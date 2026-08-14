@@ -6,7 +6,7 @@
   <title>Canal 26 Elefen — News Generator</title>
   <style>
     :root {
-      --accent-color: #d8232a;
+      --accent-color: #0284c7;
       --header-bg: #0b325e;
       --text-dark: #0b2545;
       --text-muted: #53657b;
@@ -104,7 +104,7 @@
 
     textarea {
       resize: vertical;
-      min-height: 64px;
+      min-height: 60px;
     }
 
     .file-input-wrapper {
@@ -269,16 +269,37 @@
       border-radius: 2px;
     }
 
-    /* Centered Branding Group: Logo + Tagline */
-    .channel-brand-container {
+    /* Branding: Exact Center Alignment */
+    .brand-left {
+      position: absolute;
+      right: calc(50% + 8px);
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      z-index: 1;
+    }
+
+    .brand-divider {
       position: absolute;
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
+      width: 1.5px;
+      height: 36px;
+      background-color: rgba(255, 255, 255, 0.35);
+      z-index: 1;
+    }
+
+    .brand-right {
+      position: absolute;
+      left: calc(50% + 8px);
+      top: 50%;
+      transform: translateY(-50%);
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 10px;
+      justify-content: flex-start;
       z-index: 1;
     }
 
@@ -289,23 +310,22 @@
     }
 
     #custom-logo-img {
-      max-height: 52px;
-      max-width: 100px;
+      max-height: 50px;
+      max-width: 95px;
       object-fit: contain;
       display: none;
       flex-shrink: 0;
     }
 
-    /* Station Tagline Styling */
+    /* Tagline with centered multi-line text */
     .station-tagline {
-      font-size: 0.78rem;
+      font-size: 0.74rem;
       font-weight: 600;
       font-style: italic;
       color: #f1f5f9;
       letter-spacing: 0.02em;
-      line-height: 1.15;
-      border-left: 1.5px solid rgba(255, 255, 255, 0.35);
-      padding-left: 8px;
+      line-height: 1.25;
+      text-align: center;
       text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
       white-space: pre-line;
     }
@@ -430,7 +450,8 @@
 
     <div class="form-group">
       <label>Station Tagline</label>
-      <input type="text" id="input-tagline" value="La vose de la popla">
+      <textarea id="input-tagline" style="min-height: 52px;">La vose de la
+popla</textarea>
     </div>
 
     <div class="form-group">
@@ -509,11 +530,10 @@
         <span></span>
       </div>
 
-      <!-- Centered Branding: Logo + Tagline -->
-      <div class="channel-brand-container">
+      <!-- Left of Center: Logo -->
+      <div class="brand-left" id="brand-left">
         <div class="canal26-badge" id="default-badge">
           <svg viewBox="0 0 150 180" width="46" height="55">
-            <!-- Outer Shield with Silver-Blue Outline -->
             <rect x="2" y="2" width="146" height="176" rx="24" ry="24" fill="#0b325e" stroke="#8ea3b7" stroke-width="7" />
             <g transform="translate(6, 6)">
               <clipPath id="inner-badge-clip">
@@ -536,8 +556,15 @@
           </svg>
         </div>
         <img id="custom-logo-img" alt="Logo">
-        
-        <div class="station-tagline" id="preview-tagline">La vose de la popla</div>
+      </div>
+
+      <!-- Exact Center Midpoint Divider Line -->
+      <div class="brand-divider" id="brand-divider"></div>
+
+      <!-- Right of Center: Tagline -->
+      <div class="brand-right" id="brand-right">
+        <div class="station-tagline" id="preview-tagline">La vose de la
+popla</div>
       </div>
 
       <div class="live-badge" id="preview-live" style="display: none;">
@@ -587,6 +614,9 @@
     const outPlaceholderText = document.getElementById('preview-placeholder-text');
     const defaultBadge = document.getElementById('default-badge');
     const customLogoImg = document.getElementById('custom-logo-img');
+    const brandLeft = document.getElementById('brand-left');
+    const brandDivider = document.getElementById('brand-divider');
+    const brandRight = document.getElementById('brand-right');
 
     const editorPanel = document.getElementById('editor-panel');
     const floatingBtn = document.getElementById('floating-editor-btn');
@@ -595,12 +625,20 @@
       outCategory.textContent = inCategory.value.trim() || 'NOTISIA';
       outHeadline.textContent = inHeadline.value.trim() || 'Headline goes here';
       
-      // Tagline
+      // Tagline & Center Positioning Logic
       if (inTagline.value.trim()) {
         outTagline.textContent = inTagline.value.trim();
-        outTagline.style.display = 'block';
+        brandDivider.style.display = 'block';
+        brandRight.style.display = 'flex';
+        brandLeft.style.right = 'calc(50% + 8px)';
+        brandLeft.style.left = 'auto';
+        brandLeft.style.transform = 'translateY(-50%)';
       } else {
-        outTagline.style.display = 'none';
+        brandDivider.style.display = 'none';
+        brandRight.style.display = 'none';
+        brandLeft.style.right = 'auto';
+        brandLeft.style.left = '50%';
+        brandLeft.style.transform = 'translate(-50%, -50%)';
       }
 
       // Subheadline
@@ -673,7 +711,7 @@
     document.getElementById('btn-reset').addEventListener('click', function() {
       inCategory.value = 'SPORTE';
       inHeadline.value = 'Porto de Elefen fronti Lago Serena doman a 19:30 e lo va es transmeteda par Canal 26 Elefen';
-      inTagline.value = 'La vose de la popla';
+      inTagline.value = 'La vose de la\npopla';
       inSubheadline.value = '';
       inTime.value = '9:37';
       inCaption.value = '';
