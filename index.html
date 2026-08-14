@@ -1,932 +1,694 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Weekly Product Project Tracker</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Canal 26 Elefen — News Generator</title>
   <style>
-    :root{
-      --bg: #0b0f17;
-      --panel: #121a28;
-      --text: #e9eef7;
-      --muted: #a8b3c7;
-      --line: rgba(255,255,255,0.10);
-      --good: #39d98a;
-      --warn: #ffd166;
-      --bad: #ff5c7a;
-      --info: #5aa9ff;
-      --shadow: 0 10px 25px rgba(0,0,0,0.35);
-      --radius: 16px;
+    :root {
+      --accent-color: #d90429;
+      --header-bg: #0d325e;
+      --text-dark: #0e274a;
+      --text-muted: #5c6f84;
     }
 
-    * { box-sizing: border-box; }
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      background: radial-gradient(1200px 600px at 20% 0%, rgba(90,169,255,0.15), transparent 60%),
-                  radial-gradient(900px 700px at 90% 20%, rgba(57,217,138,0.12), transparent 55%),
-                  var(--bg);
-      color: var(--text);
-      line-height: 1.4;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    header{
-      padding: 26px 18px 10px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-    h1{ margin:0 0 6px 0; font-size: 22px; }
-    .sub{ margin:0; color: var(--muted); font-size: 13px; }
-
-    .wrap{
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 14px 18px 40px;
-      display: grid;
-      gap: 14px;
+    body {
+      background-color: #0f172a;
+      color: #f8fafc;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
     }
 
-    .toolbar{
-      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 14px;
-      display: grid;
+    /* ================= EDITOR PANEL ================= */
+    #editor-panel {
+      width: 100%;
+      max-width: 480px;
+      background-color: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    .editor-header {
+      margin-bottom: 16px;
+    }
+
+    .editor-header h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .editor-header p {
+      font-size: 0.82rem;
+      color: #94a3b8;
+      line-height: 1.3;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-row {
+      display: flex;
       gap: 12px;
     }
 
-    .row{
-      display:flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: end;
-      justify-content: space-between;
+    .form-row .form-group {
+      flex: 1;
     }
 
-    .filters{
-      display:flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: end;
-    }
-
-    label{
-      display:block;
-      font-size: 12px;
-      color: var(--muted);
+    label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #cbd5e1;
       margin-bottom: 6px;
     }
 
-    select, input[type="text"], input[type="date"], textarea{
-      width: 240px;
-      max-width: 100%;
-      padding: 10px 10px;
-      border-radius: 12px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.04);
-      color: var(--text);
-      outline: none;
-    }
-    textarea{
-      width: 520px;
-      min-height: 84px;
-      resize: vertical;
-    }
-    select option { background: #0d1422; }
-
-    .btns{
-      display:flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: flex-end;
-    }
-
-    button{
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.06);
-      color: var(--text);
+    input[type="text"],
+    textarea,
+    select {
+      width: 100%;
+      background-color: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      color: #ffffff;
       padding: 10px 12px;
-      border-radius: 12px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #38bdf8;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 64px;
+    }
+
+    .file-input-wrapper {
+      background-color: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .file-input-wrapper input[type="file"] {
+      color: #94a3b8;
+      font-size: 0.8rem;
+      width: 100%;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background-color: #0f172a;
+      border: 1px solid #334155;
+      padding: 10px 12px;
+      border-radius: 8px;
+      margin-bottom: 16px;
       cursor: pointer;
-      transition: transform .05s ease, background .15s ease, border-color .15s ease;
+    }
+
+    .checkbox-group input {
+      width: 18px;
+      height: 18px;
+      accent-color: #38bdf8;
+      cursor: pointer;
+    }
+
+    .checkbox-group span {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    button {
+      cursor: pointer;
+      font-weight: 700;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 0.9rem;
+      border: none;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background-color: #2563eb;
+      color: #ffffff;
+      flex: 1.2;
+    }
+
+    .btn-secondary {
+      background-color: #334155;
+      color: #ffffff;
+      flex: 1;
+    }
+
+    .btn-danger {
+      background-color: #7f1d1d;
+      color: #fecaca;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    /* ================= FLOATING RESTORE BUTTON ================= */
+    #floating-editor-btn {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9999;
+      background-color: #2563eb;
+      color: #ffffff;
+      padding: 12px 20px;
+      border-radius: 999px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    /* ================= PREVIEW MOCKUP ================= */
+    #preview-container {
+      width: 100%;
+      max-width: 414px; /* Standard mobile viewport */
+      background-color: #ffffff;
+      color: var(--text-dark);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Status Bar */
+    .mock-status-bar {
+      background-color: var(--header-bg);
+      color: #ffffff;
+      padding: 10px 18px 4px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
       font-weight: 600;
-      letter-spacing: 0.2px;
-    }
-    button:hover{
-      background: rgba(255,255,255,0.10);
-      border-color: rgba(255,255,255,0.18);
-    }
-    button:active{ transform: translateY(1px); }
-
-    .primary{
-      background: rgba(90,169,255,0.18);
-      border-color: rgba(90,169,255,0.35);
-    }
-    .danger{
-      background: rgba(255,92,122,0.14);
-      border-color: rgba(255,92,122,0.32);
+      letter-spacing: 0.02em;
     }
 
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 14px;
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
     }
 
-    .card{
-      grid-column: span 12;
-      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 14px;
-      display:grid;
-      gap: 10px;
-    }
-
-    .cardTop{
-      display:flex;
-      gap: 10px;
+    /* Main App Header */
+    .mock-header {
+      background-color: var(--header-bg);
+      padding: 8px 16px 14px 16px;
+      display: flex;
       align-items: center;
       justify-content: space-between;
+      position: relative;
     }
-    .title{
-      display:flex;
+
+    .header-accent-line {
+      height: 4px;
+      background-color: var(--accent-color);
+      width: 100%;
+    }
+
+    .hamburger-icon {
+      width: 24px;
+      display: flex;
       flex-direction: column;
-      gap: 2px;
-    }
-    .title b{ font-size: 15px; }
-    .title span{ font-size: 12px; color: var(--muted); }
-
-    .pill{
-      font-size: 12px;
-      font-weight: 700;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.05);
-      white-space: nowrap;
+      gap: 4px;
+      cursor: pointer;
     }
 
-    .pill.good{ border-color: rgba(57,217,138,0.35); background: rgba(57,217,138,0.12); }
-    .pill.warn{ border-color: rgba(255,209,102,0.35); background: rgba(255,209,102,0.12); }
-    .pill.bad{  border-color: rgba(255,92,122,0.35); background: rgba(255,92,122,0.12); }
-    .pill.info{ border-color: rgba(90,169,255,0.35); background: rgba(90,169,255,0.12); }
-
-    .meta{
-      display:flex;
-      flex-wrap: wrap;
-      gap: 10px 14px;
-      padding-top: 4px;
-      border-top: 1px solid var(--line);
-      margin-top: 2px;
-    }
-    .meta div{ font-size: 12px; color: var(--muted); }
-    .meta b{ color: var(--text); font-weight: 700; }
-
-    .notes{
-      border-top: 1px solid var(--line);
-      padding-top: 10px;
-      display:grid;
-      gap: 8px;
+    .hamburger-icon span {
+      display: block;
+      height: 3px;
+      background-color: #ffffff;
+      border-radius: 2px;
     }
 
-    .note{
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.04);
-      border-radius: 14px;
-      padding: 10px;
-    }
-    .noteHead{
-      display:flex;
-      justify-content: space-between;
-      gap: 10px;
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
-    .noteText{
-      white-space: pre-wrap;
-      font-size: 13px;
-    }
-
-    .small{ font-size: 12px; color: var(--muted); }
-
-    .hintCard{
-      grid-column: span 12;
-      border: 1px dashed rgba(255,255,255,0.22);
-      background: rgba(255,255,255,0.03);
-      border-radius: var(--radius);
-      padding: 16px;
-      color: var(--muted);
-      box-shadow: none;
-    }
-
-    /* ========= Modal backdrop ========= */
-    .modalBack{
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.72);
-      backdrop-filter: blur(6px);
-      display: none;
+    /* Channel Badge Logo */
+    .channel-logo-container {
+      display: flex;
       align-items: center;
       justify-content: center;
-      padding: 18px;
-      z-index: 50;
     }
 
-    /* ========= Modal solid panel ========= */
-    .modal{
-      width: min(720px, 100%);
-      background: #0f1624;
-      border: 1px solid rgba(255,255,255,0.14);
-      border-radius: var(--radius);
-      box-shadow: 0 30px 60px rgba(0,0,0,0.75);
-      padding: 14px;
-      display:grid;
-      gap: 10px;
-    }
-
-    .modalTop{
-      display:flex;
+    .channel-badge {
+      background-color: #ffffff;
+      border: 2px solid #ffffff;
+      border-radius: 8px;
+      padding: 2px 8px;
+      display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-    .modalTop b{ font-size: 14px; }
-
-    .twoCol{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    @media (max-width: 700px){
-      .twoCol{ grid-template-columns: 1fr; }
-      textarea{ width: 100%; }
+      min-width: 68px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
     }
 
-    .modal select,
-    .modal input[type="text"],
-    .modal input[type="date"],
-    .modal textarea{
-      background: rgba(255,255,255,0.06);
-      border-color: rgba(255,255,255,0.16);
-    }
-    .modal textarea:focus,
-    .modal input:focus,
-    .modal select:focus{
-      border-color: rgba(90,169,255,0.45);
-      outline: none;
+    .badge-top {
+      font-size: 0.55rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      color: var(--header-bg);
+      text-transform: uppercase;
+      line-height: 1;
+      padding-top: 2px;
     }
 
-    .toast{
-      position: fixed;
-      right: 16px;
-      bottom: 16px;
-      background: rgba(15,22,36,0.95);
-      border: 1px solid var(--line);
+    .badge-num {
+      background-color: var(--accent-color);
+      color: #ffffff;
+      font-size: 1.25rem;
+      font-weight: 900;
+      line-height: 1;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin: 2px 0;
+    }
+
+    .badge-bottom {
+      font-size: 0.52rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      color: var(--header-bg);
+      text-transform: uppercase;
+      line-height: 1;
+      padding-bottom: 2px;
+    }
+
+    #custom-logo-img {
+      max-height: 42px;
+      max-width: 110px;
+      object-fit: contain;
+      display: none;
+    }
+
+    /* En Vivo Badge */
+    .live-badge {
+      background-color: var(--accent-color);
+      color: #ffffff;
+      font-size: 0.65rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      padding: 4px 8px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      text-transform: uppercase;
+    }
+
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      background-color: #ffffff;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    /* Article Body */
+    .mock-content {
+      padding: 18px 18px 30px 18px;
+      background-color: #ffffff;
+    }
+
+    .category-badge {
+      display: inline-block;
+      background-color: var(--accent-color);
+      color: #ffffff;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      letter-spacing: 0.02em;
+    }
+
+    .headline {
+      font-size: 1.55rem;
+      font-weight: 900;
+      line-height: 1.18;
+      color: var(--text-dark);
+      margin-bottom: 12px;
+      word-wrap: break-word;
+    }
+
+    .subheadline {
+      font-size: 0.95rem;
+      font-weight: 500;
+      line-height: 1.35;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    /* Article Image Area */
+    .image-container {
+      width: 100%;
+      min-height: 260px;
+      background: linear-gradient(180deg, #1b5394 0%, #0d325e 100%);
       border-radius: 14px;
-      padding: 10px 12px;
-      box-shadow: var(--shadow);
-      display:none;
-      z-index: 80;
-      max-width: min(520px, calc(100vw - 32px));
-      font-size: 13px;
-      color: var(--text);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    #preview-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .image-placeholder-text {
+      color: #ffffff;
+      font-size: 1.05rem;
+      font-weight: 700;
+      text-align: center;
+      padding: 24px;
+      line-height: 1.3;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .image-caption {
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-top: 6px;
+      padding-left: 2px;
+      display: none;
     }
   </style>
 </head>
-
 <body>
-  <header>
-    <h1>Weekly Product Project Tracker</h1>
-    <p class="sub">Lookup mode: pick a person + product to view that project’s notes and status.</p>
-  </header>
 
-  <div class="wrap">
+  <!-- ================= CONTROL PANEL ================= -->
+  <div id="editor-panel">
+    <div class="editor-header">
+      <h1>Canal 26 Elefen — Generator</h1>
+      <p>Edit fields below. Tap <b>Apply changes</b> to update, and <b>Hide editor</b> for clean screenshots.</p>
+    </div>
 
-    <section class="toolbar">
-      <div class="row">
-        <div class="filters">
-          <div>
-            <label for="filterPerson">Person</label>
-            <select id="filterPerson"></select>
-          </div>
+    <div class="form-group">
+      <label>Category</label>
+      <input type="text" id="input-category" value="Trafica">
+    </div>
 
-          <div>
-            <label for="filterProduct">Product</label>
-            <select id="filterProduct"></select>
-          </div>
+    <div class="form-group">
+      <label>Headline</label>
+      <textarea id="input-headline">Conjesta sin sorti sur autovia 89 entre Porto de Elefen e Santos.</textarea>
+    </div>
 
-          <div>
-            <label for="searchText">Search notes (optional)</label>
-            <input id="searchText" type="text" placeholder="e.g., waiting on data sheet…" />
-          </div>
-        </div>
+    <div class="form-group">
+      <label>Optional Subheadline</label>
+      <textarea id="input-subheadline" placeholder="Leave blank if you don't want one."></textarea>
+    </div>
 
-        <div class="btns">
-          <button id="btnNewUpdate" class="primary">Add weekly update</button>
-          <button id="btnExport">Export JSON</button>
-          <button id="btnImport">Import JSON</button>
-          <button id="btnReset" class="danger">Reset (local)</button>
-        </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Time</label>
+        <input type="text" id="input-time" value="10:45">
       </div>
-
-      <div class="small">
-        Nothing displays until you pick <b>both</b> a person and a product. (Assignment-locked.)
+      <div class="form-group">
+        <label>Accent Color</label>
+        <select id="input-accent">
+          <option value="#d90429">News Red</option>
+          <option value="#0284c7">Sky Blue</option>
+          <option value="#16a34a">Emerald Green</option>
+          <option value="#ea580c">Urgent Orange</option>
+          <option value="#7c3aed">Royal Purple</option>
+        </select>
       </div>
-    </section>
+    </div>
 
-    <section class="grid" id="cards"></section>
+    <div class="form-group">
+      <label>Article Image</label>
+      <div class="file-input-wrapper">
+        <input type="file" id="input-image" accept="image/*">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Image Caption</label>
+      <input type="text" id="input-caption" placeholder="Optional photo caption">
+    </div>
+
+    <div class="form-group">
+      <label>Custom Logo Image (Optional)</label>
+      <div class="file-input-wrapper">
+        <input type="file" id="input-logo" accept="image/*">
+      </div>
+    </div>
+
+    <label class="checkbox-group">
+      <input type="checkbox" id="input-live" checked>
+      <span>Show EN VIVO badge</span>
+    </label>
+
+    <div class="btn-group">
+      <button class="btn-primary" id="btn-apply">Apply changes</button>
+      <button class="btn-secondary" id="btn-hide">Hide editor</button>
+    </div>
+
+    <button class="btn-danger" id="btn-reset">Reset text</button>
   </div>
 
-  <!-- Modal -->
-  <div class="modalBack" id="modalBack" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-label="Add weekly update">
-      <div class="modalTop">
-        <b>Add / Update Notes</b>
-        <button id="btnCloseModal">Close</button>
+  <button id="floating-editor-btn">Show Editor</button>
+
+  <!-- ================= PHONE SCREEN PREVIEW ================= -->
+  <div id="preview-container">
+    <!-- Status Bar -->
+    <div class="mock-status-bar">
+      <span id="preview-time">10:45</span>
+      <div class="status-icons">
+        <span>5G</span>
+        <span>Wi-Fi</span>
+        <span>100%</span>
+      </div>
+    </div>
+
+    <!-- Top Navigation -->
+    <div class="mock-header">
+      <div class="hamburger-icon">
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
 
-      <div class="twoCol">
-        <div>
-          <label for="personSel">Person</label>
-          <select id="personSel"></select>
+      <div class="channel-logo-container">
+        <div class="channel-badge" id="default-badge">
+          <span class="badge-top">CANAL</span>
+          <span class="badge-num">26</span>
+          <span class="badge-bottom">ELEFEN</span>
         </div>
-        <div>
-          <label for="productSel">Product</label>
-          <select id="productSel"></select>
+        <img id="custom-logo-img" alt="Logo">
+      </div>
+
+      <div class="live-badge" id="preview-live">
+        <span class="live-dot"></span> EN VIVO
+      </div>
+    </div>
+    
+    <div class="header-accent-line"></div>
+
+    <!-- News Story Content -->
+    <div class="mock-content">
+      <div class="category-badge" id="preview-category">Trafica</div>
+      <h2 class="headline" id="preview-headline">Conjesta sin sorti sur autovia 89 entre Porto de Elefen e Santos.</h2>
+      <p class="subheadline" id="preview-subheadline"></p>
+
+      <div class="image-container" id="image-container">
+        <img id="preview-img" alt="News Story Photo">
+        <div class="image-placeholder-text" id="preview-placeholder-text">
+          Upload a news image<br>to replace this background.
         </div>
       </div>
-
-      <div class="twoCol">
-        <div>
-          <label for="statusSel">Status</label>
-          <select id="statusSel">
-            <option value="not_started">Not started</option>
-            <option value="in_progress">In progress</option>
-            <option value="blocked">Blocked</option>
-            <option value="done">Done</option>
-          </select>
-        </div>
-        <div>
-          <label for="dueDate">Target completion date</label>
-          <input id="dueDate" type="date" />
-        </div>
-      </div>
-
-      <div>
-        <label for="noteText">Weekly update note</label>
-        <textarea id="noteText" placeholder="What changed this week? What’s next? Any blockers?"></textarea>
-      </div>
-
-      <div class="btns">
-        <button id="btnMarkDone">Mark as Done</button>
-        <button id="btnSaveUpdate" class="primary">Save update</button>
-      </div>
-
-      <div class="small">
-        Notes append with timestamps so you’ve always got a weekly history.
-      </div>
+      <div class="image-caption" id="preview-caption"></div>
     </div>
   </div>
 
-  <div class="toast" id="toast"></div>
-  <input id="importFile" type="file" accept="application/json" style="display:none;" />
-
+  <!-- ================= JAVASCRIPT LOGIC ================= -->
   <script>
-    const STORAGE_KEY = "weekly_product_tracker_v2_lookup";
+    // Get Elements
+    const inCategory = document.getElementById('input-category');
+    const inHeadline = document.getElementById('input-headline');
+    const inSubheadline = document.getElementById('input-subheadline');
+    const inTime = document.getElementById('input-time');
+    const inAccent = document.getElementById('input-accent');
+    const inImage = document.getElementById('input-image');
+    const inCaption = document.getElementById('input-caption');
+    const inLogo = document.getElementById('input-logo');
+    const inLive = document.getElementById('input-live');
 
-    const PEOPLE = ["Adam", "Donta", "Tien"];
+    const outCategory = document.getElementById('preview-category');
+    const outHeadline = document.getElementById('preview-headline');
+    const outSubheadline = document.getElementById('preview-subheadline');
+    const outTime = document.getElementById('preview-time');
+    const outLive = document.getElementById('preview-live');
+    const outCaption = document.getElementById('preview-caption');
+    const outImg = document.getElementById('preview-img');
+    const outPlaceholderText = document.getElementById('preview-placeholder-text');
+    const defaultBadge = document.getElementById('default-badge');
+    const customLogoImg = document.getElementById('custom-logo-img');
 
-    // Keep this list if you want for reference, but the UI is assignment-locked now.
-    const PRODUCTS = [
-      "Sand Topping Mix",
-      "Concrete Mix",
-      "Mortar Mix",
-      "Fast-Setting Concrete",
-      "Self-Leveling Floor Resurfacer",
-      "Crack Sealer"
-    ];
+    const editorPanel = document.getElementById('editor-panel');
+    const floatingBtn = document.getElementById('floating-editor-btn');
 
-    // ✅ YOUR TEST ASSIGNMENTS (only these combos exist)
-    const DEFAULT_ASSIGNMENTS = {
-      "Donta": ["Sand Topping Mix"],
-      "Tien":  ["Crack Sealer"],
-      "Adam":  ["Concrete Mix"]
-    };
-
-    let state = loadState();
-
-    const el = (id) => document.getElementById(id);
-
-    const filterPerson = el("filterPerson");
-    const filterProduct = el("filterProduct");
-    const searchText = el("searchText");
-    const cardsEl = el("cards");
-
-    const modalBack = el("modalBack");
-    const btnNewUpdate = el("btnNewUpdate");
-    const btnCloseModal = el("btnCloseModal");
-    const btnSaveUpdate = el("btnSaveUpdate");
-    const btnMarkDone = el("btnMarkDone");
-    const btnExport = el("btnExport");
-    const btnImport = el("btnImport");
-    const btnReset = el("btnReset");
-
-    const personSel = el("personSel");
-    const productSel = el("productSel");
-    const statusSel = el("statusSel");
-    const dueDateEl = el("dueDate");
-    const noteTextEl = el("noteText");
-
-    const importFile = el("importFile");
-    const toastEl = el("toast");
-
-    init();
-
-    function init(){
-      // Seed state from DEFAULT_ASSIGNMENTS (only assigned combos are created)
-      if (!state.combos || Object.keys(state.combos).length === 0){
-        state = { combos: {} };
-        for (const person of PEOPLE){
-          const list = DEFAULT_ASSIGNMENTS[person] || [];
-          for (const product of list){
-            ensureCombo(person, product);
-          }
-        }
-        saveState();
+    // Update Text & Colors
+    function updatePreview() {
+      // Category
+      outCategory.textContent = inCategory.value.trim() || 'Notisia';
+      
+      // Headline
+      outHeadline.textContent = inHeadline.value.trim() || 'Headline goes here';
+      
+      // Subheadline
+      if (inSubheadline.value.trim()) {
+        outSubheadline.textContent = inSubheadline.value.trim();
+        outSubheadline.style.display = 'block';
+      } else {
+        outSubheadline.style.display = 'none';
       }
 
-      fillSelect(filterPerson, ["Select person…", ...PEOPLE]);
+      // Time
+      outTime.textContent = inTime.value.trim() || '10:45';
 
-      // Assignment-locked: product dropdown starts empty until person selected
-      fillSelect(filterProduct, ["Select product…"]);
+      // Accent Color
+      document.documentElement.style.setProperty('--accent-color', inAccent.value);
 
-      fillSelect(personSel, PEOPLE);
-      // productSel is driven by personSel, so we fill it when modal opens / person changes
+      // Live Badge Toggle
+      outLive.style.display = inLive.checked ? 'inline-flex' : 'none';
 
-      filterPerson.value = "Select person…";
-      filterProduct.value = "Select product…";
-      refreshFilterProducts();
-
-      filterPerson.addEventListener("change", () => {
-        refreshFilterProducts();
-        render();
-      });
-      filterProduct.addEventListener("change", render);
-      searchText.addEventListener("input", render);
-
-      btnNewUpdate.addEventListener("click", () => openModal());
-      btnCloseModal.addEventListener("click", closeModal);
-
-      btnSaveUpdate.addEventListener("click", saveUpdateFromModal);
-      btnMarkDone.addEventListener("click", markDoneFromModal);
-
-      btnExport.addEventListener("click", exportJSON);
-      btnImport.addEventListener("click", () => importFile.click());
-      importFile.addEventListener("change", importJSON);
-
-      btnReset.addEventListener("click", () => {
-        const ok = confirm("Reset local tracker data on this computer? (Cannot undo)");
-        if (!ok) return;
-        localStorage.removeItem(STORAGE_KEY);
-        state = loadState();
-        init();
-        toast("Reset complete.");
-      });
-
-      modalBack.addEventListener("click", (e) => {
-        if (e.target === modalBack) closeModal();
-      });
-
-      // Modal: when person changes, product list updates to only their assignments
-      personSel.addEventListener("change", () => {
-        refreshModalProducts();
-      });
-
-      render();
-    }
-
-    // ---------- Assignment helpers ----------
-    function productsForPerson(person){
-      return (DEFAULT_ASSIGNMENTS[person] || []).slice();
-    }
-    function isAssigned(person, product){
-      return productsForPerson(person).includes(product);
-    }
-
-    function refreshFilterProducts(){
-      const selectedPerson = filterPerson.value;
-
-      if (!PEOPLE.includes(selectedPerson)){
-        fillSelect(filterProduct, ["Select product…"]);
-        filterProduct.value = "Select product…";
-        return;
-      }
-
-      const allowed = productsForPerson(selectedPerson);
-      fillSelect(filterProduct, ["Select product…", ...allowed]);
-
-      if (!allowed.includes(filterProduct.value)){
-        filterProduct.value = "Select product…";
+      // Caption
+      if (inCaption.value.trim()) {
+        outCaption.textContent = inCaption.value.trim();
+        outCaption.style.display = 'block';
+      } else {
+        outCaption.style.display = 'none';
       }
     }
 
-    function refreshModalProducts(){
-      const p = personSel.value;
-      const allowed = productsForPerson(p);
-
-      fillSelect(productSel, allowed.length ? allowed : ["(No assigned products)"]);
-
-      if (allowed.length && !allowed.includes(productSel.value)){
-        productSel.value = allowed[0];
-      }
-    }
-
-    // ---------- Core helpers ----------
-    function fillSelect(selectEl, items){
-      selectEl.innerHTML = "";
-      for (const item of items){
-        const opt = document.createElement("option");
-        opt.value = item;
-        opt.textContent = item;
-        selectEl.appendChild(opt);
-      }
-    }
-
-    function comboKey(person, product){
-      return `${person}||${product}`;
-    }
-
-    function ensureCombo(person, product){
-      const key = comboKey(person, product);
-      if (!state.combos[key]){
-        state.combos[key] = {
-          person,
-          product,
-          status: "not_started",
-          dueDate: "",
-          lastUpdatedISO: "",
-          notes: []
+    // Handle Article Image Upload
+    inImage.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          outImg.src = evt.target.result;
+          outImg.style.display = 'block';
+          outPlaceholderText.style.display = 'none';
         };
+        reader.readAsDataURL(file);
       }
-      return state.combos[key];
-    }
+    });
 
-    // ---------- Render ----------
-    function render(){
-      cardsEl.innerHTML = "";
-
-      const selectedPerson = filterPerson.value;
-      const selectedProduct = filterProduct.value;
-
-      const personChosen = PEOPLE.includes(selectedPerson);
-      const productChosen = personChosen && isAssigned(selectedPerson, selectedProduct);
-
-      if (!personChosen || !productChosen){
-        cardsEl.appendChild(renderHintCard(personChosen));
-        return;
+    // Handle Custom Logo Upload
+    inLogo.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          customLogoImg.src = evt.target.result;
+          customLogoImg.style.display = 'block';
+          defaultBadge.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+      } else {
+        customLogoImg.style.display = 'none';
+        defaultBadge.style.display = 'flex';
       }
+    });
 
-      // Only assigned combos exist; ensureCombo is safe here
-      const combo = ensureCombo(selectedPerson, selectedProduct);
+    // Event Listeners for Live Updates
+    [inCategory, inHeadline, inSubheadline, inTime, inCaption, inAccent, inLive].forEach(elem => {
+      elem.addEventListener('input', updatePreview);
+      elem.addEventListener('change', updatePreview);
+    });
 
-      const needle = (searchText.value || "").trim().toLowerCase();
-      if (needle){
-        const hay = [
-          combo.person, combo.product, combo.status, combo.dueDate,
-          ...(combo.notes || []).map(n => n.text)
-        ].join(" ").toLowerCase();
+    // Explicit Apply Button
+    document.getElementById('btn-apply').addEventListener('click', updatePreview);
 
-        if (!hay.includes(needle)){
-          const empty = document.createElement("div");
-          empty.className = "hintCard";
-          empty.innerHTML = `
-            <b>No matches for that search.</b><br/>
-            Try a different keyword, or clear the search box.
-          `;
-          cardsEl.appendChild(empty);
-          return;
-        }
-      }
+    // Hide/Show Editor Toggle
+    document.getElementById('btn-hide').addEventListener('click', function() {
+      editorPanel.style.display = 'none';
+      floatingBtn.style.display = 'block';
+      window.scrollTo(0, 0);
+    });
 
-      cardsEl.appendChild(renderCard(combo));
-    }
+    floatingBtn.addEventListener('click', function() {
+      editorPanel.style.display = 'block';
+      floatingBtn.style.display = 'none';
+    });
 
-    function renderHintCard(personChosen){
-      const div = document.createElement("div");
-      div.className = "hintCard";
+    // Reset Defaults
+    document.getElementById('btn-reset').addEventListener('click', function() {
+      inCategory.value = 'Trafica';
+      inHeadline.value = 'Conjesta sin sorti sur autovia 89 entre Porto de Elefen e Santos.';
+      inSubheadline.value = '';
+      inTime.value = '10:45';
+      inCaption.value = '';
+      inAccent.value = '#d90429';
+      inLive.checked = true;
+      
+      outImg.src = '';
+      outImg.style.display = 'none';
+      outPlaceholderText.style.display = 'block';
+      
+      customLogoImg.src = '';
+      customLogoImg.style.display = 'none';
+      defaultBadge.style.display = 'flex';
+      
+      inImage.value = '';
+      inLogo.value = '';
 
-      if (!personChosen){
-        div.innerHTML = `
-          <b>Pick a person to begin.</b><br/>
-          Then the Product list will only show that person’s assigned projects.
-          <div style="margin-top:8px;" class="small">
-            Example: <span style="color: var(--text);">Donta</span> → <span style="color: var(--text);">Sand Topping Mix</span>
-          </div>
-        `;
-        return div;
-      }
+      updatePreview();
+    });
 
-      const p = filterPerson.value;
-      const allowed = productsForPerson(p);
-      div.innerHTML = `
-        <b>Now pick a product for ${escapeHtml(p)}.</b><br/>
-        Allowed: <span style="color: var(--text);">${allowed.map(escapeHtml).join(", ") || "none"}</span>
-        <div style="margin-top:8px;" class="small">
-          Use “Add weekly update” to add notes.
-        </div>
-      `;
-      return div;
-    }
-
-    function renderCard(combo){
-      const card = document.createElement("div");
-      card.className = "card";
-
-      const pillClass = statusPillClass(combo.status);
-      const pillLabel = statusLabel(combo.status);
-
-      const due = combo.dueDate ? formatDate(combo.dueDate) : "—";
-      const last = combo.lastUpdatedISO ? formatDateTime(combo.lastUpdatedISO) : "—";
-
-      const notes = (combo.notes || []).slice().reverse();
-      const notesHtml = notes.length
-        ? notes.map(n => `
-            <div class="note">
-              <div class="noteHead">
-                <span>${formatDateTime(n.tsISO)}</span>
-                <span>${statusLabel(n.status)}${n.dueDate ? " • due " + formatDate(n.dueDate) : ""}</span>
-              </div>
-              <div class="noteText">${escapeHtml(n.text)}</div>
-            </div>
-          `).join("")
-        : `<div class="small">No notes yet. Add the first weekly update.</div>`;
-
-      card.innerHTML = `
-        <div class="cardTop">
-          <div class="title">
-            <b>${escapeHtml(combo.product)}</b>
-            <span>${escapeHtml(combo.person)}</span>
-          </div>
-          <span class="pill ${pillClass}">${pillLabel}</span>
-        </div>
-
-        <div class="meta">
-          <div>Target: <b>${escapeHtml(due)}</b></div>
-          <div>Last update: <b>${escapeHtml(last)}</b></div>
-          <div>Updates: <b>${(combo.notes || []).length}</b></div>
-        </div>
-
-        <div class="notes">
-          ${notesHtml}
-        </div>
-
-        <div class="btns">
-          <button class="primary">Add update</button>
-          <button>Quick: Mark done</button>
-        </div>
-      `;
-
-      const [btnAdd, btnDone] = card.querySelectorAll("button");
-      btnAdd.addEventListener("click", () => openModal(combo.person, combo.product));
-      btnDone.addEventListener("click", () => {
-        combo.status = "done";
-        combo.lastUpdatedISO = new Date().toISOString();
-        saveState();
-        toast(`Marked done: ${combo.person} • ${combo.product}`);
-        render();
-      });
-
-      return card;
-    }
-
-    // ---------- Modal ----------
-    function openModal(person = null, product = null){
-      const currentPerson = PEOPLE.includes(filterPerson.value) ? filterPerson.value : PEOPLE[0];
-      const p = person || currentPerson;
-
-      personSel.value = p;
-      refreshModalProducts();
-
-      // Choose product: use passed product if assigned, else first assigned
-      const allowed = productsForPerson(p);
-      const chosenProduct = (product && isAssigned(p, product)) ? product : (allowed[0] || "");
-      productSel.value = chosenProduct;
-
-      const combo = ensureCombo(p, chosenProduct);
-
-      statusSel.value = combo.status || "not_started";
-      dueDateEl.value = combo.dueDate || "";
-      noteTextEl.value = "";
-
-      modalBack.style.display = "flex";
-      modalBack.setAttribute("aria-hidden", "false");
-      noteTextEl.focus();
-    }
-
-    function closeModal(){
-      modalBack.style.display = "none";
-      modalBack.setAttribute("aria-hidden", "true");
-    }
-
-    function saveUpdateFromModal(){
-      const person = personSel.value;
-      const product = productSel.value;
-
-      if (!isAssigned(person, product)){
-        toast("That product isn’t assigned to that person.");
-        return;
-      }
-
-      const combo = ensureCombo(person, product);
-      const status = statusSel.value;
-      const dueDate = dueDateEl.value;
-      const text = (noteTextEl.value || "").trim();
-
-      if (!text){
-        toast("Write a note first (even a short one).");
-        return;
-      }
-
-      combo.status = status;
-      combo.dueDate = dueDate;
-      combo.lastUpdatedISO = new Date().toISOString();
-      combo.notes = combo.notes || [];
-      combo.notes.push({
-        tsISO: combo.lastUpdatedISO,
-        text,
-        status,
-        dueDate
-      });
-
-      saveState();
-      toast(`Saved update: ${person} • ${product}`);
-
-      filterPerson.value = person;
-      refreshFilterProducts();
-      filterProduct.value = product;
-
-      closeModal();
-      render();
-    }
-
-    function markDoneFromModal(){
-      statusSel.value = "done";
-      const person = personSel.value;
-      const product = productSel.value;
-
-      if (!isAssigned(person, product)){
-        toast("That product isn’t assigned to that person.");
-        return;
-      }
-
-      const combo = ensureCombo(person, product);
-      combo.status = "done";
-      combo.lastUpdatedISO = new Date().toISOString();
-      saveState();
-      toast(`Marked done: ${person} • ${product}`);
-
-      filterPerson.value = person;
-      refreshFilterProducts();
-      filterProduct.value = product;
-
-      closeModal();
-      render();
-    }
-
-    // ---------- Import / Export ----------
-    function exportJSON(){
-      const payload = {
-        exportedAtISO: new Date().toISOString(),
-        app: "Weekly Product Project Tracker (Lookup Mode)",
-        version: 2,
-        data: state
-      };
-      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `project-tracker-export-${new Date().toISOString().slice(0,10)}.json`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-
-      toast("Exported JSON.");
-    }
-
-    function importJSON(){
-      const file = importFile.files?.[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = () => {
-        try{
-          const parsed = JSON.parse(reader.result);
-          const incoming = parsed?.data || parsed;
-          if (!incoming?.combos || typeof incoming.combos !== "object"){
-            throw new Error("Invalid file format (missing combos).");
-          }
-          state = incoming;
-          saveState();
-          toast("Import complete.");
-          importFile.value = "";
-          init();
-        } catch (e){
-          toast("Import failed: " + (e?.message || "Unknown error"));
-          importFile.value = "";
-        }
-      };
-      reader.readAsText(file);
-    }
-
-    // ---------- Storage ----------
-    function loadState(){
-      try{
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return { combos: {} };
-        const parsed = JSON.parse(raw);
-        if (!parsed || typeof parsed !== "object") return { combos: {} };
-        if (!parsed.combos) parsed.combos = {};
-        return parsed;
-      } catch {
-        return { combos: {} };
-      }
-    }
-
-    function saveState(){
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    }
-
-    // ---------- Status helpers ----------
-    function statusLabel(s){
-      switch (s){
-        case "not_started": return "Not started";
-        case "in_progress": return "In progress";
-        case "blocked": return "Blocked";
-        case "done": return "Done";
-        default: return "Unknown";
-      }
-    }
-
-    function statusPillClass(s){
-      switch (s){
-        case "done": return "good";
-        case "in_progress": return "info";
-        case "blocked": return "bad";
-        case "not_started": return "warn";
-        default: return "info";
-      }
-    }
-
-    // ---------- Formatting ----------
-    function formatDate(isoDate){
-      try{
-        const [y,m,d] = isoDate.split("-").map(Number);
-        const dt = new Date(y, m-1, d);
-        return dt.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "2-digit" });
-      } catch {
-        return isoDate;
-      }
-    }
-
-    function formatDateTime(iso){
-      try{
-        const dt = new Date(iso);
-        return dt.toLocaleString(undefined, {
-          year:"numeric", month:"short", day:"2-digit",
-          hour:"2-digit", minute:"2-digit"
-        });
-      } catch {
-        return iso;
-      }
-    }
-
-    function escapeHtml(str){
-      return String(str)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-    // ---------- Toast ----------
-    let toastTimer = null;
-    function toast(msg){
-      toastEl.textContent = msg;
-      toastEl.style.display = "block";
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => {
-        toastEl.style.display = "none";
-      }, 2200);
-    }
+    // Initial run
+    updatePreview();
   </script>
 </body>
 </html>
-
-
