@@ -6,10 +6,10 @@
   <title>Canal 26 Elefen — News Generator</title>
   <style>
     :root {
-      --accent-color: #d90429;
-      --header-bg: #0d325e;
-      --text-dark: #0e274a;
-      --text-muted: #5c6f84;
+      --accent-color: #d8232a;
+      --header-bg: #0b325e;
+      --text-dark: #0b2545;
+      --text-muted: #53657b;
     }
 
     * {
@@ -33,7 +33,7 @@
     /* ================= EDITOR PANEL ================= */
     #editor-panel {
       width: 100%;
-      max-width: 480px;
+      max-width: 440px;
       background-color: #1e293b;
       border: 1px solid #334155;
       border-radius: 16px;
@@ -47,14 +47,14 @@
     }
 
     .editor-header h1 {
-      font-size: 1.25rem;
-      font-weight: 700;
+      font-size: 1.2rem;
+      font-weight: 800;
       color: #ffffff;
       margin-bottom: 4px;
     }
 
     .editor-header p {
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       color: #94a3b8;
       line-height: 1.3;
     }
@@ -114,7 +114,6 @@
       padding: 8px 10px;
       display: flex;
       align-items: center;
-      gap: 10px;
     }
 
     .file-input-wrapper input[type="file"] {
@@ -199,20 +198,20 @@
       color: #ffffff;
       padding: 12px 20px;
       border-radius: 999px;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
       font-weight: 700;
       font-size: 0.85rem;
     }
 
-    /* ================= PREVIEW MOCKUP ================= */
+    /* ================= PHONE PREVIEW FRAME ================= */
     #preview-container {
       width: 100%;
-      max-width: 414px; /* Standard mobile viewport */
+      max-width: 414px;
       background-color: #ffffff;
       color: var(--text-dark);
-      border-radius: 28px;
+      border-radius: 32px;
       overflow: hidden;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.6);
       display: flex;
       flex-direction: column;
     }
@@ -221,11 +220,11 @@
     .mock-status-bar {
       background-color: var(--header-bg);
       color: #ffffff;
-      padding: 10px 18px 4px 18px;
+      padding: 12px 20px 4px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       font-weight: 600;
       letter-spacing: 0.02em;
     }
@@ -234,13 +233,13 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 0.75rem;
+      font-size: 0.78rem;
     }
 
-    /* Main App Header */
+    /* Top Navigation Header */
     .mock-header {
       background-color: var(--header-bg);
-      padding: 8px 16px 14px 16px;
+      padding: 6px 18px 12px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -268,71 +267,33 @@
       border-radius: 2px;
     }
 
-    /* Channel Badge Logo */
+    /* Center Logo Container */
     .channel-logo-container {
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    .channel-badge {
-      background-color: #ffffff;
-      border: 2px solid #ffffff;
-      border-radius: 8px;
-      padding: 2px 8px;
+    .canal26-badge {
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-width: 68px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-    }
-
-    .badge-top {
-      font-size: 0.55rem;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      color: var(--header-bg);
-      text-transform: uppercase;
-      line-height: 1;
-      padding-top: 2px;
-    }
-
-    .badge-num {
-      background-color: var(--accent-color);
-      color: #ffffff;
-      font-size: 1.25rem;
-      font-weight: 900;
-      line-height: 1;
-      padding: 2px 6px;
-      border-radius: 4px;
-      margin: 2px 0;
-    }
-
-    .badge-bottom {
-      font-size: 0.52rem;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      color: var(--header-bg);
-      text-transform: uppercase;
-      line-height: 1;
-      padding-bottom: 2px;
+      filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3));
     }
 
     #custom-logo-img {
-      max-height: 42px;
+      max-height: 52px;
       max-width: 110px;
       object-fit: contain;
       display: none;
     }
 
-    /* En Vivo Badge */
+    /* Live Badge */
     .live-badge {
       background-color: var(--accent-color);
       color: #ffffff;
-      font-size: 0.65rem;
+      font-size: 0.68rem;
       font-weight: 800;
-      letter-spacing: 0.05em;
-      padding: 4px 8px;
+      letter-spacing: 0.04em;
+      padding: 5px 9px;
       border-radius: 4px;
       display: inline-flex;
       align-items: center;
@@ -348,9 +309,9 @@
       display: inline-block;
     }
 
-    /* Article Body */
+    /* News Content Body */
     .mock-content {
-      padding: 18px 18px 30px 18px;
+      padding: 20px 18px 32px 18px;
       background-color: #ffffff;
     }
 
@@ -358,7 +319,7 @@
       display: inline-block;
       background-color: var(--accent-color);
       color: #ffffff;
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       font-weight: 800;
       padding: 4px 10px;
       border-radius: 6px;
@@ -387,8 +348,8 @@
     /* Article Image Area */
     .image-container {
       width: 100%;
-      min-height: 260px;
-      background: linear-gradient(180deg, #1b5394 0%, #0d325e 100%);
+      min-height: 250px;
+      background: linear-gradient(180deg, #184b85 0%, #0b325e 100%);
       border-radius: 14px;
       overflow: hidden;
       display: flex;
@@ -406,16 +367,16 @@
 
     .image-placeholder-text {
       color: #ffffff;
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 700;
       text-align: center;
       padding: 24px;
       line-height: 1.3;
-      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
     }
 
     .image-caption {
-      font-size: 0.75rem;
+      font-size: 0.76rem;
       color: #64748b;
       margin-top: 6px;
       padding-left: 2px;
@@ -429,7 +390,7 @@
   <div id="editor-panel">
     <div class="editor-header">
       <h1>Canal 26 Elefen — Generator</h1>
-      <p>Edit fields below. Tap <b>Apply changes</b> to update, and <b>Hide editor</b> for clean screenshots.</p>
+      <p>Edit fields below. Tap <b>Apply changes</b> to update, and <b>Hide editor</b> for screenshots.</p>
     </div>
 
     <div class="form-group">
@@ -455,7 +416,7 @@
       <div class="form-group">
         <label>Accent Color</label>
         <select id="input-accent">
-          <option value="#d90429">News Red</option>
+          <option value="#d8232a">News Red</option>
           <option value="#0284c7">Sky Blue</option>
           <option value="#16a34a">Emerald Green</option>
           <option value="#ea580c">Urgent Orange</option>
@@ -519,10 +480,30 @@
       </div>
 
       <div class="channel-logo-container">
-        <div class="channel-badge" id="default-badge">
-          <span class="badge-top">CANAL</span>
-          <span class="badge-num">26</span>
-          <span class="badge-bottom">ELEFEN</span>
+        <!-- Exact Vector Canal 26 Elefen Badge -->
+        <div class="canal26-badge" id="default-badge">
+          <svg viewBox="0 0 150 180" width="52" height="62">
+            <!-- Outer Shield with Silver-Blue Outline -->
+            <rect x="2" y="2" width="146" height="176" rx="24" ry="24" fill="#0b325e" stroke="#8ea3b7" stroke-width="7" />
+            <g transform="translate(6, 6)">
+              <clipPath id="inner-badge-clip">
+                <rect x="0" y="0" width="138" height="168" rx="18" ry="18" />
+              </clipPath>
+              <g clip-path="url(#inner-badge-clip)">
+                <!-- Top Dark Blue Section -->
+                <rect x="0" y="0" width="138" height="50" fill="#0b3b6d" />
+                <text x="69" y="35" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="900" text-anchor="middle" letter-spacing="2.5">CANAL</text>
+                
+                <!-- Middle Red Section -->
+                <rect x="0" y="50" width="138" height="78" fill="#d8232a" />
+                <text x="69" y="118" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="78" font-weight="900" text-anchor="middle">26</text>
+                
+                <!-- Bottom White Section -->
+                <rect x="0" y="128" width="138" height="40" fill="#ffffff" />
+                <text x="69" y="156" fill="#0b3b6d" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="18" font-weight="900" text-anchor="middle" letter-spacing="3.5">ELEFEN</text>
+              </g>
+            </g>
+          </svg>
         </div>
         <img id="custom-logo-img" alt="Logo">
       </div>
@@ -552,7 +533,6 @@
 
   <!-- ================= JAVASCRIPT LOGIC ================= -->
   <script>
-    // Get Elements
     const inCategory = document.getElementById('input-category');
     const inHeadline = document.getElementById('input-headline');
     const inSubheadline = document.getElementById('input-subheadline');
@@ -577,15 +557,10 @@
     const editorPanel = document.getElementById('editor-panel');
     const floatingBtn = document.getElementById('floating-editor-btn');
 
-    // Update Text & Colors
     function updatePreview() {
-      // Category
       outCategory.textContent = inCategory.value.trim() || 'Notisia';
-      
-      // Headline
       outHeadline.textContent = inHeadline.value.trim() || 'Headline goes here';
       
-      // Subheadline
       if (inSubheadline.value.trim()) {
         outSubheadline.textContent = inSubheadline.value.trim();
         outSubheadline.style.display = 'block';
@@ -593,16 +568,10 @@
         outSubheadline.style.display = 'none';
       }
 
-      // Time
       outTime.textContent = inTime.value.trim() || '10:45';
-
-      // Accent Color
       document.documentElement.style.setProperty('--accent-color', inAccent.value);
-
-      // Live Badge Toggle
       outLive.style.display = inLive.checked ? 'inline-flex' : 'none';
 
-      // Caption
       if (inCaption.value.trim()) {
         outCaption.textContent = inCaption.value.trim();
         outCaption.style.display = 'block';
@@ -611,7 +580,6 @@
       }
     }
 
-    // Handle Article Image Upload
     inImage.addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (file) {
@@ -625,7 +593,6 @@
       }
     });
 
-    // Handle Custom Logo Upload
     inLogo.addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (file) {
@@ -642,16 +609,13 @@
       }
     });
 
-    // Event Listeners for Live Updates
     [inCategory, inHeadline, inSubheadline, inTime, inCaption, inAccent, inLive].forEach(elem => {
       elem.addEventListener('input', updatePreview);
       elem.addEventListener('change', updatePreview);
     });
 
-    // Explicit Apply Button
     document.getElementById('btn-apply').addEventListener('click', updatePreview);
 
-    // Hide/Show Editor Toggle
     document.getElementById('btn-hide').addEventListener('click', function() {
       editorPanel.style.display = 'none';
       floatingBtn.style.display = 'block';
@@ -663,14 +627,13 @@
       floatingBtn.style.display = 'none';
     });
 
-    // Reset Defaults
     document.getElementById('btn-reset').addEventListener('click', function() {
       inCategory.value = 'Trafica';
       inHeadline.value = 'Conjesta sin sorti sur autovia 89 entre Porto de Elefen e Santos.';
       inSubheadline.value = '';
       inTime.value = '10:45';
       inCaption.value = '';
-      inAccent.value = '#d90429';
+      inAccent.value = '#d8232a';
       inLive.checked = true;
       
       outImg.src = '';
@@ -687,7 +650,6 @@
       updatePreview();
     });
 
-    // Initial run
     updatePreview();
   </script>
 </body>
