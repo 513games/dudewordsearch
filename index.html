@@ -239,11 +239,12 @@
     /* Top Navigation Header */
     .mock-header {
       background-color: var(--header-bg);
-      padding: 6px 18px 12px 18px;
+      padding: 8px 18px 12px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      position: relative;
+      position: relative; /* Anchor for absolute center positioning */
+      min-height: 68px;
     }
 
     .header-accent-line {
@@ -258,6 +259,7 @@
       flex-direction: column;
       gap: 4px;
       cursor: pointer;
+      z-index: 2;
     }
 
     .hamburger-icon span {
@@ -267,11 +269,16 @@
       border-radius: 2px;
     }
 
-    /* Center Logo Container */
+    /* Absolute Dead-Center Logo Container */
     .channel-logo-container {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
       display: flex;
       align-items: center;
       justify-content: center;
+      z-index: 1;
     }
 
     .canal26-badge {
@@ -280,7 +287,7 @@
     }
 
     #custom-logo-img {
-      max-height: 52px;
+      max-height: 54px;
       max-width: 110px;
       object-fit: contain;
       display: none;
@@ -299,6 +306,7 @@
       align-items: center;
       gap: 5px;
       text-transform: uppercase;
+      z-index: 2;
     }
 
     .live-dot {
@@ -479,10 +487,10 @@
         <span></span>
       </div>
 
+      <!-- Centered Logo Container -->
       <div class="channel-logo-container">
-        <!-- Exact Vector Canal 26 Elefen Badge -->
         <div class="canal26-badge" id="default-badge">
-          <svg viewBox="0 0 150 180" width="52" height="62">
+          <svg viewBox="0 0 150 180" width="50" height="60">
             <!-- Outer Shield with Silver-Blue Outline -->
             <rect x="2" y="2" width="146" height="176" rx="24" ry="24" fill="#0b325e" stroke="#8ea3b7" stroke-width="7" />
             <g transform="translate(6, 6)">
