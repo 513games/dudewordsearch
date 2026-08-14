@@ -243,7 +243,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      position: relative; /* Anchor for absolute center positioning */
+      position: relative;
       min-height: 68px;
     }
 
@@ -269,8 +269,8 @@
       border-radius: 2px;
     }
 
-    /* Absolute Dead-Center Logo Container */
-    .channel-logo-container {
+    /* Centered Branding Group: Logo + Tagline */
+    .channel-brand-container {
       position: absolute;
       left: 50%;
       top: 50%;
@@ -278,19 +278,36 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      gap: 10px;
       z-index: 1;
     }
 
     .canal26-badge {
       display: flex;
       filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3));
+      flex-shrink: 0;
     }
 
     #custom-logo-img {
-      max-height: 54px;
-      max-width: 110px;
+      max-height: 52px;
+      max-width: 100px;
       object-fit: contain;
       display: none;
+      flex-shrink: 0;
+    }
+
+    /* Station Tagline Styling */
+    .station-tagline {
+      font-size: 0.78rem;
+      font-weight: 600;
+      font-style: italic;
+      color: #f1f5f9;
+      letter-spacing: 0.02em;
+      line-height: 1.15;
+      border-left: 1.5px solid rgba(255, 255, 255, 0.35);
+      padding-left: 8px;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+      white-space: pre-line;
     }
 
     /* Live Badge */
@@ -403,12 +420,17 @@
 
     <div class="form-group">
       <label>Category</label>
-      <input type="text" id="input-category" value="Trafica">
+      <input type="text" id="input-category" value="SPORTE">
     </div>
 
     <div class="form-group">
       <label>Headline</label>
-      <textarea id="input-headline">Conjesta sin sorti sur autovia 89 entre Porto de Elefen e Santos.</textarea>
+      <textarea id="input-headline">Porto de Elefen fronti Lago Serena doman a 19:30 e lo va es transmeteda par Canal 26 Elefen</textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Station Tagline</label>
+      <input type="text" id="input-tagline" value="La vose de la popla">
     </div>
 
     <div class="form-group">
@@ -419,13 +441,13 @@
     <div class="form-row">
       <div class="form-group">
         <label>Time</label>
-        <input type="text" id="input-time" value="10:45">
+        <input type="text" id="input-time" value="9:37">
       </div>
       <div class="form-group">
         <label>Accent Color</label>
         <select id="input-accent">
-          <option value="#d8232a">News Red</option>
           <option value="#0284c7">Sky Blue</option>
+          <option value="#d8232a">News Red</option>
           <option value="#16a34a">Emerald Green</option>
           <option value="#ea580c">Urgent Orange</option>
           <option value="#7c3aed">Royal Purple</option>
@@ -453,7 +475,7 @@
     </div>
 
     <label class="checkbox-group">
-      <input type="checkbox" id="input-live" checked>
+      <input type="checkbox" id="input-live">
       <span>Show EN VIVO badge</span>
     </label>
 
@@ -471,7 +493,7 @@
   <div id="preview-container">
     <!-- Status Bar -->
     <div class="mock-status-bar">
-      <span id="preview-time">10:45</span>
+      <span id="preview-time">9:37</span>
       <div class="status-icons">
         <span>5G</span>
         <span>Wi-Fi</span>
@@ -487,10 +509,10 @@
         <span></span>
       </div>
 
-      <!-- Centered Logo Container -->
-      <div class="channel-logo-container">
+      <!-- Centered Branding: Logo + Tagline -->
+      <div class="channel-brand-container">
         <div class="canal26-badge" id="default-badge">
-          <svg viewBox="0 0 150 180" width="50" height="60">
+          <svg viewBox="0 0 150 180" width="46" height="55">
             <!-- Outer Shield with Silver-Blue Outline -->
             <rect x="2" y="2" width="146" height="176" rx="24" ry="24" fill="#0b325e" stroke="#8ea3b7" stroke-width="7" />
             <g transform="translate(6, 6)">
@@ -514,9 +536,11 @@
           </svg>
         </div>
         <img id="custom-logo-img" alt="Logo">
+        
+        <div class="station-tagline" id="preview-tagline">La vose de la popla</div>
       </div>
 
-      <div class="live-badge" id="preview-live">
+      <div class="live-badge" id="preview-live" style="display: none;">
         <span class="live-dot"></span> EN VIVO
       </div>
     </div>
@@ -525,8 +549,8 @@
 
     <!-- News Story Content -->
     <div class="mock-content">
-      <div class="category-badge" id="preview-category">Trafica</div>
-      <h2 class="headline" id="preview-headline">Conjesta sin sorti sur autovia 89 entre Porto de Elefen e Santos.</h2>
+      <div class="category-badge" id="preview-category">SPORTE</div>
+      <h2 class="headline" id="preview-headline">Porto de Elefen fronti Lago Serena doman a 19:30 e lo va es transmeteda par Canal 26 Elefen</h2>
       <p class="subheadline" id="preview-subheadline"></p>
 
       <div class="image-container" id="image-container">
@@ -543,6 +567,7 @@
   <script>
     const inCategory = document.getElementById('input-category');
     const inHeadline = document.getElementById('input-headline');
+    const inTagline = document.getElementById('input-tagline');
     const inSubheadline = document.getElementById('input-subheadline');
     const inTime = document.getElementById('input-time');
     const inAccent = document.getElementById('input-accent');
@@ -553,6 +578,7 @@
 
     const outCategory = document.getElementById('preview-category');
     const outHeadline = document.getElementById('preview-headline');
+    const outTagline = document.getElementById('preview-tagline');
     const outSubheadline = document.getElementById('preview-subheadline');
     const outTime = document.getElementById('preview-time');
     const outLive = document.getElementById('preview-live');
@@ -566,9 +592,18 @@
     const floatingBtn = document.getElementById('floating-editor-btn');
 
     function updatePreview() {
-      outCategory.textContent = inCategory.value.trim() || 'Notisia';
+      outCategory.textContent = inCategory.value.trim() || 'NOTISIA';
       outHeadline.textContent = inHeadline.value.trim() || 'Headline goes here';
       
+      // Tagline
+      if (inTagline.value.trim()) {
+        outTagline.textContent = inTagline.value.trim();
+        outTagline.style.display = 'block';
+      } else {
+        outTagline.style.display = 'none';
+      }
+
+      // Subheadline
       if (inSubheadline.value.trim()) {
         outSubheadline.textContent = inSubheadline.value.trim();
         outSubheadline.style.display = 'block';
@@ -576,7 +611,7 @@
         outSubheadline.style.display = 'none';
       }
 
-      outTime.textContent = inTime.value.trim() || '10:45';
+      outTime.textContent = inTime.value.trim() || '9:37';
       document.documentElement.style.setProperty('--accent-color', inAccent.value);
       outLive.style.display = inLive.checked ? 'inline-flex' : 'none';
 
@@ -617,7 +652,7 @@
       }
     });
 
-    [inCategory, inHeadline, inSubheadline, inTime, inCaption, inAccent, inLive].forEach(elem => {
+    [inCategory, inHeadline, inTagline, inSubheadline, inTime, inCaption, inAccent, inLive].forEach(elem => {
       elem.addEventListener('input', updatePreview);
       elem.addEventListener('change', updatePreview);
     });
@@ -636,13 +671,14 @@
     });
 
     document.getElementById('btn-reset').addEventListener('click', function() {
-      inCategory.value = 'Trafica';
-      inHeadline.value = 'Conjesta sin sorti sur autovia 89 entre Porto de Elefen e Santos.';
+      inCategory.value = 'SPORTE';
+      inHeadline.value = 'Porto de Elefen fronti Lago Serena doman a 19:30 e lo va es transmeteda par Canal 26 Elefen';
+      inTagline.value = 'La vose de la popla';
       inSubheadline.value = '';
-      inTime.value = '10:45';
+      inTime.value = '9:37';
       inCaption.value = '';
-      inAccent.value = '#d8232a';
-      inLive.checked = true;
+      inAccent.value = '#0284c7';
+      inLive.checked = false;
       
       outImg.src = '';
       outImg.style.display = 'none';
