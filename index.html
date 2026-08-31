@@ -1046,6 +1046,34 @@ function translateText() {
 
 function translateSentence(text) {
 
+  // PAST YES/NO QUESTIONS
+// Did you study? → Esce tu ia studia?
+
+const pastQuestion =
+  text.trim().match(/^did\s+(i|you|he|she|we|they)\s+(.+?)\??$/i);
+
+if (pastQuestion) {
+
+  const subjectMap = {
+    i: "me",
+    you: "tu",
+    he: "el",
+    she: "el",
+    we: "nos",
+    they: "los"
+  };
+
+  const englishSubject = pastQuestion[1].toLowerCase();
+  const restOfSentence = pastQuestion[2];
+
+  const elefenSubject = subjectMap[englishSubject];
+
+  // Translate the verb/rest normally
+  const translatedRest = translateSentence(restOfSentence);
+
+  return "Esce " + elefenSubject + " ia " + translatedRest + "?";
+}
+
   /*
   Break the sentence into:
 
