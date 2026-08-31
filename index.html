@@ -966,6 +966,8 @@ purple = purpur
 */
 
 
+<script>
+
 function buildDictionary() {
   const dictionary = [];
   const lines = VOCABULARY.split("\n");
@@ -981,13 +983,21 @@ function buildDictionary() {
     const english = parts.shift().trim().toLowerCase();
     const rightSide = parts.join("=").trim();
 
-    // Optional label after a pipe:
-    // word = parola | noun
+    /*
+    Optional grammar label:
+
+    word = parola | noun
+    learn = aprende | verb
+    */
+
     const metaParts = rightSide.split("|");
+
     const elefen = metaParts[0].trim();
-    const type = metaParts.length > 1
-      ? metaParts.slice(1).join("|").trim().toLowerCase()
-      : "";
+
+    const type =
+      metaParts.length > 1
+        ? metaParts.slice(1).join("|").trim().toLowerCase()
+        : "";
 
     if (english && elefen) {
       dictionary.push({
@@ -999,16 +1009,19 @@ function buildDictionary() {
     }
   }
 
-  // Check longer phrases before shorter words.
+  // Longer phrases are checked first.
   dictionary.sort((a, b) => {
+
     if (b.words.length !== a.words.length) {
       return b.words.length - a.words.length;
     }
+
     return b.english.length - a.english.length;
   });
 
   return dictionary;
 }
+
 
 const dictionary = buildDictionary();
 
@@ -1018,7 +1031,61 @@ function isWord(text) {
 }
 
 
+/*
+=========================================================
+VERB HELPERS
+=========================================================
+*/
+
+function isVerb(word) {
+
+  if (!word) return false;
+
+  const lower = word.toLowerCase();
+
+  return dictionary.some(entry =>
+    entry.english === lower &&
+    entry.type === "verb"
+  );
+}
+
+
+function previousWord(tokens, index) {
+
+  for (let i = index - 1; i >= 0; i--) {
+
+    if (isWord(tokens[i])) {
+      return tokens[i];
+    }
+
+  }
+
+  return null;
+}
+
+
+function nextWord(tokens, index) {
+
+  for (let i = index + 1; i < tokens.length; i++) {
+
+    if (isWord(tokens[i])) {
+      return tokens[i];
+    }
+
+  }
+
+  return null;
+}
+
+
+/*
+=========================================================
+CAPITALIZATION
+=========================================================
+*/
+
 function preserveCapitalization(original, translation) {
+
   if (
     original === original.toUpperCase() &&
     /[A-Za-z]/.test(original)
@@ -1030,19 +1097,33 @@ function preserveCapitalization(original, translation) {
     original &&
     original.charAt(0) === original.charAt(0).toUpperCase()
   ) {
-    return translation.charAt(0).toUpperCase() + translation.slice(1);
+    return (
+      translation.charAt(0).toUpperCase() +
+      translation.slice(1)
+    );
   }
 
   return translation;
 }
 
 
+/*
+=========================================================
+PHRASE MATCHING
+=========================================================
+*/
+
 function phraseMatches(tokens, startIndex, words) {
+
   let tokenIndex = startIndex;
 
-  for (let wordIndex = 0; wordIndex < words.length; wordIndex++) {
+  for (
+    let wordIndex = 0;
+    wordIndex < words.length;
+    wordIndex++
+  ) {
 
-    // Skip spaces between words in a phrase.
+    // Skip spaces between words.
     while (
       tokenIndex < tokens.length &&
       /^\s+$/.test(tokens[tokenIndex])
@@ -1050,10 +1131,16 @@ function phraseMatches(tokens, startIndex, words) {
       tokenIndex++;
     }
 
-    if (tokenIndex >= tokens.length) return null;
-    if (!isWord(tokens[tokenIndex])) return null;
+    if (tokenIndex >= tokens.length) {
+      return null;
+    }
 
-    const currentWord = tokens[tokenIndex].toLowerCase();
+    if (!isWord(tokens[tokenIndex])) {
+      return null;
+    }
+
+    const currentWord =
+      tokens[tokenIndex].toLowerCase();
 
     if (currentWord !== words[wordIndex]) {
       return null;
@@ -1070,22 +1157,18 @@ function phraseMatches(tokens, startIndex, words) {
 =========================================================
 AUTOMATIC ELEFEN NOUN PLURALS
 
-If the vocabulary says:
-
 word = parola | noun
-
-then:
 
 word  -> parola
 words -> parolas
 
-Elefen rule used here:
-vowel ending     -> +s
-consonant ending -> +es
+Vowel ending     -> +s
+Consonant ending -> +es
 =========================================================
 */
 
 function makeElefenPlural(word) {
+
   if (/[aeiou]$/i.test(word)) {
     return word + "s";
   }
@@ -1095,6 +1178,7 @@ function makeElefenPlural(word) {
 
 
 function findNoun(englishSingular) {
+
   return dictionary.find(entry =>
     entry.type === "noun" &&
     entry.english === englishSingular
@@ -1103,9 +1187,14 @@ function findNoun(englishSingular) {
 
 
 function translatePluralNoun(word) {
+
   const lower = word.toLowerCase();
 
-  // A few common irregular English plurals.
+
+  /*
+  Common irregular English plurals
+  */
+
   const irregularPlurals = {
     people: "person",
     men: "man",
@@ -1113,33 +1202,67 @@ function translatePluralNoun(word) {
     children: "child"
   };
 
+
   if (irregularPlurals[lower]) {
-    const noun = findNoun(irregularPlurals[lower]);
+
+    const noun =
+      findNoun(irregularPlurals[lower]);
 
     if (noun) {
       return makeElefenPlural(noun.elefen);
     }
   }
 
+
   const possibleSingulars = [];
 
-  // cities -> city, countries -> country
-  if (lower.endsWith("ies") && lower.length > 3) {
-    possibleSingulars.push(lower.slice(0, -3) + "y");
+
+  // cities -> city
+  // countries -> country
+
+  if (
+    lower.endsWith("ies") &&
+    lower.length > 3
+  ) {
+
+    possibleSingulars.push(
+      lower.slice(0, -3) + "y"
+    );
   }
 
-  // houses -> house, words -> word
-  if (lower.endsWith("s") && lower.length > 1) {
-    possibleSingulars.push(lower.slice(0, -1));
+
+  // words -> word
+  // houses -> house
+
+  if (
+    lower.endsWith("s") &&
+    lower.length > 1
+  ) {
+
+    possibleSingulars.push(
+      lower.slice(0, -1)
+    );
   }
 
-  // buses -> bus, boxes -> box
-  if (lower.endsWith("es") && lower.length > 2) {
-    possibleSingulars.push(lower.slice(0, -2));
+
+  // buses -> bus
+  // boxes -> box
+
+  if (
+    lower.endsWith("es") &&
+    lower.length > 2
+  ) {
+
+    possibleSingulars.push(
+      lower.slice(0, -2)
+    );
   }
 
-  // Try each possible singular form.
-  for (const singular of [...new Set(possibleSingulars)]) {
+
+  for (
+    const singular of [...new Set(possibleSingulars)]
+  ) {
+
     const noun = findNoun(singular);
 
     if (noun) {
@@ -1147,44 +1270,61 @@ function translatePluralNoun(word) {
     }
   }
 
+
   return null;
 }
 
 
 /*
 =========================================================
-PAST YES/NO QUESTIONS
+PAST YES / NO QUESTIONS
 
 Did you study?
--> Esce tu ia studia?
+→ Esce tu ia studia?
 
-"did" creates:
-Esce + subject + ia + base verb
+Did he study the words?
+→ Esce el ia studia la parolas?
 =========================================================
 */
 
 function translatePastQuestion(text) {
-  const match = text
-    .trim()
-    .match(/^did\s+(i|you|he|she|we|they)\s+(.+?)[?.!]*$/i);
 
-  if (!match) return null;
+  const match =
+    text
+      .trim()
+      .match(
+        /^did\s+(i|you|he|she|we|they)\s+(.+?)[?.!]*$/i
+      );
+
+
+  if (!match) {
+    return null;
+  }
+
 
   const subjectMap = {
+
     i: "me",
     you: "tu",
     he: "el",
     she: "el",
     we: "nos",
     they: "los"
+
   };
 
-  const englishSubject = match[1].toLowerCase();
-  const restOfSentence = match[2].trim();
 
-  // Translate the rest normally, without applying the
-  // "Did..." rule again.
-  const translatedRest = translateNormalSentence(restOfSentence);
+  const englishSubject =
+    match[1].toLowerCase();
+
+
+  const restOfSentence =
+    match[2].trim();
+
+
+  const translatedRest =
+    translateNormalSentence(restOfSentence);
+
 
   return (
     "Esce " +
@@ -1196,88 +1336,254 @@ function translatePastQuestion(text) {
 }
 
 
+/*
+=========================================================
+NORMAL TRANSLATION
+=========================================================
+*/
+
 function translateNormalSentence(text) {
+
   const tokens =
-    text.match(/[A-Za-zÀ-ÖØ-öø-ÿ']+|\s+|[^\sA-Za-zÀ-ÖØ-öø-ÿ']+/g)
-    || [];
+    text.match(
+      /[A-Za-zÀ-ÖØ-öø-ÿ']+|\s+|[^\sA-Za-zÀ-ÖØ-öø-ÿ']+/g
+    ) || [];
+
 
   let output = "";
 
-  for (let i = 0; i < tokens.length; i++) {
+
+  for (
+    let i = 0;
+    i < tokens.length;
+    i++
+  ) {
+
     const token = tokens[i];
 
-    // Keep spaces and punctuation.
+
+    /*
+    Keep spaces and punctuation.
+    */
+
     if (!isWord(token)) {
+
       output += token;
+
       continue;
     }
 
+
+    /*
+    =====================================================
+    REMOVE ENGLISH "TO" BETWEEN TWO VERBS
+
+    needs to learn
+    → nesesa aprende
+
+    wants to study
+    → vole studia
+
+    tries to help
+    → atenta aida
+
+    BUT:
+
+    go to school
+    → vade a la scola
+
+    because school is NOT a verb.
+    =====================================================
+    */
+
+    if (token.toLowerCase() === "to") {
+
+      const before =
+        previousWord(tokens, i);
+
+      const after =
+        nextWord(tokens, i);
+
+
+      if (
+        before &&
+        after &&
+        isVerb(before) &&
+        isVerb(after)
+      ) {
+
+        /*
+        Skip "to".
+
+        There is already a space before "to",
+        so also skip the space immediately
+        after "to".
+        */
+
+        if (
+          i + 1 < tokens.length &&
+          /^\s+$/.test(tokens[i + 1])
+        ) {
+
+          i++;
+
+        }
+
+        continue;
+      }
+    }
+
+
     let matchFound = false;
 
-    // First try exact vocabulary words and phrases.
+
+    /*
+    First try exact vocabulary entries
+    and longer phrases.
+    */
+
     for (const entry of dictionary) {
-      const result = phraseMatches(tokens, i, entry.words);
+
+      const result =
+        phraseMatches(
+          tokens,
+          i,
+          entry.words
+        );
+
 
       if (result !== null) {
-        output += preserveCapitalization(token, entry.elefen);
+
+        output +=
+          preserveCapitalization(
+            token,
+            entry.elefen
+          );
+
+
         i = result;
+
         matchFound = true;
+
         break;
       }
     }
 
+
+    /*
+    No exact vocabulary match?
+
+    Check whether it is automatically
+    recognizable as a plural noun.
+    */
+
     if (!matchFound) {
-      // If no exact entry exists, see whether this looks like
-      // the plural of a noun marked "| noun".
-      const pluralTranslation = translatePluralNoun(token);
+
+      const pluralTranslation =
+        translatePluralNoun(token);
+
 
       if (pluralTranslation) {
-        output += preserveCapitalization(token, pluralTranslation);
+
+        output +=
+          preserveCapitalization(
+            token,
+            pluralTranslation
+          );
+
       } else {
-        // Unknown words stay in English.
+
+        // Unknown words stay English.
         output += token;
+
       }
     }
   }
+
 
   return output;
 }
 
 
+/*
+=========================================================
+MAIN SENTENCE TRANSLATOR
+=========================================================
+*/
+
 function translateSentence(text) {
-  const pastQuestion = translatePastQuestion(text);
+
+  const pastQuestion =
+    translatePastQuestion(text);
+
 
   if (pastQuestion !== null) {
+
     return pastQuestion;
+
   }
+
 
   return translateNormalSentence(text);
 }
 
 
+/*
+=========================================================
+TRANSLATE BUTTON
+=========================================================
+*/
+
 function translateText() {
-  const input = document.getElementById("english").value;
-  const output = translateSentence(input);
-  document.getElementById("elefen").value = output;
+
+  const input =
+    document
+      .getElementById("english")
+      .value;
+
+
+  const output =
+    translateSentence(input);
+
+
+  document
+    .getElementById("elefen")
+    .value = output;
 }
 
 
-// Connect the button.
+/*
+Connect Translate button
+*/
+
 document
   .getElementById("translateButton")
-  .addEventListener("click", translateText);
+  .addEventListener(
+    "click",
+    translateText
+  );
 
 
-// Optional: Ctrl+Enter / Cmd+Enter translates too.
+/*
+Ctrl + Enter or Cmd + Enter
+also translates.
+*/
+
 document
   .getElementById("english")
-  .addEventListener("keydown", function (event) {
-    if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
-      translateText();
+  .addEventListener(
+    "keydown",
+    function (event) {
+
+      if (
+        (event.ctrlKey || event.metaKey) &&
+        event.key === "Enter"
+      ) {
+
+        translateText();
+
+      }
     }
-  });
+  );
 
 </script>
-
-</body>
-</html>
