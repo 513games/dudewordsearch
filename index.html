@@ -201,6 +201,7 @@ cage = caje | noun
 banana = banana | noun
 game = jua | noun
 
+
 # PREPOSITIONS / LOCATION / MOVEMENT
 
 in = en
@@ -762,7 +763,6 @@ not = no
 
 maybe = posible
 probably = probable
-between = entre
 
 here = asi
 there = ala
@@ -1435,14 +1435,383 @@ function translatePastQuestion(text) {
 
 /*
 =========================================================
+ADJECTIVE / ADVERB WORD ORDER
+
+Vocabulary labels supported:
+blue = blu | adjective
+quickly = rapida | adverb
+
+Short labels also work:
+blue = blu | adj
+quickly = rapida | adv
+
+Rules implemented here:
+
+English:  the blue car
+Elefen:   la auto blu
+
+English:  the good blue car
+Elefen:   la bon auto blu
+
+English:  the very good car
+Elefen:   la auto multe bon
+
+English:  he quickly studies
+Elefen:   el studia rapida
+
+bon and mal are the adjective exceptions. Unmodified,
+they stay BEFORE the noun. If bon or mal is itself
+modified (for example, "very good"), the whole group
+moves after the noun. Adverbs that modify adjectives stay
+with the adjective, so "the very blue car" becomes
+"la auto multe blu" after translation.
+=========================================================
+*/
+
+function getSingleWordEntries(word) {
+
+  if (!word) return [];
+
+  const lower = word.toLowerCase();
+
+  return dictionary.filter(entry =>
+    entry.words.length === 1 &&
+    entry.english === lower
+  );
+}
+
+
+function hasGrammarType(word, ...types) {
+
+  return getSingleWordEntries(word).some(entry =>
+    types.includes(entry.type)
+  );
+}
+
+
+function isAdjective(word) {
+  return hasGrammarType(word, "adjective", "adj");
+}
+
+
+function isAdverb(word) {
+  return hasGrammarType(word, "adverb", "adv");
+}
+
+
+function isBonOrMalAdjective(word) {
+
+  return getSingleWordEntries(word).some(entry => {
+
+    if (entry.type !== "adjective" && entry.type !== "adj") {
+      return false;
+    }
+
+    const elefen = entry.elefen.toLowerCase();
+
+    return elefen === "bon" || elefen === "mal";
+  });
+}
+
+
+function lowercaseFirstLetter(word) {
+  if (!word) return word;
+  return word.charAt(0).toLowerCase() + word.slice(1);
+}
+
+
+function uppercaseFirstLetter(word) {
+  if (!word) return word;
+  return word.charAt(0).toUpperCase() + word.slice(1);
+}
+
+
+/*
+Reorder only WORD VALUES while leaving all spaces and
+punctuation in their original token positions. This keeps
+commas, question marks, etc. intact.
+*/
+function reorderElefenGrammar(text) {
+
+  const tokens =
+    text.match(
+      /[A-Za-zÀ-ÖØ-öø-ÿ']+|\s+|[^\sA-Za-zÀ-ÖØ-öø-ÿ']+/g
+    ) || [];
+
+
+  /*
+  Split the sentence into runs of words separated only by
+  whitespace. Punctuation ends a run, so grammar movement
+  never jumps across a comma, period, question mark, etc.
+  */
+  const runs = [];
+  let currentRun = [];
+
+  for (let i = 0; i < tokens.length; i++) {
+
+    if (isWord(tokens[i])) {
+      currentRun.push(i);
+      continue;
+    }
+
+    if (/^\s+$/.test(tokens[i])) {
+      continue;
+    }
+
+    if (currentRun.length) {
+      runs.push(currentRun);
+      currentRun = [];
+    }
+  }
+
+  if (currentRun.length) {
+    runs.push(currentRun);
+  }
+
+
+  for (const wordIndexes of runs) {
+
+    let words = wordIndexes.map(index => tokens[index]);
+
+
+    /*
+    -----------------------------------------------------
+    ADJECTIVES
+
+    adjective + noun
+    -> noun + adjective
+
+    adjective + adjective + noun
+    -> noun + adjective + adjective
+
+    BUT bon / mal stay before the noun.
+
+    Adverbs directly attached to an adjective travel with
+    that adjective:
+
+    very + blue + car
+    -> car + very + blue
+    -----------------------------------------------------
+    */
+    for (let nounIndex = words.length - 1;
+         nounIndex >= 0;
+         nounIndex--) {
+
+      if (!isNoun(words[nounIndex])) continue;
+
+      let modifierStart = nounIndex;
+
+      while (
+        modifierStart > 0 &&
+        (
+          isAdjective(words[modifierStart - 1]) ||
+          isAdverb(words[modifierStart - 1])
+        )
+      ) {
+        modifierStart--;
+      }
+
+      if (modifierStart === nounIndex) continue;
+
+      const modifiers =
+        words.slice(modifierStart, nounIndex);
+
+      if (!modifiers.some(isAdjective)) continue;
+
+
+      /*
+      Build adjective groups. Any adverb immediately before
+      an adjective belongs to that adjective group.
+
+      very good big car
+      groups: [very good] [big]
+      */
+      const groups = [];
+      let pendingAdverbs = [];
+
+      for (const modifier of modifiers) {
+
+        if (isAdverb(modifier)) {
+          pendingAdverbs.push(modifier);
+          continue;
+        }
+
+        if (isAdjective(modifier)) {
+          groups.push({
+            words: [...pendingAdverbs, modifier],
+            adjective: modifier
+          });
+          pendingAdverbs = [];
+        }
+      }
+
+      // Do not move a dangling adverb with no adjective.
+      if (pendingAdverbs.length) continue;
+
+      const beforeNoun = [];
+      const afterNoun = [];
+
+      for (const group of groups) {
+
+        const hasAdverbModifier =
+          group.words.length > 1;
+
+        /*
+        bon / mal normally stay before the noun, but the
+        official Elefen grammar places them after the noun
+        when they are themselves modified:
+
+        a good dog       -> un bon can
+        a very good dog  -> un can multe bon
+        */
+        if (
+          isBonOrMalAdjective(group.adjective) &&
+          !hasAdverbModifier
+        ) {
+          beforeNoun.push(...group.words);
+        } else {
+          afterNoun.push(...group.words);
+        }
+      }
+
+      const noun = words[nounIndex];
+
+      const replacement = [
+        ...beforeNoun,
+        noun,
+        ...afterNoun
+      ];
+
+
+      /*
+      If an adjective started the sentence and moves behind
+      the noun, transfer normal sentence capitalization to
+      the new first word.
+      */
+      if (
+        modifierStart === 0 &&
+        wordIndexes[0] === 0 &&
+        /^[A-Z]/.test(words[0]) &&
+        replacement.length > 1
+      ) {
+
+        const movedOriginalFirst =
+          replacement.indexOf(words[0]);
+
+        if (movedOriginalFirst > 0) {
+          replacement[movedOriginalFirst] =
+            lowercaseFirstLetter(
+              replacement[movedOriginalFirst]
+            );
+        }
+
+        replacement[0] =
+          uppercaseFirstLetter(replacement[0]);
+      }
+
+
+      words.splice(
+        modifierStart,
+        nounIndex - modifierStart + 1,
+        ...replacement
+      );
+    }
+
+
+    /*
+    -----------------------------------------------------
+    ADVERBS MODIFYING VERBS
+
+    quickly + studies
+    -> studies + quickly
+
+    really + quickly + studies
+    -> studies + really + quickly
+
+    This only moves adverbs that are immediately before a
+    verb. It does NOT move an adverb before an adjective,
+    so "very blue" remains together.
+    -----------------------------------------------------
+    */
+    for (let verbIndex = words.length - 1;
+         verbIndex >= 0;
+         verbIndex--) {
+
+      if (!isVerb(words[verbIndex])) continue;
+
+      let adverbStart = verbIndex;
+
+      while (
+        adverbStart > 0 &&
+        isAdverb(words[adverbStart - 1])
+      ) {
+        adverbStart--;
+      }
+
+      if (adverbStart === verbIndex) continue;
+
+      const adverbs =
+        words.slice(adverbStart, verbIndex);
+
+      const verb = words[verbIndex];
+
+      const replacement = [
+        verb,
+        ...adverbs
+      ];
+
+
+      if (
+        adverbStart === 0 &&
+        wordIndexes[0] === 0 &&
+        /^[A-Z]/.test(words[0]) &&
+        replacement.length > 1
+      ) {
+
+        replacement[replacement.length - 1] =
+          lowercaseFirstLetter(
+            replacement[replacement.length - 1]
+          );
+
+        replacement[0] =
+          uppercaseFirstLetter(replacement[0]);
+      }
+
+
+      words.splice(
+        adverbStart,
+        verbIndex - adverbStart + 1,
+        ...replacement
+      );
+    }
+
+
+    // Put the reordered words back into their token slots.
+    for (let i = 0; i < wordIndexes.length; i++) {
+      tokens[wordIndexes[i]] = words[i];
+    }
+  }
+
+
+  return tokens.join("");
+}
+
+
+/*
+=========================================================
 NORMAL TRANSLATION
 =========================================================
 */
 
 function translateNormalSentence(text) {
 
+  // First reshape English adjective/adverb order into
+  // the Elefen word order described by the grammar labels.
+  const reorderedText =
+    reorderElefenGrammar(text);
+
   const tokens =
-    text.match(
+    reorderedText.match(
       /[A-Za-zÀ-ÖØ-öø-ÿ']+|\s+|[^\sA-Za-zÀ-ÖØ-öø-ÿ']+/g
     ) || [];
 
@@ -1491,10 +1860,39 @@ function translateNormalSentence(text) {
       const before =
         previousWord(tokens, i);
 
-      if (
+      const after =
+        nextWord(tokens, i);
+
+      /*
+      Relative-clause starters.
+
+      This catches:
+      the bananas that I gave you
+      the car that he bought
+      the cars that are blue
+
+      even if the noun before "that"
+      has not been added to the dictionary yet.
+      */
+      const relativeStarters = [
+        "i", "you", "he", "she", "it", "we", "they",
+        "am", "is", "are", "was", "were",
+        "have", "has", "had",
+        "do", "does", "did",
+        "will", "would", "can", "could",
+        "should", "must"
+      ];
+
+      const looksLikeRelativeClause =
         before &&
-        isNoun(before)
-      ) {
+        after &&
+        (
+          isNoun(before) ||
+          relativeStarters.includes(after.toLowerCase()) ||
+          isVerb(after)
+        );
+
+      if (looksLikeRelativeClause) {
 
         output += preserveCapitalization(
           token,
