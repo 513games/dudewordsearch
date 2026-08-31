@@ -658,6 +658,7 @@ speak = parla | verb
 read = leje | verb
 write = scrive | verb
 ask = demanda | verb
+asks = demanda | verb
 asked = ia demanda | verb
 answer = responde | verb
 explain = esplica | verb
@@ -1373,6 +1374,402 @@ function translatePluralNoun(word) {
 }
 
 
+
+/*
+=========================================================
+REPORTED YES / NO QUESTIONS
+
+English uses "if" / "whether" for indirect yes/no
+questions:
+
+The old woman asked me if I had a car.
+
+Elefen uses ESCE, and Elefen keeps the tense of the
+ORIGINAL direct question:
+
+"Do you have a car?"
+-> Esce tu ave un auto?
+
+reported:
+-> La fem vea ia demanda a me esce me ave un auto.
+
+English often backshifts present verbs after "asked":
+have -> had
+is   -> was
+want -> wanted
+
+Inside this specific reported-question pattern, the
+translator can reverse that English backshift by using
+the vocabulary itself. If a word translates as:
+
+had = ia ave
+
+and another vocabulary entry translates as:
+
+have = ave
+
+the reported clause can recover "have" automatically.
+
+We preserve obvious real-past clauses when they contain
+an explicit past-time marker such as "yesterday", and we
+do not unshift "had + past participle" constructions.
+=========================================================
+*/
+
+function reportedPronoun(word) {
+
+  if (!word) return null;
+
+  const map = {
+    "i": "me",
+    "me": "me",
+    "you": "tu",
+    "he": "el",
+    "him": "el",
+    "she": "el",
+    "her": "el",
+    "it": "lo",
+    "we": "nos",
+    "us": "nos",
+    "they": "los",
+    "them": "los",
+    "you all": "vos"
+  };
+
+  return map[word.toLowerCase()] || null;
+}
+
+
+function hasExplicitPastTimeMarker(text) {
+
+  return /\b(?:yesterday|earlier|previously|ago|last\s+(?:night|week|month|year|monday|tuesday|wednesday|thursday|friday|saturday|sunday)|at\s+that\s+time)\b/i
+    .test(text);
+}
+
+
+function looksLikePastParticiple(word) {
+
+  if (!word) return false;
+
+  const lower = word.toLowerCase();
+
+  const commonParticiples = new Set([
+    "been", "gone", "done", "eaten", "drunk",
+    "seen", "known", "given", "taken", "written",
+    "spoken", "driven", "bought", "brought",
+    "thought", "made", "found", "left", "lost",
+    "won", "read", "heard", "felt", "built",
+    "sent", "received"
+  ]);
+
+  return (
+    commonParticiples.has(lower) ||
+    /(?:ed|en)$/i.test(lower)
+  );
+}
+
+
+/*
+Find a present-form English vocabulary word by comparing
+Elefen translations.
+
+Example:
+had    = ia ave
+have   = ave
+
+wanted = ia vole
+want   = vole
+
+went   = ia vade
+go     = vade
+*/
+function findPresentFormForReportedPast(word) {
+
+  if (!word) return null;
+
+  const lower = word.toLowerCase();
+
+  const pastEntries =
+    dictionary.filter(entry =>
+      entry.words.length === 1 &&
+      entry.english === lower &&
+      /^ia\s+/i.test(entry.elefen)
+    );
+
+
+  for (const pastEntry of pastEntries) {
+
+    const presentElefen =
+      pastEntry.elefen.replace(/^ia\s+/i, "").trim();
+
+    const presentEntry =
+      dictionary.find(entry =>
+        entry.words.length === 1 &&
+        entry.english !== lower &&
+        entry.elefen.toLowerCase() ===
+          presentElefen.toLowerCase() &&
+        !/^(?:ia|va|ta)\s+/i.test(entry.elefen)
+      );
+
+    if (presentEntry) {
+      return presentEntry.english;
+    }
+  }
+
+
+  return null;
+}
+
+
+function normalizeReportedQuestionBackshift(text) {
+
+  /*
+  "Did you have a car?"
+  -> She asked if I had a car.
+
+  Here "had" is English backshift, not a real past event.
+
+  But:
+  She asked if I ate yesterday.
+  "yesterday" signals a real past, so preserve it.
+  */
+  if (hasExplicitPastTimeMarker(text)) {
+    return text;
+  }
+
+
+  const tokens =
+    text.match(
+      /[A-Za-zÀ-ÖØ-öø-ÿ']+|\s+|[^\sA-Za-zÀ-ÖØ-öø-ÿ']+/g
+    ) || [];
+
+
+  for (let i = 0; i < tokens.length; i++) {
+
+    if (!isWord(tokens[i])) continue;
+
+    const lower = tokens[i].toLowerCase();
+
+
+    /*
+    Preserve past perfect:
+    had eaten
+    had gone
+    had studied
+    */
+    if (lower === "had") {
+
+      const after =
+        nextWord(tokens, i);
+
+      if (looksLikePastParticiple(after)) {
+        continue;
+      }
+    }
+
+
+    const presentForm =
+      findPresentFormForReportedPast(tokens[i]);
+
+
+    if (presentForm) {
+
+      const wasCapitalized =
+        /^[A-Z]/.test(tokens[i]);
+
+      tokens[i] =
+        wasCapitalized
+          ? uppercaseFirstLetter(presentForm)
+          : presentForm;
+    }
+  }
+
+
+  return tokens.join("");
+}
+
+
+/*
+Translate the part beginning with ask/asks/asked.
+
+Examples:
+asked me if I had a car
+-> ia demanda a me esce me ave un auto
+
+ask me if I had a car
+when it follows English "did"
+-> demanda a me esce me ave un auto
+*/
+function translateReportedAskPhrase(
+  text,
+  options = {}
+) {
+
+  const match =
+    text
+      .trim()
+      .match(
+        /^(ask|asks|asked)\s+(?:(you all|me|you|him|her|us|them)\s+)?(?:if|whether)\s+(you all|i|you|he|she|it|we|they)\s+(.+?)$/i
+      );
+
+
+  if (!match) {
+    return null;
+  }
+
+
+  const englishAsk =
+    match[1].toLowerCase();
+
+  const englishObject =
+    match[2]
+      ? match[2].toLowerCase()
+      : null;
+
+  const englishSubject =
+    match[3].toLowerCase();
+
+  const embeddedPredicate =
+    match[4].trim();
+
+
+  /*
+  "asked" is past reporting.
+  A surrounding "did" is also past reporting even though
+  English uses the base word "ask".
+  */
+  const reportingIsPast =
+    options.reportingIsPast === true ||
+    englishAsk === "asked";
+
+
+  const askTranslation =
+    options.pastMarkerAlreadyAdded === true
+      ? "demanda"
+      : (
+          englishAsk === "asked"
+            ? "ia demanda"
+            : "demanda"
+        );
+
+
+  const objectTranslation =
+    englishObject
+      ? " a " + reportedPronoun(englishObject)
+      : "";
+
+
+  const subjectTranslation =
+    reportedPronoun(englishSubject);
+
+
+  const normalizedPredicate =
+    reportingIsPast
+      ? normalizeReportedQuestionBackshift(
+          embeddedPredicate
+        )
+      : embeddedPredicate;
+
+
+  const translatedPredicate =
+    translateNormalSentence(
+      normalizedPredicate
+    );
+
+
+  return (
+    askTranslation +
+    objectTranslation +
+    " esce " +
+    subjectTranslation +
+    " " +
+    translatedPredicate
+  );
+}
+
+
+/*
+Whole reported yes/no sentence:
+
+The old woman asked me if I had a car.
+-> La fem vea ia demanda a me esce me ave un auto.
+*/
+function translateReportedYesNoQuestion(text) {
+
+  const trimmed =
+    text.trim();
+
+
+  /*
+  Let the direct-question rules handle sentences beginning
+  with auxiliaries such as "Did she ask...?"
+  */
+  if (
+    /^(?:did|do|does|will|would|can|could|should|must)\b/i
+      .test(trimmed)
+  ) {
+    return null;
+  }
+
+
+  const terminalMatch =
+    trimmed.match(/([.?!])$/);
+
+  const punctuation =
+    terminalMatch
+      ? terminalMatch[1]
+      : "";
+
+  const withoutPunctuation =
+    punctuation
+      ? trimmed.slice(0, -1).trimEnd()
+      : trimmed;
+
+
+  const match =
+    withoutPunctuation.match(
+      /^(.+?)\s+((?:ask|asks|asked)\s+(?:(?:you all|me|you|him|her|us|them)\s+)?(?:if|whether)\s+(?:you all|i|you|he|she|it|we|they)\s+.+)$/i
+    );
+
+
+  if (!match) {
+    return null;
+  }
+
+
+  const outerSubject =
+    match[1].trim();
+
+  const reportedAskPart =
+    match[2].trim();
+
+
+  const translatedOuterSubject =
+    translateNormalSentence(
+      outerSubject
+    );
+
+
+  const translatedAskPart =
+    translateReportedAskPhrase(
+      reportedAskPart
+    );
+
+
+  if (translatedAskPart === null) {
+    return null;
+  }
+
+
+  return (
+    translatedOuterSubject +
+    " " +
+    translatedAskPart +
+    punctuation
+  );
+}
+
+
 /*
 =========================================================
 PAST YES / NO QUESTIONS
@@ -1420,8 +1817,30 @@ function translatePastQuestion(text) {
     match[2].trim();
 
 
+  /*
+  A direct past question can itself contain a reported
+  yes/no question:
+
+  Did she ask me if I had a car?
+  -> Esce el ia demanda a me esce me ave un auto?
+
+  "did" already supplies ia, so the inner ask stays
+  demanda instead of becoming ia demanda again.
+  */
+  const reportedAskRest =
+    translateReportedAskPhrase(
+      restOfSentence,
+      {
+        reportingIsPast: true,
+        pastMarkerAlreadyAdded: true
+      }
+    );
+
+
   const translatedRest =
-    translateNormalSentence(restOfSentence);
+    reportedAskRest !== null
+      ? reportedAskRest
+      : translateNormalSentence(restOfSentence);
 
 
   return (
@@ -2044,6 +2463,22 @@ MAIN SENTENCE TRANSLATOR
 */
 
 function translateSentence(text) {
+
+  /*
+  Check reported yes/no questions BEFORE ordinary
+  translation so English "if/whether" can become Elefen
+  "esce" and English backshift can be reversed.
+  */
+  const reportedQuestion =
+    translateReportedYesNoQuestion(text);
+
+
+  if (reportedQuestion !== null) {
+
+    return reportedQuestion;
+
+  }
+
 
   const pastQuestion =
     translatePastQuestion(text);
