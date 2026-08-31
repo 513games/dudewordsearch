@@ -2,817 +2,1223 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Canal 26 Elefen — News Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>English → Elefen Translator</title>
+
   <style>
-    :root {
-      --accent-color: #0284c7;
-      --header-bg: #0b325e;
-      --text-dark: #0b2545;
-      --text-muted: #53657b;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
-
     body {
-      background-color: #0f172a;
-      color: #f8fafc;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-    }
-
-    /* ================= EDITOR PANEL ================= */
-    #editor-panel {
-      width: 100%;
-      max-width: 440px;
-      background-color: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 16px;
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 40px auto;
       padding: 20px;
-      margin-bottom: 24px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-    }
-
-    .editor-header {
-      margin-bottom: 16px;
-    }
-
-    .editor-header h1 {
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: #ffffff;
-      margin-bottom: 4px;
-    }
-
-    .editor-header p {
-      font-size: 0.8rem;
-      color: #94a3b8;
-      line-height: 1.3;
-    }
-
-    .form-group {
-      margin-bottom: 14px;
-    }
-
-    .form-row {
-      display: flex;
-      gap: 12px;
-    }
-
-    .form-row .form-group {
-      flex: 1;
-    }
-
-    label {
-      display: block;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: #cbd5e1;
-      margin-bottom: 6px;
-    }
-
-    input[type="text"],
-    textarea,
-    select {
-      width: 100%;
-      background-color: #0f172a;
-      border: 1px solid #334155;
-      border-radius: 8px;
-      color: #ffffff;
-      padding: 10px 12px;
-      font-size: 0.95rem;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    input[type="text"]:focus,
-    textarea:focus,
-    select:focus {
-      border-color: #38bdf8;
     }
 
     textarea {
-      resize: vertical;
-      min-height: 60px;
-    }
-
-    .file-input-wrapper {
-      background-color: #0f172a;
-      border: 1px solid #334155;
-      border-radius: 8px;
-      padding: 8px 10px;
-      display: flex;
-      align-items: center;
-    }
-
-    .file-input-wrapper input[type="file"] {
-      color: #94a3b8;
-      font-size: 0.8rem;
       width: 100%;
-    }
-
-    .checkbox-group {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background-color: #0f172a;
-      border: 1px solid #334155;
-      padding: 10px 12px;
-      border-radius: 8px;
-      margin-bottom: 16px;
-      cursor: pointer;
-    }
-
-    .checkbox-group input {
-      width: 18px;
-      height: 18px;
-      accent-color: #38bdf8;
-      cursor: pointer;
-    }
-
-    .checkbox-group span {
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    .btn-group {
-      display: flex;
-      gap: 10px;
-      margin-top: 10px;
+      height: 200px;
+      margin-bottom: 15px;
+      padding: 12px;
+      font-size: 18px;
     }
 
     button {
-      cursor: pointer;
-      font-weight: 700;
-      border-radius: 8px;
-      padding: 12px;
-      font-size: 0.9rem;
-      border: none;
-      transition: opacity 0.2s, transform 0.1s;
-    }
-
-    button:active {
-      transform: scale(0.98);
-    }
-
-    .btn-primary {
-      background-color: #2563eb;
-      color: #ffffff;
-      flex: 1.2;
-    }
-
-    .btn-secondary {
-      background-color: #334155;
-      color: #ffffff;
-      flex: 1;
-    }
-
-    .btn-danger {
-      background-color: #7f1d1d;
-      color: #fecaca;
-      width: 100%;
-      margin-top: 10px;
-    }
-
-    /* ================= FLOATING RESTORE BUTTON ================= */
-    #floating-editor-btn {
-      display: none;
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 9999;
-      background-color: #2563eb;
-      color: #ffffff;
       padding: 12px 20px;
-      border-radius: 999px;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
-      font-weight: 700;
-      font-size: 0.85rem;
-    }
-
-    /* ================= PHONE PREVIEW FRAME ================= */
-    #preview-container {
-      width: 100%;
-      max-width: 414px;
-      background-color: #ffffff;
-      color: var(--text-dark);
-      border-radius: 32px;
-      overflow: hidden;
-      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.6);
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Status Bar */
-    .mock-status-bar {
-      background-color: var(--header-bg);
-      color: #ffffff;
-      padding: 12px 20px 4px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.85rem;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-    }
-
-    .status-icons {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.78rem;
-    }
-
-    /* Top Navigation Header */
-    .mock-header {
-      background-color: var(--header-bg);
-      padding: 8px 18px 12px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: relative;
-      min-height: 68px;
-    }
-
-    .header-accent-line {
-      height: 4px;
-      background-color: var(--accent-color);
-      width: 100%;
-    }
-
-    .hamburger-icon {
-      width: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+      font-size: 18px;
       cursor: pointer;
-      z-index: 2;
-    }
-
-    .hamburger-icon span {
-      display: block;
-      height: 3px;
-      background-color: #ffffff;
-      border-radius: 2px;
-    }
-
-    /* Branding: Exact Center Alignment */
-    .brand-left {
-      position: absolute;
-      right: calc(50% + 8px);
-      top: 50%;
-      transform: translateY(-50%);
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      z-index: 1;
-    }
-
-    .brand-divider {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      width: 1.5px;
-      height: 36px;
-      background-color: rgba(255, 255, 255, 0.35);
-      z-index: 1;
-    }
-
-    .brand-right {
-      position: absolute;
-      left: calc(50% + 8px);
-      top: 50%;
-      transform: translateY(-50%);
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      z-index: 1;
-    }
-
-    .canal26-badge {
-      display: flex;
-      filter: drop-shadow(0 3px 6px rgba(0,0,0,0.35));
-      flex-shrink: 0;
-    }
-
-    #custom-logo-img {
-      max-height: 52px;
-      max-width: 95px;
-      object-fit: contain;
-      display: none;
-      flex-shrink: 0;
-    }
-
-    .station-tagline {
-      font-size: 0.74rem;
-      font-weight: 600;
-      font-style: italic;
-      color: #f1f5f9;
-      letter-spacing: 0.02em;
-      line-height: 1.25;
-      text-align: center;
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-      white-space: pre-line;
-    }
-
-    /* Live Badge */
-    .live-badge {
-      background-color: var(--accent-color);
-      color: #ffffff;
-      font-size: 0.68rem;
-      font-weight: 800;
-      letter-spacing: 0.04em;
-      padding: 5px 9px;
-      border-radius: 4px;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      text-transform: uppercase;
-      z-index: 2;
-    }
-
-    .live-dot {
-      width: 6px;
-      height: 6px;
-      background-color: #ffffff;
-      border-radius: 50%;
-      display: inline-block;
-    }
-
-    /* ================= SUB-NAV CATEGORY TABS ================= */
-    .mock-subnav {
-      background-color: #f8fafc;
-      border-bottom: 1px solid #e2e8f0;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      padding: 0 8px;
-    }
-
-    .nav-tab-item {
-      padding: 9px 8px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: #64748b;
-      cursor: pointer;
-      position: relative;
-      transition: color 0.15s ease;
-      border-bottom: 3px solid transparent;
-    }
-
-    .nav-tab-item:hover {
-      color: var(--text-dark);
-    }
-
-    .nav-tab-item.active {
-      color: var(--accent-color);
-      font-weight: 900;
-      border-bottom: 3px solid var(--accent-color);
-    }
-
-    /* News Content Body */
-    .mock-content {
-      padding: 16px 18px 32px 18px;
-      background-color: #ffffff;
-    }
-
-    .category-badge {
-      display: inline-block;
-      background-color: var(--accent-color);
-      color: #ffffff;
-      font-size: 0.8rem;
-      font-weight: 800;
-      padding: 4px 10px;
-      border-radius: 6px;
-      margin-bottom: 12px;
-      letter-spacing: 0.02em;
-    }
-
-    .headline {
-      font-size: 1.55rem;
-      font-weight: 900;
-      line-height: 1.18;
-      color: var(--text-dark);
-      margin-bottom: 12px;
-      word-wrap: break-word;
-    }
-
-    .subheadline {
-      font-size: 0.95rem;
-      font-weight: 500;
-      line-height: 1.35;
-      color: var(--text-muted);
-      margin-bottom: 16px;
-      display: none;
-    }
-
-    /* Article Image Area */
-    .image-container {
-      width: 100%;
-      min-height: 250px;
-      background: linear-gradient(180deg, #184b85 0%, #0b325e 100%);
-      border-radius: 14px;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-
-    #preview-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: none;
-    }
-
-    .image-placeholder-text {
-      color: #ffffff;
-      font-size: 1rem;
-      font-weight: 700;
-      text-align: center;
-      padding: 24px;
-      line-height: 1.3;
-      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
-    }
-
-    .image-caption {
-      font-size: 0.76rem;
-      color: #64748b;
-      margin-top: 6px;
-      padding-left: 2px;
-      display: none;
     }
   </style>
 </head>
+
 <body>
 
-  <!-- ================= CONTROL PANEL ================= -->
-  <div id="editor-panel">
-    <div class="editor-header">
-      <h1>Canal 26 Elefen — Generator</h1>
-      <p>Edit fields below. Tap <b>Apply changes</b> to update, and <b>Hide editor</b> for screenshots.</p>
-    </div>
+  <h1>English → Elefen</h1>
 
-    <div class="form-group">
-      <label>Category</label>
-      <input type="text" id="input-category" value="SPORTE">
-    </div>
+  <h3>English</h3>
 
-    <div class="form-group">
-      <label>Headline</label>
-      <textarea id="input-headline">Porto de Elefen fronti Lago Serena doman a 19:30 e lo va es transmeteda par Canal 26 Elefen</textarea>
-    </div>
+  <textarea
+    id="english"
+    placeholder="Type English here..."
+  ></textarea>
 
-    <div class="form-group">
-      <label>Station Tagline</label>
-      <textarea id="input-tagline" style="min-height: 52px;">La vose de la
-popla</textarea>
-    </div>
+  <button onclick="translateText()">
+    Translate
+  </button>
 
-    <div class="form-group">
-      <label>Optional Subheadline</label>
-      <textarea id="input-subheadline" placeholder="Leave blank if you don't want one."></textarea>
-    </div>
+  <h3>Elefen</h3>
 
-    <div class="form-row">
-      <div class="form-group">
-        <label>Time</label>
-        <input type="text" id="input-time" value="9:37">
-      </div>
-      <div class="form-group">
-        <label>Accent Color</label>
-        <select id="input-accent">
-          <option value="#0284c7">Sky Blue</option>
-          <option value="#d8232a">News Red</option>
-          <option value="#16a34a">Emerald Green</option>
-          <option value="#ea580c">Urgent Orange</option>
-          <option value="#7c3aed">Royal Purple</option>
-        </select>
-      </div>
-    </div>
+  <textarea
+    id="elefen"
+    readonly
+    placeholder="Translation appears here..."
+  ></textarea>
 
-    <div class="form-group">
-      <label>Article Image</label>
-      <div class="file-input-wrapper">
-        <input type="file" id="input-image" accept="image/*">
-      </div>
-    </div>
 
-    <div class="form-group">
-      <label>Image Caption</label>
-      <input type="text" id="input-caption" placeholder="Optional photo caption">
-    </div>
+<script>
 
-    <div class="form-group">
-      <label>Custom Logo Image (Optional)</label>
-      <div class="file-input-wrapper">
-        <input type="file" id="input-logo" accept="image/*">
-      </div>
-    </div>
+/*
+=========================================================
+=========================================================
 
-    <label class="checkbox-group">
-      <input type="checkbox" id="input-live">
-      <span>Show EN VIVO badge</span>
-    </label>
+        PASTE YOUR VOCABULARY BELOW THIS LINE
 
-    <div class="btn-group">
-      <button class="btn-primary" id="btn-apply">Apply changes</button>
-      <button class="btn-secondary" id="btn-hide">Hide editor</button>
-    </div>
+# BASIC WORDS
 
-    <button class="btn-danger" id="btn-reset">Reset text</button>
-  </div>
+hello = alo
+friend = ami
 
-  <button id="floating-editor-btn">Show Editor</button>
+# PRONOUNS
 
-  <!-- ================= PHONE SCREEN PREVIEW ================= -->
-  <div id="preview-container">
-    <!-- Status Bar -->
-    <div class="mock-status-bar">
-      <span id="preview-time">9:37</span>
-      <div class="status-icons">
-        <span>5G</span>
-        <span>Wi-Fi</span>
-        <span>100%</span>
-      </div>
-    </div>
+i = me
+me = me
+you = tu
+he = el
+him = el
+she = el
+her = el
+it = lo
+we = nos
+us = nos
+they = los
+them = los
+you all = vos
 
-    <!-- Top Navigation -->
-    <div class="mock-header">
-      <div class="hamburger-icon">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
+# TENSE / MODALITY HELPERS
 
-      <!-- Left of Center: Angled Dynamic Logo -->
-      <div class="brand-left" id="brand-left">
-        <div class="canal26-badge" id="default-badge">
-          <svg viewBox="0 0 160 180" width="48" height="56" style="overflow: visible;">
-            <defs>
-              <linearGradient id="shieldBorder" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#c5ddf3"/>
-                <stop offset="50%" stop-color="#ffffff"/>
-                <stop offset="100%" stop-color="#7397b8"/>
-              </linearGradient>
-              <linearGradient id="topBlue" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#145b96"/>
-                <stop offset="100%" stop-color="#092b52"/>
-              </linearGradient>
-              <linearGradient id="midRed" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#ee2b24"/>
-                <stop offset="40%" stop-color="#d6141a"/>
-                <stop offset="100%" stop-color="#93080e"/>
-              </linearGradient>
-              <clipPath id="skewClip">
-                <rect x="0" y="0" width="138" height="166" rx="20" ry="20" />
-              </clipPath>
-            </defs>
-            
-            <!-- Angled / Skewed Badge Group -->
-            <g transform="translate(18, 5) skewX(-7.5)">
-              <rect x="0" y="0" width="138" height="166" rx="22" ry="22" fill="#092b52" stroke="url(#shieldBorder)" stroke-width="7.5" />
-              
-              <g clip-path="url(#skewClip)">
-                <!-- Top Blue Section -->
-                <rect x="0" y="0" width="138" height="52" fill="url(#topBlue)" />
-                <text x="68" y="36" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="25" font-weight="900" font-style="italic" text-anchor="middle" letter-spacing="1">CANAL</text>
-                
-                <!-- Mid Red Section with subtle gloss -->
-                <rect x="0" y="50" width="138" height="82" fill="url(#midRed)" />
-                <path d="M 0,50 Q 69,68 138,50 L 138,68 Q 69,82 0,68 Z" fill="rgba(255,255,255,0.18)" />
-                <text x="66" y="122" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="78" font-weight="900" font-style="italic" text-anchor="middle" letter-spacing="-1">26</text>
-                
-                <!-- Bottom White Section -->
-                <rect x="0" y="130" width="138" height="38" fill="#ffffff" />
-                <text x="68" y="157" fill="#092b52" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="18.5" font-weight="900" font-style="italic" text-anchor="middle" letter-spacing="3">ELEFEN</text>
-              </g>
-            </g>
-          </svg>
-        </div>
-        <img id="custom-logo-img" alt="Logo">
-      </div>
+would = ta
+would not = no ta
+wouldn't = no ta
+does not = no
+doesn't = no
 
-      <!-- Exact Center Divider Line -->
-      <div class="brand-divider" id="brand-divider"></div>
+# DETERMINERS
 
-      <!-- Tagline -->
-      <div class="brand-right" id="brand-right">
-        <div class="station-tagline" id="preview-tagline">La vose de la
-popla</div>
-      </div>
+a = un
+an = un
+the = la
+this = esta
+that = acel
+my = mea
+mine = mea
+your = tua
+yours = tua
+his = sua
+her own = sua
+hers = sua
+our = nosa
+ours = nosa
+their = lor
+theirs = lor
 
-      <div class="live-badge" id="preview-live" style="display: none;">
-        <span class="live-dot"></span> EN VIVO
-      </div>
-    </div>
-    
-    <div class="header-accent-line"></div>
+# COMMON NOUNS
 
-    <!-- Category Sub-Navigation Bar -->
-    <nav class="mock-subnav">
-      <div class="nav-tab-item" data-category="CLIMA">CLIMA</div>
-      <div class="nav-tab-item" data-category="TRAFICA">TRAFICA</div>
-      <div class="nav-tab-item active" data-category="SPORTE">SPORTE</div>
-      <div class="nav-tab-item" data-category="NOVAS">NOVAS</div>
-    </nav>
+good morning = bon dia
+car = auto
+house = casa
+thing = cosa
+language = lingua
+person = person
+river = rio
+train = tren
+bus = autobus
+bicycle = bisicle
+bike = bisicle
+plane = avion
+boat = barco
+food = come
+water = acua
+day = dia
+night = note
+work = labora
+job = labora
+street = strada
+store = boteca
+school = scola
+city = site
+country = pais
+world = mundo
+word = parola
+sentence = frase
+time = tempo
+year = anio
+month = mense
+week = semana
+hour = ora
+minute = minuta
+morning = matin
+evening = sera
+room = sala
+door = porte
+window = fenestra
+book = libro
+phone = telefono
+name = nom
+family = familia
+mother = madre
+father = padre
+child = enfante
+baby = bebe
+woman = fem
+man = om
+people = persones
+body = corpo
+head = testa
+hand = mano
+eye = ojo
+mouth = boca
+heart = cor
+coffee = cafe
+bread = pan
+fruit = fruta
+animal = animal
+dog = can
+cat = gato
+tree = arbor
+flower = flor
+sun = sol
+moon = luna
+place = loco
+problem = problem
+cage = caje
 
-    <!-- News Story Content -->
-    <div class="mock-content">
-      <div class="category-badge" id="preview-category">SPORTE</div>
-      <h2 class="headline" id="preview-headline">Porto de Elefen fronti Lago Serena doman a 19:30 e lo va es transmeteda par Canal 26 Elefen</h2>
-      <p class="subheadline" id="preview-subheadline"></p>
 
-      <div class="image-container" id="image-container">
-        <img id="preview-img" alt="News Story Photo">
-        <div class="image-placeholder-text" id="preview-placeholder-text">
-          Upload a news image<br>to replace this background.
-        </div>
-      </div>
-      <div class="image-caption" id="preview-caption"></div>
-    </div>
-  </div>
+# PREPOSITIONS / LOCATION / MOVEMENT
 
-  <!-- ================= JAVASCRIPT LOGIC ================= -->
-  <script>
-    const inCategory = document.getElementById('input-category');
-    const inHeadline = document.getElementById('input-headline');
-    const inTagline = document.getElementById('input-tagline');
-    const inSubheadline = document.getElementById('input-subheadline');
-    const inTime = document.getElementById('input-time');
-    const inAccent = document.getElementById('input-accent');
-    const inImage = document.getElementById('input-image');
-    const inCaption = document.getElementById('input-caption');
-    const inLogo = document.getElementById('input-logo');
-    const inLive = document.getElementById('input-live');
+in = en
+inside = en
+on = sur
+with = con
+without = sin
+for = per
+to = a
+from = de
+at = a
+near = prosima
+beside = a lado de
+next to = a lado de
 
-    const outCategory = document.getElementById('preview-category');
-    const outHeadline = document.getElementById('preview-headline');
-    const outTagline = document.getElementById('preview-tagline');
-    const outSubheadline = document.getElementById('preview-subheadline');
-    const outTime = document.getElementById('preview-time');
-    const outLive = document.getElementById('preview-live');
-    const outCaption = document.getElementById('preview-caption');
-    const outImg = document.getElementById('preview-img');
-    const outPlaceholderText = document.getElementById('preview-placeholder-text');
-    const defaultBadge = document.getElementById('default-badge');
-    const customLogoImg = document.getElementById('custom-logo-img');
-    const brandLeft = document.getElementById('brand-left');
-    const brandDivider = document.getElementById('brand-divider');
-    const brandRight = document.getElementById('brand-right');
-    const navTabs = document.querySelectorAll('.nav-tab-item');
+by car = par auto
+by train = par tren
+by bus = par autobus
+by bicycle = par bisicle
+by bike = par bisicle
+by plane = par avion
+by boat = par barco
 
-    const editorPanel = document.getElementById('editor-panel');
-    const floatingBtn = document.getElementById('floating-editor-btn');
+by the river = a lado de la rio
+near the river = prosima a la rio
+next to the river = a lado de la rio
 
-    function syncNavTabs(categoryText) {
-      const formatted = categoryText.trim().toUpperCase();
-      navTabs.forEach(tab => {
-        if (tab.getAttribute('data-category') === formatted) {
-          tab.classList.add('active');
-        } else {
-          tab.classList.remove('active');
-        }
+by the house = a lado de la casa
+near the house = prosima a la casa
+next to the house = a lado de la casa
+
+by my house = a lado de mea casa
+near my house = prosima a mea casa
+by your house = a lado de tua casa
+near your house = prosima a tua casa
+
+in my car = en mea auto
+in your car = en tua auto
+in his car = en sua auto
+in her car = en sua auto
+in our car = en nosa auto
+in their car = en lor auto
+
+to my house = a mea casa
+to your house = a tua casa
+to his house = a sua casa
+to her house = a sua casa
+to our house = a nosa casa
+to their house = a lor casa
+
+to the house = a la casa
+to work = a la labora
+to school = a la scola
+to the store = a la boteca
+
+to me = a me
+to you = a tu
+to him = a el
+to her = a el
+to us = a nos
+to them = a los
+to you all = a vos
+
+
+# THINK THAT
+
+i think that = me pensa ce
+i thought that = me ia pensa ce
+i will think that = me va pensa ce
+
+you think that = tu pensa ce
+you thought that = tu ia pensa ce
+you will think that = tu va pensa ce
+
+he thinks that = el pensa ce
+he thought that = el ia pensa ce
+he will think that = el va pensa ce
+
+she thinks that = el pensa ce
+she thought that = el ia pensa ce
+she will think that = el va pensa ce
+
+we think that = nos pensa ce
+we thought that = nos ia pensa ce
+we will think that = nos va pensa ce
+
+they think that = los pensa ce
+they thought that = los ia pensa ce
+they will think that = los va pensa ce
+
+you all think that = vos pensa ce
+you all thought that = vos ia pensa ce
+you all will think that = vos va pensa ce
+
+
+# BELIEVE THAT
+
+i believe that = me crede ce
+i believed that = me ia crede ce
+i will believe that = me va crede ce
+
+you believe that = tu crede ce
+you believed that = tu ia crede ce
+you will believe that = tu va crede ce
+
+he believes that = el crede ce
+he believed that = el ia crede ce
+he will believe that = el va crede ce
+
+she believes that = el crede ce
+she believed that = el ia crede ce
+she will believe that = el va crede ce
+
+we believe that = nos crede ce
+we believed that = nos ia crede ce
+we will believe that = nos va crede ce
+
+they believe that = los crede ce
+they believed that = los ia crede ce
+they will believe that = los va crede ce
+
+you all believe that = vos crede ce
+you all believed that = vos ia crede ce
+you all will believe that = vos va crede ce
+
+
+# KNOW THAT
+
+i know that = me sabe ce
+i knew that = me ia sabe ce
+i will know that = me va sabe ce
+
+you know that = tu sabe ce
+you knew that = tu ia sabe ce
+you will know that = tu va sabe ce
+
+he knows that = el sabe ce
+he knew that = el ia sabe ce
+he will know that = el va sabe ce
+
+she knows that = el sabe ce
+she knew that = el ia sabe ce
+she will know that = el va sabe ce
+
+we know that = nos sabe ce
+we knew that = nos ia sabe ce
+we will know that = nos va sabe ce
+
+they know that = los sabe ce
+they knew that = los ia sabe ce
+they will know that = los va sabe ce
+
+you all know that = vos sabe ce
+you all knew that = vos ia sabe ce
+you all will know that = vos va sabe ce
+
+
+# WANT TO
+
+want = vole
+wanted = ia vole
+will want = va vole
+would want = ta vole
+
+want to = vole
+wanted to = ia vole
+will want to = va vole
+would want to = ta vole
+
+
+# CAN / COULD / SHOULD / MUST
+
+can = pote
+could = ta pote
+should = debe
+must = debe
+have to = debe
+has to = debe
+had to = ia debe
+will have to = va debe
+would have to = ta debe
+
+able to = pote
+was able to = ia pote
+were able to = ia pote
+will be able to = va pote
+
+
+# BEFORE / AFTER
+
+before i = ante ce me
+before you = ante ce tu
+before he = ante ce el
+before she = ante ce el
+before we = ante ce nos
+before they = ante ce los
+before you all = ante ce vos
+
+after i = pos ce me
+after you = pos ce tu
+after he = pos ce el
+after she = pos ce el
+after we = pos ce nos
+after they = pos ce los
+after you all = pos ce vos
+
+
+# DO THAT / DO IT
+
+do that = fa acel
+do it = fa lo
+
+can do that = pote fa acel
+could do that = ta pote fa acel
+will do that = va fa acel
+would do that = ta fa acel
+
+we can do that = nos pote fa acel
+we could do that = nos ta pote fa acel
+we will do that = nos va fa acel
+we would do that = nos ta fa acel
+
+i can do that = me pote fa acel
+you can do that = tu pote fa acel
+he can do that = el pote fa acel
+she can do that = el pote fa acel
+they can do that = los pote fa acel
+you all can do that = vos pote fa acel
+
+
+# TELL
+
+tell me = dise a me
+tell you = dise a tu
+tell him = dise a el
+tell her = dise a el
+tell us = dise a nos
+tell them = dise a los
+tell you all = dise a vos
+
+told me = ia dise a me
+told you = ia dise a tu
+told him = ia dise a el
+told her = ia dise a el
+told us = ia dise a nos
+told them = ia dise a los
+told you all = ia dise a vos
+
+will tell me = va dise a me
+will tell you = va dise a tu
+will tell him = va dise a el
+will tell her = va dise a el
+will tell us = va dise a nos
+will tell them = va dise a los
+will tell you all = va dise a vos
+
+have to tell me = debe dise a me
+have to tell you = debe dise a tu
+have to tell him = debe dise a el
+have to tell her = debe dise a el
+have to tell us = debe dise a nos
+have to tell them = debe dise a los
+have to tell you all = debe dise a vos
+
+
+# IF / BECAUSE / WHEN / WHERE / QUESTIONS
+
+if = si
+because = car
+when = cuando
+where = do
+why = perce
+what = cual
+who = ci
+
+if i = si me
+if you = si tu
+if he = si el
+if she = si el
+if we = si nos
+if they = si los
+if you all = si vos
+
+when i = cuando me
+when you = cuando tu
+when he = cuando el
+when she = cuando el
+when we = cuando nos
+when they = cuando los
+when you all = cuando vos
+
+where i = do me
+where you = do tu
+where he = do el
+where she = do el
+where we = do nos
+where they = do los
+where you all = do vos
+
+because i = car me
+because you = car tu
+because he = car el
+because she = car el
+because we = car nos
+because they = car los
+because you all = car vos
+
+
+# BE / HAVE / CONDITIONALS
+
+be = es
+am = es
+is = es
+are = es
+was = ia es
+were = ia es
+will be = va es
+would be = ta es
+to be = es
+
+have = ave
+has = ave
+had = ia ave
+will have = va ave
+would have = ta ave
+to have = ave
+
+if i had = si me ta ave
+if you had = si tu ta ave
+if he had = si el ta ave
+if she had = si el ta ave
+if we had = si nos ta ave
+if they had = si los ta ave
+if you all had = si vos ta ave
+
+if i were = si me ta es
+if you were = si tu ta es
+if he were = si el ta es
+if she were = si el ta es
+if we were = si nos ta es
+if they were = si los ta es
+if you all were = si vos ta es
+
+
+# COMMON VERBS
+
+to become = deveni
+become = deveni
+
+do = fa
+make = fa
+to do = fa
+to make = fa
+
+go = vade
+goes = vade
+went = ia vade
+will go = va vade
+would go = ta vade
+to go = vade
+
+come = veni
+comes = veni
+came = ia veni
+will come = va veni
+would come = ta veni
+to come = veni
+
+return = reveni
+come back = reveni
+leave = parti
+depart = parti
+enter = entra
+exit = sorti
+fall = cade
+fly = vola
+follow = segue
+jump = salta
+run = core
+sit = senta
+stand = sta
+stay = resta
+stop = para
+swim = nada
+walk = pasea
+travel = viaja
+
+eat = come
+eats = come
+ate = ia come
+will eat = va come
+would eat = ta come
+to eat = come
+
+if i ate = si me ta come
+if you ate = si tu ta come
+if he ate = si el ta come
+if she ate = si el ta come
+if we ate = si nos ta come
+if they ate = si los ta come
+if you all ate = si vos ta come
+
+drink = bevi
+drinks = bevi
+drank = ia bevi
+will drink = va bevi
+would drink = ta bevi
+to drink = bevi
+
+hear = oia
+listen = escuta
+see = vide
+sees = vide
+watch = vide
+
+sleep = dormi
+wake = velia
+live = vive
+die = mori
+
+think = pensa
+believe = crede
+know = sabe
+know someone = conose
+learn = aprende
+understand = comprende
+remember = recorda
+forget = oblida
+decide = deside
+
+say = dise
+tell = dise
+speak = parla
+read = leje
+write = scrive
+ask = demanda
+answer = responde
+explain = esplica
+translate = tradui
+thank = grasia
+
+like = gusta
+love = ama
+hate = odia
+fear = teme
+hope = espera
+feel = senti
+laugh = rie
+cry = plora
+smile = surie
+prefer = prefere
+
+buy = compra
+sell = vende
+pay = paia
+take = prende
+give = dona
+choose = eleje
+find = trova
+help = aida
+use = usa
+put = pone
+bring = trae
+carry = porta
+lose = perde
+win = gania
+
+open = abri
+close = clui
+break = rompe
+start = comensa
+begin = comensa
+finish = fini
+end = fini
+change = cambia
+
+study = studia
+teach = ensenia
+play = jua
+drive = gida
+cook = coce
+wash = lava
+wear = porta
+working = laborante
+
+try = atenta
+create = crea
+build = construi
+repair = repara
+clean = limpa
+search = xerca
+show = mostra
+send = envia
+receive = reseta
+meet = encontra
+arrive = ariva
+wait = espeta
+need = nesesa
+look = regarda
+look at = regarda
+move = move
+
+
+# BASIC CONNECTORS / LITTLE WORDS
+
+but = ma
+and = e
+or = o
+also = ance
+again = denova
+already = ja
+still = ancora
+now = aora
+today = oji
+yesterday = ier
+tomorrow = doman
+soon = pronto
+later = plu tarda
+
+before = ante
+after = pos
+then = alora
+
+always = sempre
+never = nunca
+sometimes = a veses
+often = frecuente
+
+yes = si
+no = no
+not = no
+
+maybe = posible
+probably = probable
+
+here = asi
+there = ala
+here and there = asi e ala
+
+more = plu
+less = min
+very = multe
+too = tro
+almost = cuasi
+only = sola
+just = sola
+
+so that = afin
+in order to = afin
+for example = per esemplo
+in any case = en cualce caso
+of course = natural
+
+thank you = grasias
+please = per favore
+
+it is = lo es
+it was = lo ia es
+it will be = lo va es
+it would be = lo ta es
+
+this thing = esta cosa
+that thing = acel cosa
+these = estas
+those = aceles
+
+
+# NOT BE
+
+i am not = me no es
+i was not = me no ia es
+i will not be = me no va es
+i am not going to be = me no va es
+i would not be = me no ta es
+
+you are not = tu no es
+you were not = tu no ia es
+you will not be = tu no va es
+you are not going to be = tu no va es
+you would not be = tu no ta es
+
+he is not = el no es
+he was not = el no ia es
+he will not be = el no va es
+he is not going to be = el no va es
+he would not be = el no ta es
+
+she is not = el no es
+she was not = el no ia es
+she will not be = el no va es
+she is not going to be = el no va es
+she would not be = el no ta es
+
+it is not = lo no es
+it was not = lo no ia es
+it will not be = lo no va es
+it is not going to be = lo no va es
+it would not be = lo no ta es
+
+we are not = nos no es
+we were not = nos no ia es
+we will not be = nos no va es
+we are not going to be = nos no va es
+we would not be = nos no ta es
+
+they are not = los no es
+they were not = los no ia es
+they will not be = los no va es
+they are not going to be = los no va es
+they would not be = los no ta es
+
+you all are not = vos no es
+you all were not = vos no ia es
+you all will not be = vos no va es
+you all are not going to be = vos no va es
+you all would not be = vos no ta es
+
+
+# COMMON ADJECTIVES
+
+good = bon
+bad = mal
+happy = felis
+cheerful = felis
+sad = triste
+
+big = grande
+large = grande
+small = peti
+little = peti
+
+long = longa
+short = corta
+high = alta
+low = basa
+
+near = prosima
+far = distante
+
+full = plen
+empty = vacua
+open = abrida
+closed = cluida
+
+heavy = pesosa
+light = lejera
+wide = larga
+narrow = streta
+straight = direta
+round = ronda
+
+clean = limpa
+dirty = bruta
+
+easy = fasil
+difficult = difisil
+hard = dur
+soft = mol
+
+hot = calda
+warm = tepida
+cold = fria
+cool = fresca
+wet = umida
+dry = seca
+
+new = nova
+old = vea
+fast = rapida
+slow = lenta
+late = tarda
+ready = preparada
+
+important = importante
+interesting = interesante
+
+correct = coreta
+wrong = falsa
+true = vera
+false = falsa
+
+possible = posible
+impossible = nonposible
+necessary = nesesada
+sure = serta
+
+beautiful = bela
+pretty = bela
+ugly = fea
+
+cheap = barata
+expensive = cara
+
+safe = secur
+dangerous = perilosa
+strange = strana
+special = spesial
+useful = usosa
+usual = usual
+
+strong = forte
+weak = debil
+
+healthy = sana
+sick = malada
+hungry = fama
+thirsty = side
+tired = fatigada
+busy = ocupada
+free = libre
+
+friendly = amin
+honest = onesta
+jealous = jelosa
+angry = coler
+curious = curiosa
+
+comfortable = comfortosa
+uncomfortable = noncomfortosa
+
+simple = simple
+logical = lojical
+clear = clar
+dark = scur
+real = real
+
+personal = personal
+local = local
+public = publica
+private = privada
+common = comun
+
+different = diferente
+same = mesma
+young = joven
+
+black = negra
+white = blanca
+red = roja
+blue = blu
+green = verde
+yellow = jala
+gray = gris
+brown = brun
+orange = orania
+pink = ros
+purple = purpur
+
+`;
+
+
+/*
+=========================================================
+        END OF VOCABULARY
+=========================================================
+*/
+
+
+function buildDictionary() {
+
+  const dictionary = [];
+
+  const lines = VOCABULARY.split("\n");
+
+  for (const line of lines) {
+
+    const trimmed = line.trim();
+
+    // Ignore empty lines
+    if (!trimmed) continue;
+
+    // Ignore comments
+    if (trimmed.startsWith("#")) continue;
+
+    // Ignore lines without =
+    if (!trimmed.includes("=")) continue;
+
+    const parts = trimmed.split("=");
+
+    const english = parts.shift().trim().toLowerCase();
+
+    const elefen = parts.join("=").trim();
+
+    if (english && elefen) {
+
+      dictionary.push({
+        english: english,
+        elefen: elefen,
+        words: english.split(" ")
       });
+
+    }
+  }
+
+
+  /*
+  Longer phrases go first.
+
+  Example:
+
+  "good morning"
+
+  gets checked before
+
+  "good"
+  */
+
+  dictionary.sort((a, b) => {
+
+    return b.words.length - a.words.length;
+
+  });
+
+
+  return dictionary;
+}
+
+
+const dictionary = buildDictionary();
+
+
+
+function translateText() {
+
+  const input =
+    document.getElementById("english").value;
+
+  const output =
+    translateSentence(input);
+
+  document.getElementById("elefen").value = output;
+
+}
+
+
+
+function translateSentence(text) {
+
+  /*
+  Break the sentence into:
+
+  words
+  spaces
+  punctuation
+
+  Example:
+
+  Hello, my friend!
+
+  becomes roughly:
+
+  Hello
+  ,
+  space
+  my
+  space
+  friend
+  !
+  */
+
+  const tokens =
+    text.match(/[A-Za-zÀ-ÖØ-öø-ÿ']+|\s+|[^\sA-Za-zÀ-ÖØ-öø-ÿ']+/g)
+    || [];
+
+
+  let output = "";
+
+
+  for (let i = 0; i < tokens.length; i++) {
+
+    const token = tokens[i];
+
+
+    // punctuation or spaces
+    if (!isWord(token)) {
+
+      output += token;
+
+      continue;
     }
 
-    function updatePreview() {
-      const catVal = inCategory.value.trim() || 'NOTISIA';
-      outCategory.textContent = catVal;
-      syncNavTabs(catVal);
 
-      outHeadline.textContent = inHeadline.value.trim() || 'Headline goes here';
-      
-      if (inTagline.value.trim()) {
-        outTagline.textContent = inTagline.value.trim();
-        brandDivider.style.display = 'block';
-        brandRight.style.display = 'flex';
-        brandLeft.style.right = 'calc(50% + 8px)';
-        brandLeft.style.left = 'auto';
-        brandLeft.style.transform = 'translateY(-50%)';
-      } else {
-        brandDivider.style.display = 'none';
-        brandRight.style.display = 'none';
-        brandLeft.style.right = 'auto';
-        brandLeft.style.left = '50%';
-        brandLeft.style.transform = 'translate(-50%, -50%)';
-      }
+    let matchFound = false;
 
-      if (inSubheadline.value.trim()) {
-        outSubheadline.textContent = inSubheadline.value.trim();
-        outSubheadline.style.display = 'block';
-      } else {
-        outSubheadline.style.display = 'none';
-      }
 
-      outTime.textContent = inTime.value.trim() || '9:37';
-      document.documentElement.style.setProperty('--accent-color', inAccent.value);
-      outLive.style.display = inLive.checked ? 'inline-flex' : 'none';
+    /*
+    Try every vocabulary entry.
 
-      if (inCaption.value.trim()) {
-        outCaption.textContent = inCaption.value.trim();
-        outCaption.style.display = 'block';
-      } else {
-        outCaption.style.display = 'none';
+    Longer phrases are already first.
+    */
+
+    for (const entry of dictionary) {
+
+      const result =
+        phraseMatches(tokens, i, entry.words);
+
+
+      if (result !== null) {
+
+        output += preserveCapitalization(
+          token,
+          entry.elefen
+        );
+
+
+        i = result;
+
+        matchFound = true;
+
+        break;
+
       }
     }
 
-    navTabs.forEach(tab => {
-      tab.addEventListener('click', function() {
-        inCategory.value = this.getAttribute('data-category');
-        updatePreview();
-      });
-    });
 
-    inImage.addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          outImg.src = evt.target.result;
-          outImg.style.display = 'block';
-          outPlaceholderText.style.display = 'none';
-        };
-        reader.readAsDataURL(file);
-      }
-    });
+    /*
+    If the word isn't in the dictionary,
+    leave the English word alone.
+    */
 
-    inLogo.addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          customLogoImg.src = evt.target.result;
-          customLogoImg.style.display = 'block';
-          defaultBadge.style.display = 'none';
-        };
-        reader.readAsDataURL(file);
-      } else {
-        customLogoImg.style.display = 'none';
-        defaultBadge.style.display = 'flex';
-      }
-    });
+    if (!matchFound) {
 
-    [inCategory, inHeadline, inTagline, inSubheadline, inTime, inCaption, inAccent, inLive].forEach(elem => {
-      elem.addEventListener('input', updatePreview);
-      elem.addEventListener('change', updatePreview);
-    });
+      output += token;
 
-    document.getElementById('btn-apply').addEventListener('click', updatePreview);
+    }
 
-    document.getElementById('btn-hide').addEventListener('click', function() {
-      editorPanel.style.display = 'none';
-      floatingBtn.style.display = 'block';
-      window.scrollTo(0, 0);
-    });
+  }
 
-    floatingBtn.addEventListener('click', function() {
-      editorPanel.style.display = 'block';
-      floatingBtn.style.display = 'none';
-    });
 
-    document.getElementById('btn-reset').addEventListener('click', function() {
-      inCategory.value = 'SPORTE';
-      inHeadline.value = 'Porto de Elefen fronti Lago Serena doman a 19:30 e lo va es transmeteda par Canal 26 Elefen';
-      inTagline.value = 'La vose de la\npopla';
-      inSubheadline.value = '';
-      inTime.value = '9:37';
-      inCaption.value = '';
-      inAccent.value = '#0284c7';
-      inLive.checked = false;
-      
-      outImg.src = '';
-      outImg.style.display = 'none';
-      outPlaceholderText.style.display = 'block';
-      
-      customLogoImg.src = '';
-      customLogoImg.style.display = 'none';
-      defaultBadge.style.display = 'flex';
-      
-      inImage.value = '';
-      inLogo.value = '';
+  return output;
+}
 
-      updatePreview();
-    });
 
-    updatePreview();
-  </script>
+
+function phraseMatches(tokens, startIndex, words) {
+
+  let tokenIndex = startIndex;
+
+
+  for (let wordIndex = 0;
+       wordIndex < words.length;
+       wordIndex++) {
+
+
+    /*
+    Skip spaces between words.
+    */
+
+    while (
+      tokenIndex < tokens.length &&
+      /^\s+$/.test(tokens[tokenIndex])
+    ) {
+
+      tokenIndex++;
+
+    }
+
+
+    if (tokenIndex >= tokens.length) {
+
+      return null;
+
+    }
+
+
+    if (!isWord(tokens[tokenIndex])) {
+
+      return null;
+
+    }
+
+
+    const currentWord =
+      tokens[tokenIndex].toLowerCase();
+
+
+    if (currentWord !== words[wordIndex]) {
+
+      return null;
+
+    }
+
+
+    tokenIndex++;
+
+  }
+
+
+  return tokenIndex - 1;
+}
+
+
+
+function isWord(text) {
+
+  return /^[A-Za-zÀ-ÖØ-öø-ÿ']+$/.test(text);
+
+}
+
+
+
+function preserveCapitalization(original, translation) {
+
+  /*
+  HELLO → ALO
+  Hello → Alo
+  hello → alo
+  */
+
+  if (
+    original === original.toUpperCase() &&
+    /[A-Za-z]/.test(original)
+  ) {
+
+    return translation.toUpperCase();
+
+  }
+
+
+  if (
+    original.charAt(0) ===
+    original.charAt(0).toUpperCase()
+  ) {
+
+    return (
+      translation.charAt(0).toUpperCase() +
+      translation.slice(1)
+    );
+
+  }
+
+
+  return translation;
+
+}
+
+</script>
+
 </body>
 </html>
