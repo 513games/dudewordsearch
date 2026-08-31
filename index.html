@@ -1203,40 +1203,43 @@ function isWord(text) {
 
 function preserveCapitalization(original, translation) {
 
-  /*
-  HELLO → ALO
-  Hello → Alo
-  hello → alo
-  */
-
   if (
     original === original.toUpperCase() &&
     /[A-Za-z]/.test(original)
   ) {
-
     return translation.toUpperCase();
-
   }
-
 
   if (
     original.charAt(0) ===
     original.charAt(0).toUpperCase()
   ) {
-
     return (
       translation.charAt(0).toUpperCase() +
       translation.slice(1)
     );
-
   }
 
-
   return translation;
-
 }
 
+
+/* CONNECT BUTTON */
+
+document
+  .getElementById("translateButton")
+  .addEventListener("click", translateText);
+
+
+/* SHOW THAT JAVASCRIPT ACTUALLY LOADED */
+
+document.getElementById("elefen").placeholder =
+  "JavaScript loaded. Ready to translate.";
+
 </script>
+
+</body>
+</html>
 
 </body>
 </html>
