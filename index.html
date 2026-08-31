@@ -1197,6 +1197,31 @@ function findNoun(englishSingular) {
   );
 }
 
+function isNoun(word) {
+
+  if (!word) return false;
+
+  const lower = word.toLowerCase();
+
+  // Exact singular noun
+  if (
+    dictionary.some(entry =>
+      entry.type === "noun" &&
+      entry.english === lower
+    )
+  ) {
+    return true;
+  }
+
+  // Recognized plural noun
+  if (translatePluralNoun(lower)) {
+    return true;
+  }
+
+  return false;
+}
+
+
 
 function translatePluralNoun(word) {
 
@@ -1388,6 +1413,42 @@ function translateNormalSentence(text) {
 
     /*
     =====================================================
+    RELATIVE "THAT"
+
+    that car
+    → acel auto
+
+    the car that I bought
+    → la auto cual me ia compra
+
+    the cars that I bought
+    → la autos cual me ia compra
+    =====================================================
+    */
+
+    if (token.toLowerCase() === "that") {
+
+      const before =
+        previousWord(tokens, i);
+
+      if (
+        before &&
+        isNoun(before)
+      ) {
+
+        output += preserveCapitalization(
+          token,
+          "cual"
+        );
+
+        continue;
+      }
+    }
+
+
+
+    /*
+    =====================================================
     REMOVE ENGLISH "TO" BETWEEN TWO VERBS
 
     needs to learn
@@ -1549,18 +1610,40 @@ TRANSLATE BUTTON
 function translateText() {
 
   const input =
-    document
-      .getElementById("english")
-      .value;
+    document.getElementById("english").value;
 
 
-  const output =
-    translateSentence(input);
+  /*
+  Split the paragraph into individual sentences.
+
+  This lets grammar rules work on EACH sentence,
+  not just the first sentence in the textbox.
+  */
+
+  const sentences =
+    input.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [];
 
 
-  document
-    .getElementById("elefen")
-    .value = output;
+  const translated =
+    sentences.map(sentence => {
+
+      // Preserve spaces before each sentence.
+      const leadingSpaces =
+        sentence.match(/^\s*/)[0];
+
+      const cleanSentence =
+        sentence.trimStart();
+
+      return (
+        leadingSpaces +
+        translateSentence(cleanSentence)
+      );
+
+    }).join("");
+
+
+  document.getElementById("elefen").value =
+    translated;
 }
 
 
