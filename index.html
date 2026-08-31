@@ -1090,6 +1090,14 @@ CAPITALIZATION
 
 function preserveCapitalization(original, translation) {
 
+  // Special case for English "I"
+  if (original === "I") {
+    return (
+      translation.charAt(0).toUpperCase() +
+      translation.slice(1)
+    );
+  }
+
   if (
     original === original.toUpperCase() &&
     /[A-Za-z]/.test(original)
