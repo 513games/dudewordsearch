@@ -518,7 +518,7 @@ button:active {
 <div>
 
   <div class="kicker">
-    ELEFEN • PAROL TROVADA
+    Trova la parolas
   </div>
 
   <h1>
@@ -620,7 +620,7 @@ button:active {
     class="win"
   >
 
-    🎉 Completada! You found every word.
+    🎉 Completida! You found every word.
 
   </div>
 
@@ -668,22 +668,12 @@ button:active {
 (() => {
 
 
-/*
-=====================================================
-ALL THREE PUZZLES
-=====================================================
-*/
-
-
 const PUZZLES = [
 
 
-/*
-=====================================================
-PUZZLE 1
-=====================================================
-*/
-
+/* =============================
+   PUZZLE 1
+============================= */
 
 {
 
@@ -822,26 +812,9 @@ MERCURDI: [
 },
 
 
-
-/*
-=====================================================
-PUZZLE 2
-=====================================================
-
-Much more directional variety.
-
-REPARA     backwards
-ABORDA     down
-BALENA     diagonal up-right
-BECO       right
-SALA       up
-CALDERA    diagonal down-left
-DEMAN      diagonal down-right
-ACUA       diagonal up-left
-DESIDE     right
-LETO       up
-*/
-
+/* =============================
+   PUZZLE 2
+============================= */
 
 {
 
@@ -981,26 +954,9 @@ LETO: [
 },
 
 
-
-/*
-=====================================================
-PUZZLE 3
-=====================================================
-
-Again mixed heavily.
-
-GASTA      down
-MANEJA     backwards
-PARXEA     diagonal down-right
-SAPATO     up
-TIRA       diagonal up-left
-COMERIA    right
-VERME      diagonal down-left
-POMO       diagonal up-right
-MALADA     backwards
-OSPITAL    down
-*/
-
+/* =============================
+   PUZZLE 3
+============================= */
 
 {
 
@@ -1147,27 +1103,10 @@ OSPITAL: [
 ];
 
 
-
-/*
-=====================================================
-SETTINGS
-=====================================================
-*/
-
-
-const SIZE =
-  11;
-
+const SIZE = 11;
 
 const LETTERS =
   "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-
-/*
-=====================================================
-HTML ELEMENTS
-=====================================================
-*/
 
 
 const grid =
@@ -1218,48 +1157,24 @@ const resetButton =
   );
 
 
+let currentPuzzleIndex = 0;
 
-/*
-=====================================================
-GAME STATE
-=====================================================
-*/
-
-
-let currentPuzzleIndex =
-  0;
-
-
-let board =
-  [];
-
+let board = [];
 
 let foundWords =
   new Set();
 
-
 let dragging =
   false;
-
 
 let startCell =
   null;
 
-
 let currentPath =
   [];
 
-
 let activeTouchID =
   null;
-
-
-
-/*
-=====================================================
-GET CURRENT PUZZLE
-=====================================================
-*/
 
 
 function getCurrentPuzzle() {
@@ -1269,14 +1184,6 @@ function getCurrentPuzzle() {
   ];
 
 }
-
-
-
-/*
-=====================================================
-RANDOM LETTER
-=====================================================
-*/
 
 
 function randomLetter() {
@@ -1291,24 +1198,10 @@ function randomLetter() {
 }
 
 
-
-/*
-=====================================================
-BUILD PUZZLE
-=====================================================
-*/
-
-
 function buildPuzzle() {
-
 
   const puzzle =
     getCurrentPuzzle();
-
-
-  /*
-  Fill entire grid with random letters.
-  */
 
 
   board =
@@ -1334,11 +1227,6 @@ function buildPuzzle() {
         )
 
     );
-
-
-  /*
-  Place the real hidden words.
-  */
 
 
   for (
@@ -1382,16 +1270,7 @@ function buildPuzzle() {
 }
 
 
-
-/*
-=====================================================
-DRAW GRID
-=====================================================
-*/
-
-
 function renderGrid() {
-
 
   grid.innerHTML =
     "";
@@ -1444,16 +1323,7 @@ function renderGrid() {
 }
 
 
-
-/*
-=====================================================
-DRAW WORD LIST
-=====================================================
-*/
-
-
 function renderWordList() {
-
 
   const puzzle =
     getCurrentPuzzle();
@@ -1510,16 +1380,7 @@ function renderWordList() {
 }
 
 
-
-/*
-=====================================================
-UPDATE PUZZLE NUMBER
-=====================================================
-*/
-
-
 function updatePuzzleNumber() {
-
 
   puzzleNumber.textContent =
 
@@ -1537,19 +1398,10 @@ function updatePuzzleNumber() {
 }
 
 
-
-/*
-=====================================================
-GET CELL
-=====================================================
-*/
-
-
 function getCellElement(
   row,
   column
 ) {
-
 
   return grid.querySelector(
 
@@ -1568,19 +1420,10 @@ function getCellElement(
 }
 
 
-
-/*
-=====================================================
-FIND CELL UNDER FINGER
-=====================================================
-*/
-
-
 function getCellFromPoint(
   x,
   y
 ) {
-
 
   const element =
     document.elementFromPoint(
@@ -1607,7 +1450,6 @@ function getCellFromPoint(
     !grid.contains(cell)
   ) {
 
-
     return null;
 
   }
@@ -1615,32 +1457,19 @@ function getCellFromPoint(
 
   return {
 
-
     row:
-
       Number(
         cell.dataset.row
       ),
 
-
     column:
-
       Number(
         cell.dataset.column
       )
 
-
   };
 
 }
-
-
-
-/*
-=====================================================
-SNAP FINGER TO STRAIGHT LINE
-=====================================================
-*/
 
 
 function snappedPath(
@@ -1648,15 +1477,12 @@ function snappedPath(
   current
 ) {
 
-
   const rowDifference =
-
     current.row -
     start.row;
 
 
   const columnDifference =
-
     current.column -
     start.column;
 
@@ -1666,7 +1492,6 @@ function snappedPath(
     columnDifference === 0
   ) {
 
-
     return [
       start
     ];
@@ -1675,14 +1500,12 @@ function snappedPath(
 
 
   const absoluteRow =
-
     Math.abs(
       rowDifference
     );
 
 
   const absoluteColumn =
-
     Math.abs(
       columnDifference
     );
@@ -1700,20 +1523,12 @@ function snappedPath(
     0;
 
 
-
-  /*
-  Vertical
-  */
-
-
   if (
     absoluteRow >
     absoluteColumn * 1.7
   ) {
 
-
     rowStep =
-
       Math.sign(
         rowDifference
       );
@@ -1729,24 +1544,16 @@ function snappedPath(
   }
 
 
-
-  /*
-  Horizontal
-  */
-
-
   else if (
     absoluteColumn >
     absoluteRow * 1.7
   ) {
-
 
     rowStep =
       0;
 
 
     columnStep =
-
       Math.sign(
         columnDifference
       );
@@ -1758,31 +1565,21 @@ function snappedPath(
   }
 
 
-
-  /*
-  Diagonal
-  */
-
-
   else {
 
-
     rowStep =
-
       Math.sign(
         rowDifference
       );
 
 
     columnStep =
-
       Math.sign(
         columnDifference
       );
 
 
     steps =
-
       Math.max(
         absoluteRow,
         absoluteColumn
@@ -1803,13 +1600,11 @@ function snappedPath(
 
 
     const row =
-
       start.row +
       rowStep * i;
 
 
     const column =
-
       start.column +
       columnStep * i;
 
@@ -1820,7 +1615,6 @@ function snappedPath(
       column < 0 ||
       column >= SIZE
     ) {
-
 
       break;
 
@@ -1842,16 +1636,7 @@ function snappedPath(
 }
 
 
-
-/*
-=====================================================
-CLEAR BLUE SELECTION
-=====================================================
-*/
-
-
 function clearPreview() {
-
 
   grid
     .querySelectorAll(
@@ -1860,11 +1645,9 @@ function clearPreview() {
     .forEach(
       cell => {
 
-
         cell.classList.remove(
           "preview"
         );
-
 
       }
     );
@@ -1872,18 +1655,9 @@ function clearPreview() {
 }
 
 
-
-/*
-=====================================================
-SHOW BLUE SELECTION
-=====================================================
-*/
-
-
 function showPreview(
   path
 ) {
-
 
   clearPreview();
 
@@ -1899,7 +1673,6 @@ function showPreview(
 
 
     const cell =
-
       getCellElement(
         position.row,
         position.column
@@ -1913,7 +1686,6 @@ function showPreview(
       )
     ) {
 
-
       cell.classList.add(
         "preview"
       );
@@ -1925,25 +1697,15 @@ function showPreview(
 }
 
 
-
-/*
-=====================================================
-COMPARE TWO PATHS
-=====================================================
-*/
-
-
 function samePath(
   pathA,
   pathB
 ) {
 
-
   if (
     pathA.length !==
     pathB.length
   ) {
-
 
     return false;
 
@@ -1969,7 +1731,6 @@ function samePath(
 
     ) {
 
-
       return false;
 
     }
@@ -1982,18 +1743,9 @@ function samePath(
 }
 
 
-
-/*
-=====================================================
-FIND MATCHING WORD
-=====================================================
-*/
-
-
 function findMatchingWord(
   path
 ) {
-
 
   const puzzle =
     getCurrentPuzzle();
@@ -2011,22 +1763,15 @@ function findMatchingWord(
       )
     ) {
 
-
       continue;
 
     }
 
 
     const correctPath =
-
       puzzle.placements[
         word
       ];
-
-
-    /*
-    Forward
-    */
 
 
     if (
@@ -2036,19 +1781,12 @@ function findMatchingWord(
       )
     ) {
 
-
       return word;
 
     }
 
 
-    /*
-    Backwards
-    */
-
-
     const backwards =
-
       [
         ...correctPath
       ].reverse();
@@ -2060,7 +1798,6 @@ function findMatchingWord(
         backwards
       )
     ) {
-
 
       return word;
 
@@ -2074,18 +1811,9 @@ function findMatchingWord(
 }
 
 
-
-/*
-=====================================================
-PAINT WORD YELLOW
-=====================================================
-*/
-
-
 function paintWordYellow(
   path
 ) {
-
 
   for (
     const position
@@ -2094,7 +1822,6 @@ function paintWordYellow(
 
 
     const cell =
-
       getCellElement(
         position.row,
         position.column
@@ -2102,7 +1829,6 @@ function paintWordYellow(
 
 
     if (cell) {
-
 
       cell.classList.add(
         "found"
@@ -2115,36 +1841,18 @@ function paintWordYellow(
 }
 
 
-
-/*
-=====================================================
-UPDATE SCORE
-=====================================================
-*/
-
-
 function updateScore() {
 
-
   const total =
-
     getCurrentPuzzle()
       .words
       .length;
 
 
   score.textContent =
-
     foundWords.size +
-
     " / " +
-
     total;
-
-
-  /*
-  FINISHED
-  */
 
 
   if (
@@ -2159,7 +1867,7 @@ function updateScore() {
 
 
     message.textContent =
-      "You found every word! 🎉";
+      "Completida! 🎉";
 
 
     message.className =
@@ -2170,7 +1878,6 @@ function updateScore() {
 
   else {
 
-
     win.classList.remove(
       "show"
     );
@@ -2180,22 +1887,7 @@ function updateScore() {
 }
 
 
-
-/*
-=====================================================
-FINISH SELECTION
-=====================================================
-*/
-
-
 function finishSelection() {
-
-
-  /*
-  Once puzzle is complete,
-  ignore additional swipes.
-  */
-
 
   if (
 
@@ -2207,14 +1899,11 @@ function finishSelection() {
 
   ) {
 
-
     clearPreview();
-
 
     return;
 
   }
-
 
 
   if (
@@ -2222,26 +1911,18 @@ function finishSelection() {
     0
   ) {
 
-
     return;
 
   }
 
 
   const matchedWord =
-
     findMatchingWord(
       currentPath
     );
 
 
   clearPreview();
-
-
-
-  /*
-  CORRECT
-  */
 
 
   if (
@@ -2265,12 +1946,6 @@ function finishSelection() {
     updateScore();
 
 
-    /*
-    Only change this message if
-    puzzle isn't already complete.
-    */
-
-
     if (
 
       foundWords.size !==
@@ -2283,9 +1958,7 @@ function finishSelection() {
 
 
       message.textContent =
-
         matchedWord +
-
         " found! ✨";
 
 
@@ -2295,12 +1968,6 @@ function finishSelection() {
     }
 
   }
-
-
-
-  /*
-  WRONG
-  */
 
 
   else {
@@ -2326,24 +1993,10 @@ function finishSelection() {
 }
 
 
-
-/*
-=====================================================
-START DRAG
-=====================================================
-*/
-
-
 function startDrag(
   x,
   y
 ) {
-
-
-  /*
-  Ignore touching grid after completion.
-  */
-
 
   if (
 
@@ -2355,14 +2008,12 @@ function startDrag(
 
   ) {
 
-
     return false;
 
   }
 
 
   const cell =
-
     getCellFromPoint(
       x,
       y
@@ -2370,7 +2021,6 @@ function startDrag(
 
 
   if (!cell) {
-
 
     return false;
 
@@ -2395,25 +2045,15 @@ function startDrag(
 }
 
 
-
-/*
-=====================================================
-MOVE DRAG
-=====================================================
-*/
-
-
 function moveDrag(
   x,
   y
 ) {
 
-
   if (
     !dragging ||
     !startCell
   ) {
-
 
     return;
 
@@ -2421,7 +2061,6 @@ function moveDrag(
 
 
   const cell =
-
     getCellFromPoint(
       x,
       y
@@ -2430,14 +2069,12 @@ function moveDrag(
 
   if (!cell) {
 
-
     return;
 
   }
 
 
   const path =
-
     snappedPath(
       startCell,
       cell
@@ -2451,19 +2088,9 @@ function moveDrag(
 }
 
 
-
-/*
-=====================================================
-END DRAG
-=====================================================
-*/
-
-
 function endDrag() {
 
-
   if (!dragging) {
-
 
     return;
 
@@ -2479,14 +2106,6 @@ function endDrag() {
 }
 
 
-
-/*
-=====================================================
-IPHONE / IPAD TOUCH
-=====================================================
-*/
-
-
 grid.addEventListener(
 
   "touchstart",
@@ -2499,7 +2118,6 @@ grid.addEventListener(
       0
     ) {
 
-
       return;
 
     }
@@ -2509,12 +2127,10 @@ grid.addEventListener(
 
 
     const touch =
-
       event.changedTouches[0];
 
 
     activeTouchID =
-
       touch.identifier;
 
 
@@ -2535,7 +2151,6 @@ grid.addEventListener(
 );
 
 
-
 grid.addEventListener(
 
   "touchmove",
@@ -2544,7 +2159,6 @@ grid.addEventListener(
 
 
     if (!dragging) {
-
 
       return;
 
@@ -2585,7 +2199,6 @@ grid.addEventListener(
 
     if (!touch) {
 
-
       return;
 
     }
@@ -2606,7 +2219,6 @@ grid.addEventListener(
   }
 
 );
-
 
 
 grid.addEventListener(
@@ -2633,7 +2245,6 @@ grid.addEventListener(
   }
 
 );
-
 
 
 grid.addEventListener(
@@ -2674,14 +2285,6 @@ grid.addEventListener(
 );
 
 
-
-/*
-=====================================================
-MOUSE SUPPORT
-=====================================================
-*/
-
-
 grid.addEventListener(
 
   "mousedown",
@@ -2705,7 +2308,6 @@ grid.addEventListener(
 );
 
 
-
 window.addEventListener(
 
   "mousemove",
@@ -2714,7 +2316,6 @@ window.addEventListener(
 
 
     if (!dragging) {
-
 
       return;
 
@@ -2734,27 +2335,17 @@ window.addEventListener(
 );
 
 
-
 window.addEventListener(
 
   "mouseup",
 
   () => {
 
-
     endDrag();
 
   }
 
 );
-
-
-
-/*
-=====================================================
-RESET CURRENT PUZZLE
-=====================================================
-*/
 
 
 resetButton.addEventListener(
@@ -2783,26 +2374,9 @@ resetButton.addEventListener(
     message.className =
       "";
 
-
   }
 
 );
-
-
-
-/*
-=====================================================
-NEW PUZZLE
-=====================================================
-
-Puzzle 1
-   ↓
-Puzzle 2
-   ↓
-Puzzle 3
-   ↓
-Puzzle 1
-*/
 
 
 newPuzzleButton.addEventListener(
@@ -2856,31 +2430,18 @@ newPuzzleButton.addEventListener(
     message.className =
       "";
 
-
   }
 
 );
 
 
-
-/*
-=====================================================
-START GAME
-=====================================================
-*/
-
-
 buildPuzzle();
-
 
 renderGrid();
 
-
 renderWordList();
 
-
 updatePuzzleNumber();
-
 
 updateScore();
 
