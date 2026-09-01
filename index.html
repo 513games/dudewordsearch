@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
 
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
-  />
+  >
 
-  <meta name="theme-color" content="#090e1c" />
+  <meta name="theme-color" content="#090e1c">
 
   <title>Elefen Word Find</title>
 
@@ -27,9 +27,7 @@
       --yellow: #fff52e;
       --yellow-glow: rgba(255, 245, 46, 0.35);
 
-      --border: rgba(255, 255, 255, 0.1);
-
-      --cell-size: min(5.35vw, 36px);
+      --border: rgba(255, 255, 255, 0.10);
     }
 
     * {
@@ -42,8 +40,6 @@
 
     body {
       margin: 0;
-
-      min-height: 100%;
 
       color: var(--text);
 
@@ -58,7 +54,7 @@
       background:
         radial-gradient(
           circle at top,
-          rgba(55, 95, 220, 0.2),
+          rgba(55, 95, 220, 0.20),
           transparent 34rem
         ),
         var(--background);
@@ -71,15 +67,12 @@
 
       margin: 0 auto;
 
-      padding:
-        24px
-        12px
-        50px;
+      padding: 24px 12px 50px;
     }
 
-    /* -----------------------------
+    /* =========================
        HEADER
-    ----------------------------- */
+    ========================= */
 
     .top {
       display: flex;
@@ -128,9 +121,9 @@
       line-height: 1.5;
     }
 
-    /* -----------------------------
+    /* =========================
        BUTTONS
-    ----------------------------- */
+    ========================= */
 
     .buttons {
       display: flex;
@@ -172,9 +165,9 @@
       transform: scale(0.98);
     }
 
-    /* -----------------------------
+    /* =========================
        MAIN LAYOUT
-    ----------------------------- */
+    ========================= */
 
     .layout {
       display: grid;
@@ -198,30 +191,34 @@
       background: rgba(17, 26, 49, 0.92);
     }
 
-    /* -----------------------------
-       PUZZLE GRID
-    ----------------------------- */
+    /* =========================
+       11 x 11 PUZZLE
+    ========================= */
 
     .grid-wrapper {
-      overflow: hidden;
+      width: 100%;
 
-      border-radius: 18px;
+      display: flex;
+
+      justify-content: center;
     }
 
     #grid {
       display: grid;
 
+      /*
+        11 columns instead of 15.
+
+        Since the whole puzzle stays roughly
+        the same width, each square is larger.
+      */
+
       grid-template-columns:
-        repeat(15, var(--cell-size));
+        repeat(11, minmax(0, 1fr));
 
-      grid-template-rows:
-        repeat(15, var(--cell-size));
+      gap: 3px;
 
-      gap: 2px;
-
-      width: max-content;
-
-      margin: 0 auto;
+      width: min(100%, 560px);
 
       padding: 8px;
 
@@ -232,12 +229,12 @@
       background: #0c1428;
 
       /*
-        VERY IMPORTANT FOR PHONES
+        VERY IMPORTANT FOR IPHONE
 
-        This tells Safari that finger movement
-        inside the puzzle belongs to us,
-        not page scrolling.
+        Finger movement inside the puzzle
+        belongs to the game, not the page.
       */
+
       touch-action: none;
 
       overscroll-behavior: none;
@@ -250,42 +247,49 @@
     }
 
     .cell {
-      width: var(--cell-size);
-      height: var(--cell-size);
+      aspect-ratio: 1 / 1;
+
+      min-width: 0;
 
       display: grid;
 
       place-items: center;
 
-      border-radius: 8px;
+      border-radius: 9px;
 
-      background: rgba(255, 255, 255, 0.035);
+      background:
+        rgba(255, 255, 255, 0.04);
 
       color: var(--text);
 
-      font-size: clamp(
-        0.74rem,
-        3.4vw,
-        1.08rem
-      );
+      /*
+        Larger letters because there
+        are only 11 columns.
+      */
+
+      font-size:
+        clamp(
+          0.95rem,
+          4.6vw,
+          1.45rem
+        );
 
       font-weight: 950;
 
       line-height: 1;
 
       transition:
-        background 0.1s ease,
-        color 0.1s ease,
+        background 0.10s ease,
+        color 0.10s ease,
         transform 0.08s ease,
-        box-shadow 0.1s ease;
+        box-shadow 0.10s ease;
     }
 
-    /*
-      While the player is dragging.
-    */
+    /* Blue while dragging */
 
     .cell.preview {
-      background: var(--blue-soft);
+      background:
+        var(--blue-soft);
 
       box-shadow:
         inset
@@ -295,28 +299,29 @@
         2px
         var(--blue);
 
-      transform: scale(1.04);
+      transform:
+        scale(1.04);
     }
 
-    /*
-      Correct word.
-    */
+    /* Yellow after correct answer */
 
     .cell.found {
-      background: var(--yellow);
+      background:
+        var(--yellow);
 
-      color: #151800;
+      color:
+        #151800;
 
       box-shadow:
         0
         0
-        12px
+        13px
         var(--yellow-glow);
     }
 
-    /* -----------------------------
+    /* =========================
        STATUS
-    ----------------------------- */
+    ========================= */
 
     .status {
       min-height: 52px;
@@ -373,9 +378,9 @@
       display: block;
     }
 
-    /* -----------------------------
+    /* =========================
        WORD LIST
-    ----------------------------- */
+    ========================= */
 
     .side h2 {
       margin: 2px 0 12px;
@@ -390,7 +395,7 @@
     }
 
     .word {
-      min-height: 40px;
+      min-height: 42px;
 
       display: flex;
 
@@ -400,7 +405,8 @@
 
       border-radius: 11px;
 
-      background: rgba(255, 255, 255, 0.04);
+      background:
+        rgba(255, 255, 255, 0.04);
 
       color: var(--text);
 
@@ -414,7 +420,9 @@
 
       color: #151800;
 
-      text-decoration: line-through 2px;
+      text-decoration:
+        line-through
+        2px;
     }
 
     .tip {
@@ -427,25 +435,26 @@
       line-height: 1.45;
     }
 
-    /* -----------------------------
+    /* =========================
        MOBILE
-    ----------------------------- */
+    ========================= */
 
     @media (max-width: 720px) {
+
       .layout {
         grid-template-columns: 1fr;
       }
 
       #wordList {
         grid-template-columns:
-          repeat(2, minmax(0, 1fr));
+          repeat(
+            2,
+            minmax(0, 1fr)
+          );
       }
     }
 
     @media (max-width: 390px) {
-      :root {
-        --cell-size: 5.1vw;
-      }
 
       main {
         padding-left: 8px;
@@ -457,15 +466,20 @@
       }
 
       #grid {
-        gap: 1px;
+        padding: 6px;
 
-        padding: 5px;
+        gap: 2px;
       }
 
       .cell {
-        border-radius: 5px;
+        border-radius: 7px;
 
-        font-size: 0.68rem;
+        font-size:
+          clamp(
+            0.9rem,
+            4.5vw,
+            1.25rem
+          );
       }
 
       .word {
@@ -473,7 +487,11 @@
       }
     }
 
-    @media (prefers-reduced-motion: reduce) {
+    @media (
+      prefers-reduced-motion:
+      reduce
+    ) {
+
       .cell {
         transition: none;
       }
@@ -481,31 +499,46 @@
   </style>
 </head>
 
+
 <body>
 
 <main>
 
-  <!-- HEADER -->
+  <!-- =========================
+       HEADER
+  ========================== -->
 
   <section class="top">
 
     <div>
 
       <div class="kicker">
+
         ELEFEN • PAROL TROVADA
+
       </div>
 
+
       <h1>
+
         Word Find
+
       </h1>
 
+
       <p class="description">
-        Swipe your finger across a hidden Elefen word.
+
+        Swipe your finger across a hidden
+        Elefen word.
+
         Correct words turn neon yellow.
-        Wrong selections simply disappear.
+
+        Wrong selections disappear.
+
       </p>
 
     </div>
+
 
     <div class="buttons">
 
@@ -514,14 +547,19 @@
         class="primary"
         type="button"
       >
+
         New puzzle
+
       </button>
+
 
       <button
         id="resetPuzzle"
         type="button"
       >
+
         Reset finds
+
       </button>
 
     </div>
@@ -529,18 +567,24 @@
   </section>
 
 
-  <!-- GAME -->
+  <!-- =========================
+       GAME
+  ========================== -->
 
   <section class="layout">
 
+
     <div class="card">
+
 
       <div class="grid-wrapper">
 
+
         <div
           id="grid"
-          aria-label="Elefen word search puzzle"
+          aria-label="Elefen word search"
         ></div>
+
 
       </div>
 
@@ -550,17 +594,26 @@
         aria-live="polite"
       >
 
+
         <div>
+
           <strong id="score">
+
             0 / 10
+
           </strong>
 
           found
+
         </div>
 
+
         <div id="message">
+
           Drag across a word.
+
         </div>
+
 
       </div>
 
@@ -569,29 +622,46 @@
         id="win"
         class="win"
       >
-        🎉 Completada! You found every word.
+
+        🎉 Completada!
+
+        You found every word.
+
       </div>
+
 
     </div>
 
 
     <!-- WORD LIST -->
 
+
     <aside class="card side">
 
+
       <h2>
+
         Find these words
+
       </h2>
 
-      <div id="wordList"></div>
+
+      <div id="wordList">
+
+      </div>
+
 
       <p class="tip">
+
         Words can run horizontally,
         vertically, diagonally,
         forwards, or backwards.
+
       </p>
 
+
     </aside>
+
 
   </section>
 
@@ -599,446 +669,415 @@
 
 
 <script>
-/*
-====================================================
-ELEFEN WORD FIND
-====================================================
-*/
-
 
 (() => {
 
   /*
-  ----------------------------------------------------
-  WORDS
-  ----------------------------------------------------
-  Add or remove words here later.
+  ====================================================
+  ELEFEN WORDS
+  ====================================================
   */
 
   const WORDS = [
+
     "DEVENI",
+
     "CAR",
+
     "VOLE",
+
     "PERCE",
+
     "PROSIMA",
+
     "JUA",
+
     "LIBRE",
+
     "SENTI",
+
     "PARLA",
+
     "MERCURDI"
+
   ];
 
 
   /*
-  ----------------------------------------------------
-  SETTINGS
-  ----------------------------------------------------
+  ====================================================
+  11 x 11 BOARD
+  ====================================================
   */
 
-  const SIZE = 15;
+  const SIZE = 11;
+
 
   const LETTERS =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 
   /*
-  Words may travel in any of these
-  eight directions.
+  ====================================================
+  FIXED WORD LOCATIONS
+  ====================================================
+
+  These locations DO NOT CHANGE.
+
+  New Puzzle only changes the junk letters
+  surrounding the hidden words.
+
+  Coordinates begin at zero.
   */
 
-  const DIRECTIONS = [
 
-    [-1, -1],
+  const PLACEMENTS = {
 
-    [-1, 0],
 
-    [-1, 1],
+    /*
+    MERCURDI
+    Vertical
+    */
 
-    [0, -1],
+    MERCURDI: [
 
-    [0, 1],
+      [2, 7],
+      [3, 7],
+      [4, 7],
+      [5, 7],
+      [6, 7],
+      [7, 7],
+      [8, 7],
+      [9, 7]
 
-    [1, -1],
+    ],
 
-    [1, 0],
 
-    [1, 1]
+    /*
+    PROSIMA
+    Vertical upward
+    */
 
-  ];
+    PROSIMA: [
+
+      [7, 10],
+      [6, 10],
+      [5, 10],
+      [4, 10],
+      [3, 10],
+      [2, 10],
+      [1, 10]
+
+    ],
+
+
+    /*
+    DEVENI
+    Diagonal
+    */
+
+    DEVENI: [
+
+      [0, 4],
+      [1, 5],
+      [2, 6],
+      [3, 7],
+      [4, 8],
+      [5, 9]
+
+    ],
+
+
+    /*
+    PERCE
+    Horizontal backwards
+    */
+
+    PERCE: [
+
+      [1, 6],
+      [1, 5],
+      [1, 4],
+      [1, 3],
+      [1, 2]
+
+    ],
+
+
+    /*
+    LIBRE
+    Horizontal
+    */
+
+    LIBRE: [
+
+      [7, 4],
+      [7, 5],
+      [7, 6],
+      [7, 7],
+      [7, 8]
+
+    ],
+
+
+    /*
+    SENTI
+    Vertical upwards
+    */
+
+    SENTI: [
+
+      [9, 9],
+      [8, 9],
+      [7, 9],
+      [6, 9],
+      [5, 9]
+
+    ],
+
+
+    /*
+    PARLA
+    Horizontal
+    */
+
+    PARLA: [
+
+      [10, 0],
+      [10, 1],
+      [10, 2],
+      [10, 3],
+      [10, 4]
+
+    ],
+
+
+    /*
+    VOLE
+    Horizontal
+    */
+
+    VOLE: [
+
+      [3, 4],
+      [3, 5],
+      [3, 6],
+      [3, 7]
+
+    ],
+
+
+    /*
+    CAR
+    Diagonal
+    */
+
+    CAR: [
+
+      [2, 9],
+      [3, 8],
+      [4, 7]
+
+    ],
+
+
+    /*
+    JUA
+    Vertical
+    */
+
+    JUA: [
+
+      [8, 1],
+      [9, 1],
+      [10, 1]
+
+    ]
+
+  };
 
 
   /*
-  ----------------------------------------------------
+  ====================================================
   HTML ELEMENTS
-  ----------------------------------------------------
+  ====================================================
   */
 
   const grid =
-    document.getElementById("grid");
+    document.getElementById(
+      "grid"
+    );
+
 
   const wordList =
-    document.getElementById("wordList");
+    document.getElementById(
+      "wordList"
+    );
+
 
   const score =
-    document.getElementById("score");
+    document.getElementById(
+      "score"
+    );
+
 
   const message =
-    document.getElementById("message");
+    document.getElementById(
+      "message"
+    );
+
 
   const win =
-    document.getElementById("win");
+    document.getElementById(
+      "win"
+    );
+
 
   const newPuzzleButton =
-    document.getElementById("newPuzzle");
+    document.getElementById(
+      "newPuzzle"
+    );
+
 
   const resetButton =
-    document.getElementById("resetPuzzle");
+    document.getElementById(
+      "resetPuzzle"
+    );
 
 
   /*
-  ----------------------------------------------------
+  ====================================================
   GAME STATE
-  ----------------------------------------------------
+  ====================================================
   */
 
+
   let board = [];
+
 
   let foundWords =
     new Set();
 
+
   let dragging =
     false;
+
 
   let startCell =
     null;
 
+
   let currentPath =
     [];
 
-  let activePointer =
+
+  let activeTouchID =
     null;
 
 
   /*
-  ----------------------------------------------------
-  RANDOM NUMBER
-  ----------------------------------------------------
+  ====================================================
+  RANDOM LETTER
+  ====================================================
   */
 
-  function randomNumber(max) {
 
-    return Math.floor(
-      Math.random() * max
-    );
+  function randomLetter() {
+
+    return LETTERS[
+      Math.floor(
+        Math.random() *
+        LETTERS.length
+      )
+    ];
 
   }
 
 
   /*
-  ----------------------------------------------------
-  CREATE EMPTY BOARD
-  ----------------------------------------------------
+  ====================================================
+  BUILD THE BOARD
+  ====================================================
   */
 
-  function emptyBoard() {
 
-    return Array.from(
-      { length: SIZE },
-      () =>
-        Array(SIZE).fill("")
-    );
+  function buildPuzzle() {
 
-  }
-
-
-  /*
-  ----------------------------------------------------
-  CHECK WHETHER A WORD FITS
-  ----------------------------------------------------
-  */
-
-  function canPlaceWord(
-    word,
-    row,
-    column,
-    rowDirection,
-    columnDirection,
-    puzzle
-  ) {
-
-    const endRow =
-      row +
-      rowDirection *
-      (word.length - 1);
-
-    const endColumn =
-      column +
-      columnDirection *
-      (word.length - 1);
-
-
-    if (
-      endRow < 0 ||
-      endRow >= SIZE ||
-      endColumn < 0 ||
-      endColumn >= SIZE
-    ) {
-
-      return false;
-
-    }
-
-
-    for (
-      let i = 0;
-      i < word.length;
-      i++
-    ) {
-
-      const r =
-        row +
-        rowDirection * i;
-
-      const c =
-        column +
-        columnDirection * i;
-
-      const existing =
-        puzzle[r][c];
-
-
-      if (
-        existing &&
-        existing !== word[i]
-      ) {
-
-        return false;
-
-      }
-
-    }
-
-
-    return true;
-
-  }
-
-
-  /*
-  ----------------------------------------------------
-  PLACE ONE WORD
-  ----------------------------------------------------
-  */
-
-  function placeWord(
-    word,
-    puzzle
-  ) {
-
-    for (
-      let attempt = 0;
-      attempt < 2000;
-      attempt++
-    ) {
-
-      const direction =
-        DIRECTIONS[
-          randomNumber(
-            DIRECTIONS.length
-          )
-        ];
-
-
-      const rowDirection =
-        direction[0];
-
-      const columnDirection =
-        direction[1];
-
-
-      const row =
-        randomNumber(SIZE);
-
-      const column =
-        randomNumber(SIZE);
-
-
-      if (
-        !canPlaceWord(
-          word,
-          row,
-          column,
-          rowDirection,
-          columnDirection,
-          puzzle
-        )
-      ) {
-
-        continue;
-
-      }
-
-
-      for (
-        let i = 0;
-        i < word.length;
-        i++
-      ) {
-
-        const r =
-          row +
-          rowDirection * i;
-
-        const c =
-          column +
-          columnDirection * i;
-
-
-        puzzle[r][c] =
-          word[i];
-
-      }
-
-
-      return true;
-
-    }
-
-
-    return false;
-
-  }
-
-
-  /*
-  ----------------------------------------------------
-  GENERATE PUZZLE
-  ----------------------------------------------------
-  */
-
-  function generatePuzzle() {
 
     /*
-      If generation somehow gets unlucky,
-      restart the board.
+      First fill the entire
+      board with random letters.
     */
 
+
+    board =
+      Array.from(
+        { length: SIZE },
+
+        () =>
+          Array.from(
+            { length: SIZE },
+
+            () =>
+              randomLetter()
+          )
+      );
+
+
+    /*
+      Now overwrite those random
+      letters with the real words.
+
+      Because PLACEMENTS never changes,
+      the words remain in the same places.
+    */
+
+
     for (
-      let restart = 0;
-      restart < 100;
-      restart++
+      const word
+      of WORDS
     ) {
 
-      const puzzle =
-        emptyBoard();
+
+      const positions =
+        PLACEMENTS[word];
 
 
-      let successful =
-        true;
+      positions.forEach(
+        (position, index) => {
 
 
-      /*
-        Long words first.
-        Easier to fit them before short words.
-      */
-
-      const orderedWords =
-        [...WORDS].sort(
-          (a, b) =>
-            b.length - a.length
-        );
+          const row =
+            position[0];
 
 
-      for (
-        const word
-        of orderedWords
-      ) {
+          const column =
+            position[1];
 
-        if (
-          !placeWord(
-            word,
-            puzzle
-          )
-        ) {
 
-          successful =
-            false;
+          board[row][column] =
+            word[index];
 
-          break;
 
         }
-
-      }
-
-
-      if (!successful) {
-
-        continue;
-
-      }
-
-
-      /*
-        Fill empty spaces
-        with random letters.
-      */
-
-      for (
-        let row = 0;
-        row < SIZE;
-        row++
-      ) {
-
-        for (
-          let column = 0;
-          column < SIZE;
-          column++
-        ) {
-
-          if (
-            puzzle[row][column] === ""
-          ) {
-
-            puzzle[row][column] =
-              LETTERS[
-                randomNumber(
-                  LETTERS.length
-                )
-              ];
-
-          }
-
-        }
-
-      }
-
-
-      board =
-        puzzle.map(
-          row =>
-            row.join("")
-        );
-
-
-      return true;
+      );
 
     }
-
-
-    return false;
 
   }
 
 
   /*
-  ----------------------------------------------------
+  ====================================================
   DRAW GRID
-  ----------------------------------------------------
+  ====================================================
   */
+
 
   function renderGrid() {
 
-    grid.innerHTML = "";
+
+    grid.innerHTML =
+      "";
 
 
     for (
@@ -1047,11 +1086,13 @@ ELEFEN WORD FIND
       row++
     ) {
 
+
       for (
         let column = 0;
         column < SIZE;
         column++
       ) {
+
 
         const cell =
           document.createElement(
@@ -1087,20 +1128,24 @@ ELEFEN WORD FIND
 
 
   /*
-  ----------------------------------------------------
+  ====================================================
   DRAW WORD LIST
-  ----------------------------------------------------
+  ====================================================
   */
+
 
   function renderWordList() {
 
-    wordList.innerHTML = "";
+
+    wordList.innerHTML =
+      "";
 
 
     for (
       const word
       of WORDS
     ) {
+
 
       const item =
         document.createElement(
@@ -1121,8 +1166,11 @@ ELEFEN WORD FIND
 
 
       if (
-        foundWords.has(word)
+        foundWords.has(
+          word
+        )
       ) {
+
 
         item.classList.add(
           "found"
@@ -1141,22 +1189,28 @@ ELEFEN WORD FIND
 
 
   /*
-  ----------------------------------------------------
+  ====================================================
   GET CELL ELEMENT
-  ----------------------------------------------------
+  ====================================================
   */
+
 
   function getCellElement(
     row,
     column
   ) {
 
+
     return grid.querySelector(
 
       '.cell[data-row="' +
+
       row +
+
       '"][data-column="' +
+
       column +
+
       '"]'
 
     );
@@ -1165,15 +1219,17 @@ ELEFEN WORD FIND
 
 
   /*
-  ----------------------------------------------------
+  ====================================================
   FIND CELL UNDER FINGER
-  ----------------------------------------------------
+  ====================================================
   */
+
 
   function getCellFromPoint(
     x,
     y
   ) {
+
 
     const element =
       document.elementFromPoint(
@@ -1207,15 +1263,18 @@ ELEFEN WORD FIND
 
     return {
 
+
       row:
         Number(
           cell.dataset.row
         ),
 
+
       column:
         Number(
           cell.dataset.column
         )
+
 
     };
 
@@ -1223,33 +1282,31 @@ ELEFEN WORD FIND
 
 
   /*
-  ----------------------------------------------------
-  SNAP FINGER MOVEMENT
-  ----------------------------------------------------
+  ====================================================
+  SNAP DRAG TO A STRAIGHT LINE
+  ====================================================
 
-  This is important.
+  Your finger does not need to move
+  perfectly straight.
 
-  Humans do not drag in perfectly straight
-  pixel-perfect lines.
-
-  So the game snaps movement to:
-
-  horizontal
-  vertical
-  diagonal
+  The game figures out whether you
+  intended horizontal, vertical,
+  or diagonal.
   */
+
 
   function snappedPath(
     start,
     current
   ) {
 
-    let rowDifference =
+
+    const rowDifference =
       current.row -
       start.row;
 
 
-    let columnDifference =
+    const columnDifference =
       current.column -
       start.column;
 
@@ -1259,7 +1316,10 @@ ELEFEN WORD FIND
       columnDifference === 0
     ) {
 
-      return [start];
+
+      return [
+        start
+      ];
 
     }
 
@@ -1287,10 +1347,12 @@ ELEFEN WORD FIND
       Mostly vertical
     */
 
+
     if (
       absoluteRow >
       absoluteColumn * 1.7
     ) {
+
 
       rowStep =
         Math.sign(
@@ -1298,7 +1360,8 @@ ELEFEN WORD FIND
         );
 
 
-      columnStep = 0;
+      columnStep =
+        0;
 
 
       steps =
@@ -1311,12 +1374,15 @@ ELEFEN WORD FIND
       Mostly horizontal
     */
 
+
     else if (
       absoluteColumn >
       absoluteRow * 1.7
     ) {
 
-      rowStep = 0;
+
+      rowStep =
+        0;
 
 
       columnStep =
@@ -1335,7 +1401,9 @@ ELEFEN WORD FIND
       Diagonal
     */
 
+
     else {
+
 
       rowStep =
         Math.sign(
@@ -1367,6 +1435,7 @@ ELEFEN WORD FIND
       i++
     ) {
 
+
       const row =
         start.row +
         rowStep * i;
@@ -1383,6 +1452,7 @@ ELEFEN WORD FIND
         column < 0 ||
         column >= SIZE
       ) {
+
 
         break;
 
@@ -1405,38 +1475,45 @@ ELEFEN WORD FIND
 
 
   /*
-  ----------------------------------------------------
+  ====================================================
   CLEAR BLUE PREVIEW
-  ----------------------------------------------------
+  ====================================================
   */
+
 
   function clearPreview() {
 
-    const previewCells =
-      grid.querySelectorAll(
+
+    grid
+      .querySelectorAll(
         ".cell.preview"
+      )
+      .forEach(
+        cell => {
+
+
+          cell.classList.remove(
+            "preview"
+          );
+
+
+        }
       );
-
-
-    previewCells.forEach(
-      cell =>
-        cell.classList.remove(
-          "preview"
-        )
-    );
 
   }
 
 
   /*
-  ----------------------------------------------------
+  ====================================================
   SHOW CURRENT DRAG
-  ----------------------------------------------------
+  ====================================================
   */
+
 
   function showPreview(
     path
   ) {
+
 
     clearPreview();
 
@@ -1449,6 +1526,7 @@ ELEFEN WORD FIND
       const position
       of path
     ) {
+
 
       const cell =
         getCellElement(
@@ -1464,6 +1542,7 @@ ELEFEN WORD FIND
         )
       ) {
 
+
         cell.classList.add(
           "preview"
         );
@@ -1476,43 +1555,156 @@ ELEFEN WORD FIND
 
 
   /*
-  ----------------------------------------------------
-  READ SELECTED LETTERS
-  ----------------------------------------------------
+  ====================================================
+  COMPARE TWO PATHS
+  ====================================================
   */
 
-  function getSelectedWord(
-    path
+
+  function samePath(
+    pathA,
+    pathB
   ) {
 
-    return path
-      .map(
-        position =>
-          board[
-            position.row
-          ][
-            position.column
-          ]
-      )
-      .join("");
+
+    if (
+      pathA.length !==
+      pathB.length
+    ) {
+
+
+      return false;
+
+    }
+
+
+    for (
+      let i = 0;
+      i < pathA.length;
+      i++
+    ) {
+
+
+      if (
+        pathA[i].row !==
+          pathB[i][0] ||
+
+        pathA[i].column !==
+          pathB[i][1]
+      ) {
+
+
+        return false;
+
+      }
+
+    }
+
+
+    return true;
 
   }
 
 
   /*
-  ----------------------------------------------------
-  TURN CORRECT WORD YELLOW
-  ----------------------------------------------------
+  ====================================================
+  CHECK WHETHER PLAYER FOUND A REAL WORD
+  ====================================================
   */
+
+
+  function findMatchingWord(
+    path
+  ) {
+
+
+    for (
+      const word
+      of WORDS
+    ) {
+
+
+      if (
+        foundWords.has(
+          word
+        )
+      ) {
+
+
+        continue;
+
+      }
+
+
+      const correctPath =
+        PLACEMENTS[word];
+
+
+      /*
+        Forward direction
+      */
+
+
+      if (
+        samePath(
+          path,
+          correctPath
+        )
+      ) {
+
+
+        return word;
+
+      }
+
+
+      /*
+        Backwards direction
+      */
+
+
+      const backwards =
+        [...correctPath]
+          .reverse();
+
+
+      if (
+        samePath(
+          path,
+          backwards
+        )
+      ) {
+
+
+        return word;
+
+      }
+
+    }
+
+
+    return null;
+
+  }
+
+
+  /*
+  ====================================================
+  PAINT WORD YELLOW
+  ====================================================
+  */
+
 
   function paintWordYellow(
     path
   ) {
 
+
     for (
       const position
       of path
     ) {
+
 
       const cell =
         getCellElement(
@@ -1522,6 +1714,7 @@ ELEFEN WORD FIND
 
 
       if (cell) {
+
 
         cell.classList.add(
           "found"
@@ -1535,12 +1728,14 @@ ELEFEN WORD FIND
 
 
   /*
-  ----------------------------------------------------
+  ====================================================
   UPDATE SCORE
-  ----------------------------------------------------
+  ====================================================
   */
 
+
   function updateScore() {
+
 
     score.textContent =
       foundWords.size +
@@ -1553,13 +1748,16 @@ ELEFEN WORD FIND
       WORDS.length
     ) {
 
+
       win.classList.add(
         "show"
       );
 
     }
 
+
     else {
+
 
       win.classList.remove(
         "show"
@@ -1571,46 +1769,28 @@ ELEFEN WORD FIND
 
 
   /*
-  ----------------------------------------------------
-  FINISH SELECTION
-  ----------------------------------------------------
+  ====================================================
+  FINISH PLAYER SELECTION
+  ====================================================
   */
 
+
   function finishSelection() {
+
 
     if (
       currentPath.length === 0
     ) {
+
 
       return;
 
     }
 
 
-    const selected =
-      getSelectedWord(
-        currentPath
-      );
-
-
-    const backwards =
-      [...selected]
-        .reverse()
-        .join("");
-
-
     const matchedWord =
-      WORDS.find(
-
-        word =>
-
-          !foundWords.has(word) &&
-
-          (
-            word === selected ||
-            word === backwards
-          )
-
+      findMatchingWord(
+        currentPath
       );
 
 
@@ -1621,7 +1801,11 @@ ELEFEN WORD FIND
       CORRECT
     */
 
-    if (matchedWord) {
+
+    if (
+      matchedWord
+    ) {
+
 
       foundWords.add(
         matchedWord
@@ -1654,7 +1838,9 @@ ELEFEN WORD FIND
       WRONG
     */
 
+
     else {
+
 
       message.textContent =
         "Nope. Try another one. 😎";
@@ -1666,23 +1852,28 @@ ELEFEN WORD FIND
     }
 
 
-    currentPath = [];
+    currentPath =
+      [];
 
-    startCell = null;
+
+    startCell =
+      null;
 
   }
 
 
   /*
-  ----------------------------------------------------
+  ====================================================
   START DRAG
-  ----------------------------------------------------
+  ====================================================
   */
+
 
   function startDrag(
     x,
     y
   ) {
+
 
     const cell =
       getCellFromPoint(
@@ -1692,6 +1883,7 @@ ELEFEN WORD FIND
 
 
     if (!cell) {
+
 
       return false;
 
@@ -1717,20 +1909,23 @@ ELEFEN WORD FIND
 
 
   /*
-  ----------------------------------------------------
-  MOVE FINGER
-  ----------------------------------------------------
+  ====================================================
+  MOVE DRAG
+  ====================================================
   */
+
 
   function moveDrag(
     x,
     y
   ) {
 
+
     if (
       !dragging ||
       !startCell
     ) {
+
 
       return;
 
@@ -1745,6 +1940,7 @@ ELEFEN WORD FIND
 
 
     if (!cell) {
+
 
       return;
 
@@ -1766,14 +1962,17 @@ ELEFEN WORD FIND
 
 
   /*
-  ----------------------------------------------------
+  ====================================================
   END DRAG
-  ----------------------------------------------------
+  ====================================================
   */
+
 
   function endDrag() {
 
+
     if (!dragging) {
+
 
       return;
 
@@ -1791,173 +1990,12 @@ ELEFEN WORD FIND
 
   /*
   ====================================================
-  POINTER EVENTS
+  IPHONE / IPAD TOUCH EVENTS
   ====================================================
 
-  Works with:
-
-  iPhone
-  iPad
-  Android
-  mouse
-  touchscreen laptops
-  */
-
-
-  grid.addEventListener(
-    "pointerdown",
-    event => {
-
-      /*
-        Stop Safari from treating this
-        as page movement.
-      */
-
-      event.preventDefault();
-
-
-      if (
-        !startDrag(
-          event.clientX,
-          event.clientY
-        )
-      ) {
-
-        return;
-
-      }
-
-
-      activePointer =
-        event.pointerId;
-
-
-      try {
-
-        grid.setPointerCapture(
-          activePointer
-        );
-
-      }
-
-      catch (error) {
-
-        /*
-          Some browsers may not support
-          pointer capture.
-
-          The game can still work.
-        */
-
-      }
-
-    }
-  );
-
-
-  grid.addEventListener(
-    "pointermove",
-    event => {
-
-      if (
-        !dragging ||
-        event.pointerId !==
-        activePointer
-      ) {
-
-        return;
-
-      }
-
-
-      event.preventDefault();
-
-
-      moveDrag(
-        event.clientX,
-        event.clientY
-      );
-
-    }
-  );
-
-
-  grid.addEventListener(
-    "pointerup",
-    event => {
-
-      if (
-        event.pointerId !==
-        activePointer
-      ) {
-
-        return;
-
-      }
-
-
-      event.preventDefault();
-
-
-      endDrag();
-
-
-      try {
-
-        if (
-          grid.hasPointerCapture(
-            activePointer
-          )
-        ) {
-
-          grid.releasePointerCapture(
-            activePointer
-          );
-
-        }
-
-      }
-
-      catch (error) {
-
-      }
-
-
-      activePointer = null;
-
-    }
-  );
-
-
-  grid.addEventListener(
-    "pointercancel",
-    () => {
-
-      dragging =
-        false;
-
-      activePointer =
-        null;
-
-      startCell =
-        null;
-
-      currentPath =
-        [];
-
-      clearPreview();
-
-    }
-  );
-
-
-  /*
-  ====================================================
-  EXTRA IOS TOUCH PROTECTION
-  ====================================================
-
-  This explicitly stops touch scrolling
-  inside the puzzle area.
+  We handle touch events directly so
+  Safari does not scroll the page when
+  your finger is on the puzzle.
   */
 
 
@@ -1965,7 +2003,33 @@ ELEFEN WORD FIND
     "touchstart",
     event => {
 
+
+      if (
+        event.changedTouches.length === 0
+      ) {
+
+
+        return;
+
+      }
+
+
       event.preventDefault();
+
+
+      const touch =
+        event.changedTouches[0];
+
+
+      activeTouchID =
+        touch.identifier;
+
+
+      startDrag(
+        touch.clientX,
+        touch.clientY
+      );
+
 
     },
     {
@@ -1978,7 +2042,113 @@ ELEFEN WORD FIND
     "touchmove",
     event => {
 
+
+      if (!dragging) {
+
+
+        return;
+
+      }
+
+
       event.preventDefault();
+
+
+      let touch = null;
+
+
+      for (
+        const possibleTouch
+        of event.touches
+      ) {
+
+
+        if (
+          possibleTouch.identifier ===
+          activeTouchID
+        ) {
+
+
+          touch =
+            possibleTouch;
+
+
+          break;
+
+        }
+
+      }
+
+
+      if (!touch) {
+
+
+        return;
+
+      }
+
+
+      moveDrag(
+        touch.clientX,
+        touch.clientY
+      );
+
+
+    },
+    {
+      passive: false
+    }
+  );
+
+
+  grid.addEventListener(
+    "touchend",
+    event => {
+
+
+      event.preventDefault();
+
+
+      endDrag();
+
+
+      activeTouchID =
+        null;
+
+
+    },
+    {
+      passive: false
+    }
+  );
+
+
+  grid.addEventListener(
+    "touchcancel",
+    event => {
+
+
+      event.preventDefault();
+
+
+      dragging =
+        false;
+
+
+      activeTouchID =
+        null;
+
+
+      currentPath =
+        [];
+
+
+      startCell =
+        null;
+
+
+      clearPreview();
+
 
     },
     {
@@ -1988,21 +2158,82 @@ ELEFEN WORD FIND
 
 
   /*
-  ----------------------------------------------------
-  RESET CURRENT PUZZLE
-  ----------------------------------------------------
+  ====================================================
+  COMPUTER MOUSE SUPPORT
+  ====================================================
   */
+
+
+  grid.addEventListener(
+    "mousedown",
+    event => {
+
+
+      event.preventDefault();
+
+
+      startDrag(
+        event.clientX,
+        event.clientY
+      );
+
+    }
+  );
+
+
+  window.addEventListener(
+    "mousemove",
+    event => {
+
+
+      if (!dragging) {
+
+
+        return;
+
+      }
+
+
+      moveDrag(
+        event.clientX,
+        event.clientY
+      );
+
+    }
+  );
+
+
+  window.addEventListener(
+    "mouseup",
+    () => {
+
+
+      endDrag();
+
+    }
+  );
+
+
+  /*
+  ====================================================
+  RESET FINDS
+  ====================================================
+  */
+
 
   resetButton.addEventListener(
     "click",
     () => {
+
 
       foundWords.clear();
 
 
       renderGrid();
 
+
       renderWordList();
+
 
       updateScore();
 
@@ -2019,41 +2250,39 @@ ELEFEN WORD FIND
 
 
   /*
-  ----------------------------------------------------
+  ====================================================
   NEW PUZZLE
-  ----------------------------------------------------
+  ====================================================
+
+  The hidden words stay in the exact
+  same locations.
+
+  Only the random filler letters change.
   */
+
 
   newPuzzleButton.addEventListener(
     "click",
     () => {
 
+
       foundWords.clear();
 
 
-      const success =
-        generatePuzzle();
-
-
-      if (!success) {
-
-        message.textContent =
-          "Couldn't generate puzzle. Try again.";
-
-        return;
-
-      }
+      buildPuzzle();
 
 
       renderGrid();
 
+
       renderWordList();
+
 
       updateScore();
 
 
       message.textContent =
-        "Fresh puzzle. Go hunt. 🔎";
+        "Fresh letters. Go hunt. 🔎";
 
 
       message.className =
@@ -2070,28 +2299,22 @@ ELEFEN WORD FIND
   */
 
 
-  const generated =
-    generatePuzzle();
-
-
-  if (!generated) {
-
-    message.textContent =
-      "Puzzle generation failed.";
-
-    return;
-
-  }
+  buildPuzzle();
 
 
   renderGrid();
 
+
   renderWordList();
+
 
   updateScore();
 
+
 })();
+
 </script>
+
 
 </body>
 </html>
