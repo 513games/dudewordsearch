@@ -1,2579 +1,2097 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
 
-  <title>English → Elefen Translator</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+  />
+
+  <meta name="theme-color" content="#090e1c" />
+
+  <title>Elefen Word Find</title>
 
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 20px;
+    :root {
+      --background: #090e1c;
+      --panel: #111a31;
+      --panel-light: #18233f;
+
+      --text: #f7f9ff;
+      --muted: #a9b4ce;
+
+      --blue: #73adff;
+      --blue-soft: rgba(115, 173, 255, 0.28);
+
+      --yellow: #fff52e;
+      --yellow-glow: rgba(255, 245, 46, 0.35);
+
+      --border: rgba(255, 255, 255, 0.1);
+
+      --cell-size: min(5.35vw, 36px);
     }
 
-    textarea {
-      width: 100%;
-      height: 200px;
-      margin-bottom: 15px;
-      padding: 12px;
-      font-size: 18px;
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: var(--background);
+    }
+
+    body {
+      margin: 0;
+
+      min-height: 100%;
+
+      color: var(--text);
+
+      font-family:
+        ui-rounded,
+        "SF Pro Rounded",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+      background:
+        radial-gradient(
+          circle at top,
+          rgba(55, 95, 220, 0.2),
+          transparent 34rem
+        ),
+        var(--background);
+
+      overscroll-behavior-y: contain;
+    }
+
+    main {
+      width: min(100%, 900px);
+
+      margin: 0 auto;
+
+      padding:
+        24px
+        12px
+        50px;
+    }
+
+    /* -----------------------------
+       HEADER
+    ----------------------------- */
+
+    .top {
+      display: flex;
+
+      justify-content: space-between;
+      align-items: flex-end;
+
+      gap: 16px;
+
+      flex-wrap: wrap;
+
+      margin-bottom: 18px;
+    }
+
+    .kicker {
+      color: var(--yellow);
+
+      font-size: 0.78rem;
+
+      font-weight: 950;
+
+      letter-spacing: 0.17em;
+
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 6px 0 0;
+
+      font-size: clamp(2.2rem, 9vw, 4rem);
+
+      line-height: 0.95;
+
+      letter-spacing: -0.05em;
+    }
+
+    .description {
+      max-width: 650px;
+
+      margin: 12px 0 0;
+
+      color: var(--muted);
+
+      font-size: 1rem;
+
+      line-height: 1.5;
+    }
+
+    /* -----------------------------
+       BUTTONS
+    ----------------------------- */
+
+    .buttons {
+      display: flex;
+
+      gap: 9px;
+
+      flex-wrap: wrap;
     }
 
     button {
-      padding: 12px 20px;
-      font-size: 18px;
+      min-height: 46px;
+
+      padding: 0 16px;
+
+      border: 1px solid var(--border);
+
+      border-radius: 15px;
+
+      background: var(--panel-light);
+
+      color: var(--text);
+
+      font: inherit;
+
+      font-weight: 900;
+
       cursor: pointer;
+    }
+
+    button.primary {
+      background: var(--yellow);
+
+      border-color: transparent;
+
+      color: #151800;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    /* -----------------------------
+       MAIN LAYOUT
+    ----------------------------- */
+
+    .layout {
+      display: grid;
+
+      grid-template-columns:
+        minmax(0, 1fr)
+        230px;
+
+      gap: 16px;
+
+      align-items: start;
+    }
+
+    .card {
+      padding: 12px;
+
+      border: 1px solid var(--border);
+
+      border-radius: 22px;
+
+      background: rgba(17, 26, 49, 0.92);
+    }
+
+    /* -----------------------------
+       PUZZLE GRID
+    ----------------------------- */
+
+    .grid-wrapper {
+      overflow: hidden;
+
+      border-radius: 18px;
+    }
+
+    #grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(15, var(--cell-size));
+
+      grid-template-rows:
+        repeat(15, var(--cell-size));
+
+      gap: 2px;
+
+      width: max-content;
+
+      margin: 0 auto;
+
+      padding: 8px;
+
+      border: 1px solid var(--border);
+
+      border-radius: 18px;
+
+      background: #0c1428;
+
+      /*
+        VERY IMPORTANT FOR PHONES
+
+        This tells Safari that finger movement
+        inside the puzzle belongs to us,
+        not page scrolling.
+      */
+      touch-action: none;
+
+      overscroll-behavior: none;
+
+      user-select: none;
+
+      -webkit-user-select: none;
+
+      -webkit-touch-callout: none;
+    }
+
+    .cell {
+      width: var(--cell-size);
+      height: var(--cell-size);
+
+      display: grid;
+
+      place-items: center;
+
+      border-radius: 8px;
+
+      background: rgba(255, 255, 255, 0.035);
+
+      color: var(--text);
+
+      font-size: clamp(
+        0.74rem,
+        3.4vw,
+        1.08rem
+      );
+
+      font-weight: 950;
+
+      line-height: 1;
+
+      transition:
+        background 0.1s ease,
+        color 0.1s ease,
+        transform 0.08s ease,
+        box-shadow 0.1s ease;
+    }
+
+    /*
+      While the player is dragging.
+    */
+
+    .cell.preview {
+      background: var(--blue-soft);
+
+      box-shadow:
+        inset
+        0
+        0
+        0
+        2px
+        var(--blue);
+
+      transform: scale(1.04);
+    }
+
+    /*
+      Correct word.
+    */
+
+    .cell.found {
+      background: var(--yellow);
+
+      color: #151800;
+
+      box-shadow:
+        0
+        0
+        12px
+        var(--yellow-glow);
+    }
+
+    /* -----------------------------
+       STATUS
+    ----------------------------- */
+
+    .status {
+      min-height: 52px;
+
+      display: flex;
+
+      justify-content: space-between;
+      align-items: center;
+
+      gap: 10px;
+
+      flex-wrap: wrap;
+
+      padding: 12px 5px 0;
+
+      color: var(--muted);
+    }
+
+    .status strong {
+      color: var(--text);
+
+      font-weight: 950;
+    }
+
+    #message {
+      color: var(--text);
+
+      font-weight: 900;
+    }
+
+    #message.good {
+      color: var(--yellow);
+    }
+
+    .win {
+      display: none;
+
+      margin-top: 8px;
+
+      padding: 14px;
+
+      border-radius: 14px;
+
+      background: var(--yellow);
+
+      color: #151800;
+
+      font-weight: 950;
+
+      text-align: center;
+    }
+
+    .win.show {
+      display: block;
+    }
+
+    /* -----------------------------
+       WORD LIST
+    ----------------------------- */
+
+    .side h2 {
+      margin: 2px 0 12px;
+
+      font-size: 1.05rem;
+    }
+
+    #wordList {
+      display: grid;
+
+      gap: 8px;
+    }
+
+    .word {
+      min-height: 40px;
+
+      display: flex;
+
+      align-items: center;
+
+      padding: 8px 10px;
+
+      border-radius: 11px;
+
+      background: rgba(255, 255, 255, 0.04);
+
+      color: var(--text);
+
+      font-weight: 900;
+
+      letter-spacing: 0.03em;
+    }
+
+    .word.found {
+      background: var(--yellow);
+
+      color: #151800;
+
+      text-decoration: line-through 2px;
+    }
+
+    .tip {
+      margin: 13px 2px 2px;
+
+      color: var(--muted);
+
+      font-size: 0.84rem;
+
+      line-height: 1.45;
+    }
+
+    /* -----------------------------
+       MOBILE
+    ----------------------------- */
+
+    @media (max-width: 720px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      #wordList {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 390px) {
+      :root {
+        --cell-size: 5.1vw;
+      }
+
+      main {
+        padding-left: 8px;
+        padding-right: 8px;
+      }
+
+      .card {
+        padding: 9px;
+      }
+
+      #grid {
+        gap: 1px;
+
+        padding: 5px;
+      }
+
+      .cell {
+        border-radius: 5px;
+
+        font-size: 0.68rem;
+      }
+
+      .word {
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .cell {
+        transition: none;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <h1>English → Elefen</h1>
+<main>
 
-  <h3>English</h3>
+  <!-- HEADER -->
 
-  <textarea
-    id="english"
-    placeholder="Type English here..."
-  ></textarea>
+  <section class="top">
 
-  <button id="translateButton" type="button">
-    Translate
-  </button>
+    <div>
 
-  <h3>Elefen</h3>
+      <div class="kicker">
+        ELEFEN • PAROL TROVADA
+      </div>
 
-  <textarea
-    id="elefen"
-    readonly
-    placeholder="Translation appears here..."
-  ></textarea>
+      <h1>
+        Word Find
+      </h1>
+
+      <p class="description">
+        Swipe your finger across a hidden Elefen word.
+        Correct words turn neon yellow.
+        Wrong selections simply disappear.
+      </p>
+
+    </div>
+
+    <div class="buttons">
+
+      <button
+        id="newPuzzle"
+        class="primary"
+        type="button"
+      >
+        New puzzle
+      </button>
+
+      <button
+        id="resetPuzzle"
+        type="button"
+      >
+        Reset finds
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- GAME -->
+
+  <section class="layout">
+
+    <div class="card">
+
+      <div class="grid-wrapper">
+
+        <div
+          id="grid"
+          aria-label="Elefen word search puzzle"
+        ></div>
+
+      </div>
+
+
+      <div
+        class="status"
+        aria-live="polite"
+      >
+
+        <div>
+          <strong id="score">
+            0 / 10
+          </strong>
+
+          found
+        </div>
+
+        <div id="message">
+          Drag across a word.
+        </div>
+
+      </div>
+
+
+      <div
+        id="win"
+        class="win"
+      >
+        🎉 Completada! You found every word.
+      </div>
+
+    </div>
+
+
+    <!-- WORD LIST -->
+
+    <aside class="card side">
+
+      <h2>
+        Find these words
+      </h2>
+
+      <div id="wordList"></div>
+
+      <p class="tip">
+        Words can run horizontally,
+        vertically, diagonally,
+        forwards, or backwards.
+      </p>
+
+    </aside>
+
+  </section>
+
+</main>
 
 
 <script>
-
 /*
-=========================================================
-=========================================================
-
-        PASTE YOUR VOCABULARY BELOW THIS LINE
-
-Format:
-
-english = elefen
-
-Example:
-
-hello = alo
-friend = ami | noun
-good morning = bon dia
-i love you = me ama tu
-
-=========================================================
-=========================================================
+====================================================
+ELEFEN WORD FIND
+====================================================
 */
 
 
-const VOCABULARY = `
-
-# BASIC WORDS
-
-hello = alo
-friend = ami | noun
-
-# PRONOUNS
-
-i = me
-me = me
-you = tu
-he = el
-him = el
-she = el
-her = el
-it = lo
-we = nos
-us = nos
-they = los
-them = los
-you all = vos
-
-# TENSE / MODALITY HELPERS
-
-would = ta
-would not = no ta
-wouldn't = no ta
-does not = no
-doesn't = no
-don't = no
-
-# DETERMINERS
-
-a = un
-an = un
-the = la
-this = esta
-that = acel
-my = mea
-mine = mea
-your = tua
-yours = tua
-his = sua
-her own = sua
-hers = sua
-our = nosa
-ours = nosa
-their = lor
-theirs = lor
-
-# COMMON NOUNS
-
-good morning = bon dia
-car = auto | noun
-house = casa | noun
-thing = cosa | noun
-language = lingua | noun
-person = person | noun
-river = rio | noun
-train = tren | noun
-bus = autobus | noun
-bicycle = bisicle | noun
-bike = bisicle | noun
-plane = avion | noun
-boat = barco | noun
-food = come | noun
-water = acua | noun
-day = dia | noun
-night = note | noun
-work = labora | noun
-job = labora | noun
-street = strada | noun
-store = boteca | noun
-school = scola | noun
-city = site | noun
-country = pais | noun
-world = mundo | noun
-word = parola | noun
-sentence = frase | noun
-time = tempo | noun
-year = anio | noun
-month = mense | noun
-week = semana | noun
-hour = ora | noun
-minute = minuta | noun
-morning = matin | noun
-evening = sera | noun
-room = sala | noun
-door = porte | noun
-window = fenestra | noun
-book = libro | noun
-phone = telefono | noun
-name = nom | noun
-family = familia | noun
-mother = madre | noun
-father = padre | noun
-child = enfante | noun
-baby = bebe | noun
-woman = fem | noun
-man = om | noun
-people = persones | noun
-body = corpo | noun
-head = testa | noun
-hand = mano | noun
-eye = ojo | noun
-mouth = boca | noun
-heart = cor | noun
-coffee = cafe | noun
-bread = pan | noun
-fruit = fruta | noun
-animal = animal | noun
-dog = can | noun
-cat = gato | noun
-tree = arbor | noun
-flower = flor | noun
-sun = sol | noun
-moon = luna | noun
-place = loco | noun
-problem = problem | noun
-cage = caje | noun
-banana = banana | noun
-game = jua | noun
-
-
-# PREPOSITIONS / LOCATION / MOVEMENT
-
-in = en
-inside = en
-on = sur
-with = con
-without = sin
-for = per
-to = a
-from = de
-at = a
-near = prosima
-beside = a lado de
-next to = a lado de
-
-by car = par auto
-by train = par tren
-by bus = par autobus
-by bicycle = par bisicle
-by bike = par bisicle
-by plane = par avion
-by boat = par barco
-
-by the river = a lado de la rio
-near the river = prosima a la rio
-next to the river = a lado de la rio
-
-by the house = a lado de la casa
-near the house = prosima a la casa
-next to the house = a lado de la casa
-
-by my house = a lado de mea casa
-near my house = prosima a mea casa
-by your house = a lado de tua casa
-near your house = prosima a tua casa
-
-in my car = en mea auto
-in your car = en tua auto
-in his car = en sua auto
-in her car = en sua auto
-in our car = en nosa auto
-in their car = en lor auto
-
-to my house = a mea casa
-to your house = a tua casa
-to his house = a sua casa
-to her house = a sua casa
-to our house = a nosa casa
-to their house = a lor casa
-
-to the house = a la casa
-to work = a la labora
-to school = a la scola
-to the store = a la boteca
-
-to me = a me
-to you = a tu
-to him = a el
-to her = a el
-to us = a nos
-to them = a los
-to you all = a vos
-
-
-# THINK THAT
-
-i think that = me pensa ce
-i thought that = me ia pensa ce
-i will think that = me va pensa ce
-
-you think that = tu pensa ce
-you thought that = tu ia pensa ce
-you will think that = tu va pensa ce
-
-he thinks that = el pensa ce
-he thought that = el ia pensa ce
-he will think that = el va pensa ce
-
-she thinks that = el pensa ce
-she thought that = el ia pensa ce
-she will think that = el va pensa ce
-
-we think that = nos pensa ce
-we thought that = nos ia pensa ce
-we will think that = nos va pensa ce
-
-they think that = los pensa ce
-they thought that = los ia pensa ce
-they will think that = los va pensa ce
-
-you all think that = vos pensa ce
-you all thought that = vos ia pensa ce
-you all will think that = vos va pensa ce
-
-
-# BELIEVE THAT
-
-i believe that = me crede ce
-i believed that = me ia crede ce
-i will believe that = me va crede ce
-
-you believe that = tu crede ce
-you believed that = tu ia crede ce
-you will believe that = tu va crede ce
-
-he believes that = el crede ce
-he believed that = el ia crede ce
-he will believe that = el va crede ce
-
-she believes that = el crede ce
-she believed that = el ia crede ce
-she will believe that = el va crede ce
-
-we believe that = nos crede ce
-we believed that = nos ia crede ce
-we will believe that = nos va crede ce
-
-they believe that = los crede ce
-they believed that = los ia crede ce
-they will believe that = los va crede ce
-
-you all believe that = vos crede ce
-you all believed that = vos ia crede ce
-you all will believe that = vos va crede ce
-
-
-# KNOW THAT
-
-i know that = me sabe ce
-i knew that = me ia sabe ce
-i will know that = me va sabe ce
-
-you know that = tu sabe ce
-you knew that = tu ia sabe ce
-you will know that = tu va sabe ce
-
-he knows that = el sabe ce
-he knew that = el ia sabe ce
-he will know that = el va sabe ce
-
-she knows that = el sabe ce
-she knew that = el ia sabe ce
-she will know that = el va sabe ce
-
-we know that = nos sabe ce
-we knew that = nos ia sabe ce
-we will know that = nos va sabe ce
-
-they know that = los sabe ce
-they knew that = los ia sabe ce
-they will know that = los va sabe ce
-
-you all know that = vos sabe ce
-you all knew that = vos ia sabe ce
-you all will know that = vos va sabe ce
-
-
-# WANT TO
-
-want = vole
-wanted = ia vole
-will want = va vole
-would want = ta vole
-
-want to = vole
-wanted to = ia vole
-will want to = va vole
-would want to = ta vole
-
-
-# CAN / COULD / SHOULD / MUST
-
-can = pote
-could = ta pote
-should = debe
-must = debe
-have to = debe
-has to = debe
-had to = ia debe
-will have to = va debe
-would have to = ta debe
-
-able to = pote
-was able to = ia pote
-were able to = ia pote
-will be able to = va pote
-
-
-# BEFORE / AFTER
-
-before i = ante ce me
-before you = ante ce tu
-before he = ante ce el
-before she = ante ce el
-before we = ante ce nos
-before they = ante ce los
-before you all = ante ce vos
-
-after i = pos ce me
-after you = pos ce tu
-after he = pos ce el
-after she = pos ce el
-after we = pos ce nos
-after they = pos ce los
-after you all = pos ce vos
-
-
-# DO THAT / DO IT
-
-do that = fa acel
-do it = fa lo
-
-can do that = pote fa acel
-could do that = ta pote fa acel
-will do that = va fa acel
-would do that = ta fa acel
-
-we can do that = nos pote fa acel
-we could do that = nos ta pote fa acel
-we will do that = nos va fa acel
-we would do that = nos ta fa acel
-
-i can do that = me pote fa acel
-you can do that = tu pote fa acel
-he can do that = el pote fa acel
-she can do that = el pote fa acel
-they can do that = los pote fa acel
-you all can do that = vos pote fa acel
-
-did he = esce el
-did you = esce tu
-did I = esce me 
-did she = esce el
-did they = esce los
-did you all = esce vos
-did we = esce nos
-
-
-# TELL
-
-tell me = dise a me
-tell you = dise a tu
-tell him = dise a el
-tell her = dise a el
-tell us = dise a nos
-tell them = dise a los
-tell you all = dise a vos
-
-told me = ia dise a me
-told you = ia dise a tu
-told him = ia dise a el
-told her = ia dise a el
-told us = ia dise a nos
-told them = ia dise a los
-told you all = ia dise a vos
-
-will tell me = va dise a me
-will tell you = va dise a tu
-will tell him = va dise a el
-will tell her = va dise a el
-will tell us = va dise a nos
-will tell them = va dise a los
-will tell you all = va dise a vos
-
-have to tell me = debe dise a me
-have to tell you = debe dise a tu
-have to tell him = debe dise a el
-have to tell her = debe dise a el
-have to tell us = debe dise a nos
-have to tell them = debe dise a los
-have to tell you all = debe dise a vos
-
-
-# IF / BECAUSE / WHEN / WHERE / QUESTIONS
-
-if = si
-because = car
-when = cuando
-where = do
-why = perce
-what = cual
-who = ci
-
-if i = si me
-if you = si tu
-if he = si el
-if she = si el
-if we = si nos
-if they = si los
-if you all = si vos
-
-when i = cuando me
-when you = cuando tu
-when he = cuando el
-when she = cuando el
-when we = cuando nos
-when they = cuando los
-when you all = cuando vos
-
-where i = do me
-where you = do tu
-where he = do el
-where she = do el
-where we = do nos
-where they = do los
-where you all = do vos
-
-
-# BE / HAVE / CONDITIONALS
-
-be = es
-am = es
-is = es
-are = es
-was = ia es
-were = ia es
-will be = va es
-would be = ta es
-to be = es
-
-have = ave
-has = ave
-had = ia ave
-will have = va ave
-would have = ta ave
-to have = ave
-
-if i had = si me ta ave
-if you had = si tu ta ave
-if he had = si el ta ave
-if she had = si el ta ave
-if we had = si nos ta ave
-if they had = si los ta ave
-if you all had = si vos ta ave
-
-if i were = si me ta es
-if you were = si tu ta es
-if he were = si el ta es
-if she were = si el ta es
-if we were = si nos ta es
-if they were = si los ta es
-if you all were = si vos ta es
-
-
-# COMMON VERBS
-
-to become = deveni | verb
-become = deveni | verb
-
-do = fa | verb
-make = fa | verb
-to do = fa | verb
-to make = fa | verb
-
-go = vade | verb
-goes = vade | verb
-went = ia vade | verb
-will go = va vade | verb
-would go = ta vade | verb
-to go = vade | verb
-
-come = veni | verb
-comes = veni | verb
-came = ia veni | verb
-will come = va veni | verb
-would come = ta veni | verb
-to come = veni | verb
-do you = esce tu | verb
-
-return = reveni | verb
-come back = reveni | verb
-give = dona | verb
-give to = dona a | verb
-gave = ia dona | verb
-gave you = ia dona a tu | verb
-gave him = ia dona a el | verb
-gave her = ia dona a el | verb
-gave them = ia dona a los | verb
-gave you all = ia dona a vos | verb
-gave me = ia dona a me | verb
-give you = dona a tu | verb
-give him = dona a el | verb
-give her = dona a el | verb
-give them = dona a los | verb
-give you all = dona a vos | verb
-give me = dona a me | verb
-give to = dona a | verb
-leave = parti | verb
-depart = parti | verb
-enter = entra | verb
-exit = sorti | verb
-fall = cade | verb
-fly = vola | verb
-follow = segue | verb
-jump = salta | verb
-run = core | verb
-sit = senta | verb
-stand = sta | verb
-stay = resta | verb
-stop = para | verb
-swim = nada | verb
-walk = pasea | verb
-travel = viaja | verb
-needs = nesesa | verb
-park = parci | verb
-parked = parcida | verb
-
-eat = come | verb
-eats = come | verb
-ate = ia come | verb
-will eat = va come | verb
-would eat = ta come | verb
-to eat = come | verb
-
-if i ate = si me ta come | verb
-if you ate = si tu ta come | verb
-if he ate = si el ta come | verb
-if she ate = si el ta come | verb
-if we ate = si nos ta come | verb
-if they ate = si los ta come | verb
-if you all ate = si vos ta come | verb
-
-drink = bevi | verb
-drinks = bevi | verb
-drank = ia bevi | verb
-will drink = va bevi | verb
-would drink = ta bevi | verb
-to drink = bevi | verb
-
-hear = oia | verb
-listen = escuta | verb
-see = vide | verb
-sees = vide | verb
-watch = regarda | verb
-
-sleep = dormi | verb
-wake = velia | verb
-live = vive | verb
-die = mori | verb
-
-think = pensa | verb
-believe = crede | verb
-know = sabe | verb
-know someone = conose | verb
-learn = aprende | verb
-understand = comprende | verb
-remember = recorda | verb
-forget = oblida | verb
-decide = deside | verb
-
-say = dise | verb
-tell = dise | verb
-speak = parla | verb
-read = leje | verb
-write = scrive | verb
-ask = demanda | verb
-asks = demanda | verb
-asked = ia demanda | verb
-answer = responde | verb
-explain = esplica | verb
-translate = tradui | verb
-thank = grasia | verb
-
-like = gusta | verb
-love = ama | verb
-hate = odia | verb
-fear = teme | verb
-hope = espera | verb
-feel = senti | verb
-laugh = rie | verb
-cry = plora | verb
-smile = surie | verb
-prefer = prefere | verb
-
-buy = compra | verb
-sell = vende | verb
-pay = paia | verb
-take = prende | verb
-give = dona | verb
-choose = eleje | verb
-find = trova | verb
-help = aida | verb
-use = usa | verb
-put = pone | verb
-bring = trae | verb
-carry = porta | verb
-lose = perde | verb
-win = gania | verb
- 
-open = abri | verb
-close = clui | verb
-break = rompe | verb
-start = comensa | verb
-begin = comensa | verb
-finish = fini | verb
-end = fini | verb
-change = cambia | verb
-
-study = studia | verb
-teach = ensenia | verb
-play = jua | verb
-drive = gida | verb
-cook = coce | verb
-wash = lava | verb
-wear = porta | verb
-working = laborante | verb
-
-try = atenta | verb
-create = crea | verb
-build = construi | verb
-repair = repara | verb
-clean = limpa | verb
-search = xerca | verb
-show = mostra | verb
-send = envia | verb
-receive = reseta | verb
-meet = encontra | verb
-arrive = ariva | verb
-wait = espeta | verb
-need = nesesa | verb
-he needs = el nesesa | verb
-she needs = el nesesa | verb
-we need = nos nesesa | verb
-they need = los nesesa | verb
-you all need = vos nesesa | verb
-I need = me nesesa | verb
-you need = tu nesesa | verb
-look = regarda | verb
-look at = regarda | verb
-move = move | verb
-
-
-# BASIC CONNECTORS / LITTLE WORDS
-
-but = ma
-and = e
-or = o
-also = ance
-again = denova
-already = ja
-still = ancora
-now = aora
-today = oji
-yesterday = ier
-tomorrow = doman
-soon = pronto
-later = plu tarda
-
-before = ante
-after = pos
-then = alora
-
-always = sempre
-never = nunca
-sometimes = a veses
-often = frecuente
-
-yes = si
-no = no
-not = no
-
-maybe = posible
-probably = probable
-
-here = asi
-there = ala
-here and there = asi e ala
-over there = ala
-
-more = plu
-less = min
-very = multe
-too = tro
-almost = cuasi
-only = sola
-just = sola
-
-so that = afin
-in order to = afin
-for example = per esemplo
-in any case = en cualce caso
-of course = natural
-
-thank you = grasias
-please = per favore
-
-it is = lo es
-it was = lo ia es
-it will be = lo va es
-it would be = lo ta es
-
-this thing = esta cosa
-that thing = acel cosa
-these = estas
-those = aceles
-
-which = cual
-
-
-
-# NOT BE
-
-i am not = me no es
-i was not = me no ia es
-i will not be = me no va es
-i am not going to be = me no va es
-i would not be = me no ta es
-
-you are not = tu no es
-you were not = tu no ia es
-you will not be = tu no va es
-you are not going to be = tu no va es
-you would not be = tu no ta es
-
-he is not = el no es
-he was not = el no ia es
-he will not be = el no va es
-he is not going to be = el no va es
-he would not be = el no ta es
-
-she is not = el no es
-she was not = el no ia es
-she will not be = el no va es
-she is not going to be = el no va es
-she would not be = el no ta es
-
-it is not = lo no es
-it was not = lo no ia es
-it will not be = lo no va es
-it is not going to be = lo no va es
-it would not be = lo no ta es
-
-we are not = nos no es
-we were not = nos no ia es
-we will not be = nos no va es
-we are not going to be = nos no va es
-we would not be = nos no ta es
-
-they are not = los no es
-they were not = los no ia es
-they will not be = los no va es
-they are not going to be = los no va es
-they would not be = los no ta es
-
-you all are not = vos no es
-you all were not = vos no ia es
-you all will not be = vos no va es
-you all are not going to be = vos no va es
-you all would not be = vos no ta es
-
-
-# COMMON ADJECTIVES
-
-good = bon | adjective
-bad = mal | adjective
-happy = felis | adjective
-cheerful = felis | adjective
-sad = triste | adjective
-
-big = grande | adjective
-large = grande | adjective
-small = peti | adjective
-little = peti | adjective
-
-long = longa | adjective
-short = corta | adjective
-high = alta | adjective
-low = basa | adjective
-
-near = prosima | adjective
-far = distante | adjective
-
-full = plen | adjective
-empty = vacua | adjective
-open = abrida | adjective
-closed = cluida | adjective
-
-heavy = pesosa | adjective
-light = lejera | adjective
-wide = larga | adjective
-narrow = streta | adjective
-straight = direta | adjective
-round = ronda | adjective
-
-clean = limpa | adjective
-dirty = bruta | adjective
-
-easy = fasil | adjective
-difficult = difisil | adjective
-hard = dur | adjective
-soft = mol | adjective
-
-hot = calda | adjective
-warm = tepida | adjective
-cold = fria | adjective
-cool = fresca | adjective
-wet = umida | adjective
-dry = seca | adjective
-
-new = nova | adjective
-old = vea | adjective
-fast = rapida | adjective
-slow = lenta | adjective
-late = tarda | adjective
-ready = preparada | adjective
-
-important = importante | adjective
-interesting = interesante | adjective
-
-correct = coreta | adjective
-wrong = falsa | adjective
-true = vera | adjective
-false = falsa | adjective
-
-possible = posible | adjective
-impossible = nonposible | adjective
-necessary = nesesada | adjective
-sure = serta | adjective
-
-beautiful = bela | adjective
-pretty = bela | adjective
-ugly = fea | adjective
-
-cheap = barata | adjective
-expensive = cara | adjective
-
-safe = secur | adjective
-dangerous = perilosa | adjective
-strange = strana | adjective
-special = spesial | adjective
-useful = usosa | adjective
-usual = usual | adjective
-
-strong = forte | adjective
-weak = debil | adjective
-
-healthy = sana | adjective
-sick = malada | adjective
-hungry = fama | adjective
-thirsty = side | adjective
-tired = fatigada | adjective
-busy = ocupada | adjective
-free = libre | adjective
-
-friendly = amin | adjective
-honest = onesta | adjective
-jealous = jelosa | adjective
-angry = coler | adjective
-curious = curiosa | adjective
-
-comfortable = comfortosa | adjective
-uncomfortable = noncomfortosa | adjective
-
-simple = simple | adjective
-logical = lojical | adjective
-clear = clar | adjective
-dark = scur | adjective
-real = real | adjective
-
-personal = personal | adjective
-local = local | adjective
-public = publica | adjective
-private = privada | adjective
-common = comun | adjective
-
-different = diferente | adjective
-same = mesma | adjective
-young = joven | adjective
-
-black = negra | adjective
-white = blanca | adjective
-red = roja | adjective
-blue = blu | adjective
-green = verde | adjective
-yellow = jala | adjective
-gray = gris | adjective
-brown = brun | adjective
-orange = orania | adjective
-pink = ros | adjective
-purple = purpur | adjective
-
-quickly = rapida | adverb
-slowly = lenta | adverb
-well = bon | adverb
-badly = mal | adverb
-really = vera | adverb
-
-always = sempre | adverb
-never = nunca | adverb
-sometimes = a veses | adverb
-often = a multe veses | adverb
-rarely = a poca veses | adverb
-
-now = aora | adverb
-then = alora | adverb
-already = ja | adverb
-still = ancora | adverb
-again = denova | adverb
-soon = pronto | adverb
-late = tarda | adverb
-early = temprana | adverb
-
-today = oji | adverb
-yesterday = ier | adverb
-tomorrow = doman | adverb
-
-here = asi | adverb
-there = ala | adverb
-
-maybe = cisa | adverb
-perhaps = cisa | adverb
-almost = cuasi | adverb
-barely = apena | adverb
-
-also = ance | adverb
-even = an | adverb
-too = tro | adverb
-
-very = multe | adverb
-more = plu | adverb
-less = min | adverb
-
-`;
-
-
-/*
-=========================================================
-        END OF VOCABULARY
-=========================================================
-*/
-
-
-function buildDictionary() {
-  const dictionary = [];
-  const lines = VOCABULARY.split("\n");
-
-  for (const line of lines) {
-    const trimmed = line.trim();
-
-    if (!trimmed) continue;
-    if (trimmed.startsWith("#")) continue;
-    if (!trimmed.includes("=")) continue;
-
-    const parts = trimmed.split("=");
-    const english = parts.shift().trim().toLowerCase();
-    const rightSide = parts.join("=").trim();
-
-    /*
-    Optional grammar label:
-
-    word = parola | noun
-    learn = aprende | verb
-    */
-
-    const metaParts = rightSide.split("|");
-
-    const elefen = metaParts[0].trim();
-
-    const type =
-      metaParts.length > 1
-        ? metaParts.slice(1).join("|").trim().toLowerCase()
-        : "";
-
-    if (english && elefen) {
-      dictionary.push({
-        english,
-        elefen,
-        type,
-        words: english.split(/\s+/)
-      });
-    }
-  }
-
-  // Longer phrases are checked first.
-  dictionary.sort((a, b) => {
-
-    if (b.words.length !== a.words.length) {
-      return b.words.length - a.words.length;
-    }
-
-    return b.english.length - a.english.length;
-  });
-
-  return dictionary;
-}
-
-
-const dictionary = buildDictionary();
-
-
-function isWord(text) {
-  return /^[A-Za-zÀ-ÖØ-öø-ÿ']+$/.test(text);
-}
-
-
-/*
-=========================================================
-VERB HELPERS
-=========================================================
-*/
-
-function isVerb(word) {
-
-  if (!word) return false;
-
-  const lower = word.toLowerCase();
-
-  return dictionary.some(entry =>
-    entry.english === lower &&
-    entry.type === "verb"
-  );
-}
-
-
-function previousWord(tokens, index) {
-
-  for (let i = index - 1; i >= 0; i--) {
-
-    if (isWord(tokens[i])) {
-      return tokens[i];
-    }
-
-  }
-
-  return null;
-}
-
-
-function nextWord(tokens, index) {
-
-  for (let i = index + 1; i < tokens.length; i++) {
-
-    if (isWord(tokens[i])) {
-      return tokens[i];
-    }
-
-  }
-
-  return null;
-}
-
-
-/*
-=========================================================
-CAPITALIZATION
-=========================================================
-*/
-
-function preserveCapitalization(original, translation) {
-
-  // Special case for English "I"
-  if (original === "I") {
-    return (
-      translation.charAt(0).toUpperCase() +
-      translation.slice(1)
+(() => {
+
+  /*
+  ----------------------------------------------------
+  WORDS
+  ----------------------------------------------------
+  Add or remove words here later.
+  */
+
+  const WORDS = [
+    "DEVENI",
+    "CAR",
+    "VOLE",
+    "PERCE",
+    "PROSIMA",
+    "JUA",
+    "LIBRE",
+    "SENTI",
+    "PARLA",
+    "MERCURDI"
+  ];
+
+
+  /*
+  ----------------------------------------------------
+  SETTINGS
+  ----------------------------------------------------
+  */
+
+  const SIZE = 15;
+
+  const LETTERS =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+
+  /*
+  Words may travel in any of these
+  eight directions.
+  */
+
+  const DIRECTIONS = [
+
+    [-1, -1],
+
+    [-1, 0],
+
+    [-1, 1],
+
+    [0, -1],
+
+    [0, 1],
+
+    [1, -1],
+
+    [1, 0],
+
+    [1, 1]
+
+  ];
+
+
+  /*
+  ----------------------------------------------------
+  HTML ELEMENTS
+  ----------------------------------------------------
+  */
+
+  const grid =
+    document.getElementById("grid");
+
+  const wordList =
+    document.getElementById("wordList");
+
+  const score =
+    document.getElementById("score");
+
+  const message =
+    document.getElementById("message");
+
+  const win =
+    document.getElementById("win");
+
+  const newPuzzleButton =
+    document.getElementById("newPuzzle");
+
+  const resetButton =
+    document.getElementById("resetPuzzle");
+
+
+  /*
+  ----------------------------------------------------
+  GAME STATE
+  ----------------------------------------------------
+  */
+
+  let board = [];
+
+  let foundWords =
+    new Set();
+
+  let dragging =
+    false;
+
+  let startCell =
+    null;
+
+  let currentPath =
+    [];
+
+  let activePointer =
+    null;
+
+
+  /*
+  ----------------------------------------------------
+  RANDOM NUMBER
+  ----------------------------------------------------
+  */
+
+  function randomNumber(max) {
+
+    return Math.floor(
+      Math.random() * max
     );
+
   }
 
-  if (
-    original === original.toUpperCase() &&
-    /[A-Za-z]/.test(original)
-  ) {
-    return translation.toUpperCase();
-  }
 
-  if (
-    original &&
-    original.charAt(0) === original.charAt(0).toUpperCase()
-  ) {
-    return (
-      translation.charAt(0).toUpperCase() +
-      translation.slice(1)
+  /*
+  ----------------------------------------------------
+  CREATE EMPTY BOARD
+  ----------------------------------------------------
+  */
+
+  function emptyBoard() {
+
+    return Array.from(
+      { length: SIZE },
+      () =>
+        Array(SIZE).fill("")
     );
+
   }
 
-  return translation;
-}
 
+  /*
+  ----------------------------------------------------
+  CHECK WHETHER A WORD FITS
+  ----------------------------------------------------
+  */
 
-/*
-=========================================================
-PHRASE MATCHING
-=========================================================
-*/
-
-function phraseMatches(tokens, startIndex, words) {
-
-  let tokenIndex = startIndex;
-
-  for (
-    let wordIndex = 0;
-    wordIndex < words.length;
-    wordIndex++
+  function canPlaceWord(
+    word,
+    row,
+    column,
+    rowDirection,
+    columnDirection,
+    puzzle
   ) {
 
-    // Skip spaces between words.
-    while (
-      tokenIndex < tokens.length &&
-      /^\s+$/.test(tokens[tokenIndex])
+    const endRow =
+      row +
+      rowDirection *
+      (word.length - 1);
+
+    const endColumn =
+      column +
+      columnDirection *
+      (word.length - 1);
+
+
+    if (
+      endRow < 0 ||
+      endRow >= SIZE ||
+      endColumn < 0 ||
+      endColumn >= SIZE
     ) {
-      tokenIndex++;
-    }
 
-    if (tokenIndex >= tokens.length) {
-      return null;
-    }
-
-    if (!isWord(tokens[tokenIndex])) {
-      return null;
-    }
-
-    const currentWord =
-      tokens[tokenIndex].toLowerCase();
-
-    if (currentWord !== words[wordIndex]) {
-      return null;
-    }
-
-    tokenIndex++;
-  }
-
-  return tokenIndex - 1;
-}
-
-
-/*
-=========================================================
-AUTOMATIC ELEFEN NOUN PLURALS
-
-word = parola | noun
-
-word  -> parola
-words -> parolas
-
-Vowel ending     -> +s
-Consonant ending -> +es
-=========================================================
-*/
-
-function makeElefenPlural(word) {
-
-  if (/[aeiou]$/i.test(word)) {
-    return word + "s";
-  }
-
-  return word + "es";
-}
-
-
-function findNoun(englishSingular) {
-
-  return dictionary.find(entry =>
-    entry.type === "noun" &&
-    entry.english === englishSingular
-  );
-}
-
-function isNoun(word) {
-
-  if (!word) return false;
-
-  const lower = word.toLowerCase();
-
-  // Exact singular noun
-  if (
-    dictionary.some(entry =>
-      entry.type === "noun" &&
-      entry.english === lower
-    )
-  ) {
-    return true;
-  }
-
-  // Recognized plural noun
-  if (translatePluralNoun(lower)) {
-    return true;
-  }
-
-  return false;
-}
-
-
-
-function translatePluralNoun(word) {
-
-  const lower = word.toLowerCase();
-
-
-  /*
-  Common irregular English plurals
-  */
-
-  const irregularPlurals = {
-    people: "person",
-    men: "man",
-    women: "woman",
-    children: "child"
-  };
-
-
-  if (irregularPlurals[lower]) {
-
-    const noun =
-      findNoun(irregularPlurals[lower]);
-
-    if (noun) {
-      return makeElefenPlural(noun.elefen);
-    }
-  }
-
-
-  const possibleSingulars = [];
-
-
-  // cities -> city
-  // countries -> country
-
-  if (
-    lower.endsWith("ies") &&
-    lower.length > 3
-  ) {
-
-    possibleSingulars.push(
-      lower.slice(0, -3) + "y"
-    );
-  }
-
-
-  // words -> word
-  // houses -> house
-
-  if (
-    lower.endsWith("s") &&
-    lower.length > 1
-  ) {
-
-    possibleSingulars.push(
-      lower.slice(0, -1)
-    );
-  }
-
-
-  // buses -> bus
-  // boxes -> box
-
-  if (
-    lower.endsWith("es") &&
-    lower.length > 2
-  ) {
-
-    possibleSingulars.push(
-      lower.slice(0, -2)
-    );
-  }
-
-
-  for (
-    const singular of [...new Set(possibleSingulars)]
-  ) {
-
-    const noun = findNoun(singular);
-
-    if (noun) {
-      return makeElefenPlural(noun.elefen);
-    }
-  }
-
-
-  return null;
-}
-
-
-
-/*
-=========================================================
-REPORTED YES / NO QUESTIONS
-
-English uses "if" / "whether" for indirect yes/no
-questions:
-
-The old woman asked me if I had a car.
-
-Elefen uses ESCE, and Elefen keeps the tense of the
-ORIGINAL direct question:
-
-"Do you have a car?"
--> Esce tu ave un auto?
-
-reported:
--> La fem vea ia demanda a me esce me ave un auto.
-
-English often backshifts present verbs after "asked":
-have -> had
-is   -> was
-want -> wanted
-
-Inside this specific reported-question pattern, the
-translator can reverse that English backshift by using
-the vocabulary itself. If a word translates as:
-
-had = ia ave
-
-and another vocabulary entry translates as:
-
-have = ave
-
-the reported clause can recover "have" automatically.
-
-We preserve obvious real-past clauses when they contain
-an explicit past-time marker such as "yesterday", and we
-do not unshift "had + past participle" constructions.
-=========================================================
-*/
-
-function reportedPronoun(word) {
-
-  if (!word) return null;
-
-  const map = {
-    "i": "me",
-    "me": "me",
-    "you": "tu",
-    "he": "el",
-    "him": "el",
-    "she": "el",
-    "her": "el",
-    "it": "lo",
-    "we": "nos",
-    "us": "nos",
-    "they": "los",
-    "them": "los",
-    "you all": "vos"
-  };
-
-  return map[word.toLowerCase()] || null;
-}
-
-
-function hasExplicitPastTimeMarker(text) {
-
-  return /\b(?:yesterday|earlier|previously|ago|last\s+(?:night|week|month|year|monday|tuesday|wednesday|thursday|friday|saturday|sunday)|at\s+that\s+time)\b/i
-    .test(text);
-}
-
-
-function looksLikePastParticiple(word) {
-
-  if (!word) return false;
-
-  const lower = word.toLowerCase();
-
-  const commonParticiples = new Set([
-    "been", "gone", "done", "eaten", "drunk",
-    "seen", "known", "given", "taken", "written",
-    "spoken", "driven", "bought", "brought",
-    "thought", "made", "found", "left", "lost",
-    "won", "read", "heard", "felt", "built",
-    "sent", "received"
-  ]);
-
-  return (
-    commonParticiples.has(lower) ||
-    /(?:ed|en)$/i.test(lower)
-  );
-}
-
-
-/*
-Find a present-form English vocabulary word by comparing
-Elefen translations.
-
-Example:
-had    = ia ave
-have   = ave
-
-wanted = ia vole
-want   = vole
-
-went   = ia vade
-go     = vade
-*/
-function findPresentFormForReportedPast(word) {
-
-  if (!word) return null;
-
-  const lower = word.toLowerCase();
-
-  const pastEntries =
-    dictionary.filter(entry =>
-      entry.words.length === 1 &&
-      entry.english === lower &&
-      /^ia\s+/i.test(entry.elefen)
-    );
-
-
-  for (const pastEntry of pastEntries) {
-
-    const presentElefen =
-      pastEntry.elefen.replace(/^ia\s+/i, "").trim();
-
-    const presentEntry =
-      dictionary.find(entry =>
-        entry.words.length === 1 &&
-        entry.english !== lower &&
-        entry.elefen.toLowerCase() ===
-          presentElefen.toLowerCase() &&
-        !/^(?:ia|va|ta)\s+/i.test(entry.elefen)
-      );
-
-    if (presentEntry) {
-      return presentEntry.english;
-    }
-  }
-
-
-  return null;
-}
-
-
-function normalizeReportedQuestionBackshift(text) {
-
-  /*
-  "Did you have a car?"
-  -> She asked if I had a car.
-
-  Here "had" is English backshift, not a real past event.
-
-  But:
-  She asked if I ate yesterday.
-  "yesterday" signals a real past, so preserve it.
-  */
-  if (hasExplicitPastTimeMarker(text)) {
-    return text;
-  }
-
-
-  const tokens =
-    text.match(
-      /[A-Za-zÀ-ÖØ-öø-ÿ']+|\s+|[^\sA-Za-zÀ-ÖØ-öø-ÿ']+/g
-    ) || [];
-
-
-  for (let i = 0; i < tokens.length; i++) {
-
-    if (!isWord(tokens[i])) continue;
-
-    const lower = tokens[i].toLowerCase();
-
-
-    /*
-    Preserve past perfect:
-    had eaten
-    had gone
-    had studied
-    */
-    if (lower === "had") {
-
-      const after =
-        nextWord(tokens, i);
-
-      if (looksLikePastParticiple(after)) {
-        continue;
-      }
-    }
-
-
-    const presentForm =
-      findPresentFormForReportedPast(tokens[i]);
-
-
-    if (presentForm) {
-
-      const wasCapitalized =
-        /^[A-Z]/.test(tokens[i]);
-
-      tokens[i] =
-        wasCapitalized
-          ? uppercaseFirstLetter(presentForm)
-          : presentForm;
-    }
-  }
-
-
-  return tokens.join("");
-}
-
-
-/*
-Translate the part beginning with ask/asks/asked.
-
-Examples:
-asked me if I had a car
--> ia demanda a me esce me ave un auto
-
-ask me if I had a car
-when it follows English "did"
--> demanda a me esce me ave un auto
-*/
-function translateReportedAskPhrase(
-  text,
-  options = {}
-) {
-
-  const match =
-    text
-      .trim()
-      .match(
-        /^(ask|asks|asked)\s+(?:(you all|me|you|him|her|us|them)\s+)?(?:if|whether)\s+(you all|i|you|he|she|it|we|they)\s+(.+?)$/i
-      );
-
-
-  if (!match) {
-    return null;
-  }
-
-
-  const englishAsk =
-    match[1].toLowerCase();
-
-  const englishObject =
-    match[2]
-      ? match[2].toLowerCase()
-      : null;
-
-  const englishSubject =
-    match[3].toLowerCase();
-
-  const embeddedPredicate =
-    match[4].trim();
-
-
-  /*
-  "asked" is past reporting.
-  A surrounding "did" is also past reporting even though
-  English uses the base word "ask".
-  */
-  const reportingIsPast =
-    options.reportingIsPast === true ||
-    englishAsk === "asked";
-
-
-  const askTranslation =
-    options.pastMarkerAlreadyAdded === true
-      ? "demanda"
-      : (
-          englishAsk === "asked"
-            ? "ia demanda"
-            : "demanda"
-        );
-
-
-  const objectTranslation =
-    englishObject
-      ? " a " + reportedPronoun(englishObject)
-      : "";
-
-
-  const subjectTranslation =
-    reportedPronoun(englishSubject);
-
-
-  const normalizedPredicate =
-    reportingIsPast
-      ? normalizeReportedQuestionBackshift(
-          embeddedPredicate
-        )
-      : embeddedPredicate;
-
-
-  const translatedPredicate =
-    translateNormalSentence(
-      normalizedPredicate
-    );
-
-
-  return (
-    askTranslation +
-    objectTranslation +
-    " esce " +
-    subjectTranslation +
-    " " +
-    translatedPredicate
-  );
-}
-
-
-/*
-Whole reported yes/no sentence:
-
-The old woman asked me if I had a car.
--> La fem vea ia demanda a me esce me ave un auto.
-*/
-function translateReportedYesNoQuestion(text) {
-
-  const trimmed =
-    text.trim();
-
-
-  /*
-  Let the direct-question rules handle sentences beginning
-  with auxiliaries such as "Did she ask...?"
-  */
-  if (
-    /^(?:did|do|does|will|would|can|could|should|must)\b/i
-      .test(trimmed)
-  ) {
-    return null;
-  }
-
-
-  const terminalMatch =
-    trimmed.match(/([.?!])$/);
-
-  const punctuation =
-    terminalMatch
-      ? terminalMatch[1]
-      : "";
-
-  const withoutPunctuation =
-    punctuation
-      ? trimmed.slice(0, -1).trimEnd()
-      : trimmed;
-
-
-  const match =
-    withoutPunctuation.match(
-      /^(.+?)\s+((?:ask|asks|asked)\s+(?:(?:you all|me|you|him|her|us|them)\s+)?(?:if|whether)\s+(?:you all|i|you|he|she|it|we|they)\s+.+)$/i
-    );
-
-
-  if (!match) {
-    return null;
-  }
-
-
-  const outerSubject =
-    match[1].trim();
-
-  const reportedAskPart =
-    match[2].trim();
-
-
-  const translatedOuterSubject =
-    translateNormalSentence(
-      outerSubject
-    );
-
-
-  const translatedAskPart =
-    translateReportedAskPhrase(
-      reportedAskPart
-    );
-
-
-  if (translatedAskPart === null) {
-    return null;
-  }
-
-
-  return (
-    translatedOuterSubject +
-    " " +
-    translatedAskPart +
-    punctuation
-  );
-}
-
-
-/*
-=========================================================
-PAST YES / NO QUESTIONS
-
-Did you study?
-→ Esce tu ia studia?
-
-Did he study the words?
-→ Esce el ia studia la parolas?
-=========================================================
-*/
-
-function translatePastQuestion(text) {
-
-  const match =
-    text
-      .trim()
-      .match(
-        /^did\s+(i|you|he|she|we|they)\s+(.+?)[?.!]*$/i
-      );
-
-
-  if (!match) {
-    return null;
-  }
-
-
-  const subjectMap = {
-
-    i: "me",
-    you: "tu",
-    he: "el",
-    she: "el",
-    we: "nos",
-    they: "los"
-
-  };
-
-
-  const englishSubject =
-    match[1].toLowerCase();
-
-
-  const restOfSentence =
-    match[2].trim();
-
-
-  /*
-  A direct past question can itself contain a reported
-  yes/no question:
-
-  Did she ask me if I had a car?
-  -> Esce el ia demanda a me esce me ave un auto?
-
-  "did" already supplies ia, so the inner ask stays
-  demanda instead of becoming ia demanda again.
-  */
-  const reportedAskRest =
-    translateReportedAskPhrase(
-      restOfSentence,
-      {
-        reportingIsPast: true,
-        pastMarkerAlreadyAdded: true
-      }
-    );
-
-
-  const translatedRest =
-    reportedAskRest !== null
-      ? reportedAskRest
-      : translateNormalSentence(restOfSentence);
-
-
-  return (
-    "Esce " +
-    subjectMap[englishSubject] +
-    " ia " +
-    translatedRest +
-    "?"
-  );
-}
-
-
-/*
-=========================================================
-ADJECTIVE / ADVERB WORD ORDER
-
-Vocabulary labels supported:
-blue = blu | adjective
-quickly = rapida | adverb
-
-Short labels also work:
-blue = blu | adj
-quickly = rapida | adv
-
-Rules implemented here:
-
-English:  the blue car
-Elefen:   la auto blu
-
-English:  the good blue car
-Elefen:   la bon auto blu
-
-English:  the very good car
-Elefen:   la auto multe bon
-
-English:  he quickly studies
-Elefen:   el studia rapida
-
-bon and mal are the adjective exceptions. Unmodified,
-they stay BEFORE the noun. If bon or mal is itself
-modified (for example, "very good"), the whole group
-moves after the noun. Adverbs that modify adjectives stay
-with the adjective, so "the very blue car" becomes
-"la auto multe blu" after translation.
-=========================================================
-*/
-
-function getSingleWordEntries(word) {
-
-  if (!word) return [];
-
-  const lower = word.toLowerCase();
-
-  return dictionary.filter(entry =>
-    entry.words.length === 1 &&
-    entry.english === lower
-  );
-}
-
-
-function hasGrammarType(word, ...types) {
-
-  return getSingleWordEntries(word).some(entry =>
-    types.includes(entry.type)
-  );
-}
-
-
-function isAdjective(word) {
-  return hasGrammarType(word, "adjective", "adj");
-}
-
-
-function isAdverb(word) {
-  return hasGrammarType(word, "adverb", "adv");
-}
-
-
-function isBonOrMalAdjective(word) {
-
-  return getSingleWordEntries(word).some(entry => {
-
-    if (entry.type !== "adjective" && entry.type !== "adj") {
       return false;
+
     }
 
-    const elefen = entry.elefen.toLowerCase();
 
-    return elefen === "bon" || elefen === "mal";
-  });
-}
+    for (
+      let i = 0;
+      i < word.length;
+      i++
+    ) {
+
+      const r =
+        row +
+        rowDirection * i;
+
+      const c =
+        column +
+        columnDirection * i;
+
+      const existing =
+        puzzle[r][c];
 
 
-function lowercaseFirstLetter(word) {
-  if (!word) return word;
-  return word.charAt(0).toLowerCase() + word.slice(1);
-}
+      if (
+        existing &&
+        existing !== word[i]
+      ) {
+
+        return false;
+
+      }
+
+    }
 
 
-function uppercaseFirstLetter(word) {
-  if (!word) return word;
-  return word.charAt(0).toUpperCase() + word.slice(1);
-}
+    return true;
 
-
-/*
-Reorder only WORD VALUES while leaving all spaces and
-punctuation in their original token positions. This keeps
-commas, question marks, etc. intact.
-*/
-function reorderElefenGrammar(text) {
-
-  const tokens =
-    text.match(
-      /[A-Za-zÀ-ÖØ-öø-ÿ']+|\s+|[^\sA-Za-zÀ-ÖØ-öø-ÿ']+/g
-    ) || [];
+  }
 
 
   /*
-  Split the sentence into runs of words separated only by
-  whitespace. Punctuation ends a run, so grammar movement
-  never jumps across a comma, period, question mark, etc.
+  ----------------------------------------------------
+  PLACE ONE WORD
+  ----------------------------------------------------
   */
-  const runs = [];
-  let currentRun = [];
 
-  for (let i = 0; i < tokens.length; i++) {
-
-    if (isWord(tokens[i])) {
-      currentRun.push(i);
-      continue;
-    }
-
-    if (/^\s+$/.test(tokens[i])) {
-      continue;
-    }
-
-    if (currentRun.length) {
-      runs.push(currentRun);
-      currentRun = [];
-    }
-  }
-
-  if (currentRun.length) {
-    runs.push(currentRun);
-  }
-
-
-  for (const wordIndexes of runs) {
-
-    let words = wordIndexes.map(index => tokens[index]);
-
-
-    /*
-    -----------------------------------------------------
-    ADJECTIVES
-
-    adjective + noun
-    -> noun + adjective
-
-    adjective + adjective + noun
-    -> noun + adjective + adjective
-
-    BUT bon / mal stay before the noun.
-
-    Adverbs directly attached to an adjective travel with
-    that adjective:
-
-    very + blue + car
-    -> car + very + blue
-    -----------------------------------------------------
-    */
-    for (let nounIndex = words.length - 1;
-         nounIndex >= 0;
-         nounIndex--) {
-
-      if (!isNoun(words[nounIndex])) continue;
-
-      let modifierStart = nounIndex;
-
-      while (
-        modifierStart > 0 &&
-        (
-          isAdjective(words[modifierStart - 1]) ||
-          isAdverb(words[modifierStart - 1])
-        )
-      ) {
-        modifierStart--;
-      }
-
-      if (modifierStart === nounIndex) continue;
-
-      const modifiers =
-        words.slice(modifierStart, nounIndex);
-
-      if (!modifiers.some(isAdjective)) continue;
-
-
-      /*
-      Build adjective groups. Any adverb immediately before
-      an adjective belongs to that adjective group.
-
-      very good big car
-      groups: [very good] [big]
-      */
-      const groups = [];
-      let pendingAdverbs = [];
-
-      for (const modifier of modifiers) {
-
-        if (isAdverb(modifier)) {
-          pendingAdverbs.push(modifier);
-          continue;
-        }
-
-        if (isAdjective(modifier)) {
-          groups.push({
-            words: [...pendingAdverbs, modifier],
-            adjective: modifier
-          });
-          pendingAdverbs = [];
-        }
-      }
-
-      // Do not move a dangling adverb with no adjective.
-      if (pendingAdverbs.length) continue;
-
-      const beforeNoun = [];
-      const afterNoun = [];
-
-      for (const group of groups) {
-
-        const hasAdverbModifier =
-          group.words.length > 1;
-
-        /*
-        bon / mal normally stay before the noun, but the
-        official Elefen grammar places them after the noun
-        when they are themselves modified:
-
-        a good dog       -> un bon can
-        a very good dog  -> un can multe bon
-        */
-        if (
-          isBonOrMalAdjective(group.adjective) &&
-          !hasAdverbModifier
-        ) {
-          beforeNoun.push(...group.words);
-        } else {
-          afterNoun.push(...group.words);
-        }
-      }
-
-      const noun = words[nounIndex];
-
-      const replacement = [
-        ...beforeNoun,
-        noun,
-        ...afterNoun
-      ];
-
-
-      /*
-      If an adjective started the sentence and moves behind
-      the noun, transfer normal sentence capitalization to
-      the new first word.
-      */
-      if (
-        modifierStart === 0 &&
-        wordIndexes[0] === 0 &&
-        /^[A-Z]/.test(words[0]) &&
-        replacement.length > 1
-      ) {
-
-        const movedOriginalFirst =
-          replacement.indexOf(words[0]);
-
-        if (movedOriginalFirst > 0) {
-          replacement[movedOriginalFirst] =
-            lowercaseFirstLetter(
-              replacement[movedOriginalFirst]
-            );
-        }
-
-        replacement[0] =
-          uppercaseFirstLetter(replacement[0]);
-      }
-
-
-      words.splice(
-        modifierStart,
-        nounIndex - modifierStart + 1,
-        ...replacement
-      );
-    }
-
-
-    /*
-    -----------------------------------------------------
-    ADVERBS MODIFYING VERBS
-
-    quickly + studies
-    -> studies + quickly
-
-    really + quickly + studies
-    -> studies + really + quickly
-
-    This only moves adverbs that are immediately before a
-    verb. It does NOT move an adverb before an adjective,
-    so "very blue" remains together.
-    -----------------------------------------------------
-    */
-    for (let verbIndex = words.length - 1;
-         verbIndex >= 0;
-         verbIndex--) {
-
-      if (!isVerb(words[verbIndex])) continue;
-
-      let adverbStart = verbIndex;
-
-      while (
-        adverbStart > 0 &&
-        isAdverb(words[adverbStart - 1])
-      ) {
-        adverbStart--;
-      }
-
-      if (adverbStart === verbIndex) continue;
-
-      const adverbs =
-        words.slice(adverbStart, verbIndex);
-
-      const verb = words[verbIndex];
-
-      const replacement = [
-        verb,
-        ...adverbs
-      ];
-
-
-      if (
-        adverbStart === 0 &&
-        wordIndexes[0] === 0 &&
-        /^[A-Z]/.test(words[0]) &&
-        replacement.length > 1
-      ) {
-
-        replacement[replacement.length - 1] =
-          lowercaseFirstLetter(
-            replacement[replacement.length - 1]
-          );
-
-        replacement[0] =
-          uppercaseFirstLetter(replacement[0]);
-      }
-
-
-      words.splice(
-        adverbStart,
-        verbIndex - adverbStart + 1,
-        ...replacement
-      );
-    }
-
-
-    // Put the reordered words back into their token slots.
-    for (let i = 0; i < wordIndexes.length; i++) {
-      tokens[wordIndexes[i]] = words[i];
-    }
-  }
-
-
-  return tokens.join("");
-}
-
-
-/*
-=========================================================
-NORMAL TRANSLATION
-=========================================================
-*/
-
-function translateNormalSentence(text) {
-
-  // First reshape English adjective/adverb order into
-  // the Elefen word order described by the grammar labels.
-  const reorderedText =
-    reorderElefenGrammar(text);
-
-  const tokens =
-    reorderedText.match(
-      /[A-Za-zÀ-ÖØ-öø-ÿ']+|\s+|[^\sA-Za-zÀ-ÖØ-öø-ÿ']+/g
-    ) || [];
-
-
-  let output = "";
-
-
-  for (
-    let i = 0;
-    i < tokens.length;
-    i++
+  function placeWord(
+    word,
+    puzzle
   ) {
 
-    const token = tokens[i];
+    for (
+      let attempt = 0;
+      attempt < 2000;
+      attempt++
+    ) {
+
+      const direction =
+        DIRECTIONS[
+          randomNumber(
+            DIRECTIONS.length
+          )
+        ];
 
 
-    /*
-    Keep spaces and punctuation.
-    */
+      const rowDirection =
+        direction[0];
 
-    if (!isWord(token)) {
-
-      output += token;
-
-      continue;
-    }
+      const columnDirection =
+        direction[1];
 
 
-    /*
-    =====================================================
-    RELATIVE "THAT"
+      const row =
+        randomNumber(SIZE);
 
-    that car
-    → acel auto
-
-    the car that I bought
-    → la auto cual me ia compra
-
-    the cars that I bought
-    → la autos cual me ia compra
-    =====================================================
-    */
-
-    if (token.toLowerCase() === "that") {
-
-      const before =
-        previousWord(tokens, i);
-
-      const after =
-        nextWord(tokens, i);
-
-      /*
-      Relative-clause starters.
-
-      This catches:
-      the bananas that I gave you
-      the car that he bought
-      the cars that are blue
-
-      even if the noun before "that"
-      has not been added to the dictionary yet.
-      */
-      const relativeStarters = [
-        "i", "you", "he", "she", "it", "we", "they",
-        "am", "is", "are", "was", "were",
-        "have", "has", "had",
-        "do", "does", "did",
-        "will", "would", "can", "could",
-        "should", "must"
-      ];
-
-      const looksLikeRelativeClause =
-        before &&
-        after &&
-        (
-          isNoun(before) ||
-          relativeStarters.includes(after.toLowerCase()) ||
-          isVerb(after)
-        );
-
-      if (looksLikeRelativeClause) {
-
-        output += preserveCapitalization(
-          token,
-          "cual"
-        );
-
-        continue;
-      }
-    }
-
-
-
-    /*
-    =====================================================
-    REMOVE ENGLISH "TO" BETWEEN TWO VERBS
-
-    needs to learn
-    → nesesa aprende
-
-    wants to study
-    → vole studia
-
-    tries to help
-    → atenta aida
-
-    BUT:
-
-    go to school
-    → vade a la scola
-
-    because school is NOT a verb.
-    =====================================================
-    */
-
-    if (token.toLowerCase() === "to") {
-
-      const before =
-        previousWord(tokens, i);
-
-      const after =
-        nextWord(tokens, i);
+      const column =
+        randomNumber(SIZE);
 
 
       if (
-        before &&
-        after &&
-        isVerb(before) &&
-        isVerb(after)
+        !canPlaceWord(
+          word,
+          row,
+          column,
+          rowDirection,
+          columnDirection,
+          puzzle
+        )
       ) {
 
-        /*
-        Skip "to".
-
-        There is already a space before "to",
-        so also skip the space immediately
-        after "to".
-        */
-
-        if (
-          i + 1 < tokens.length &&
-          /^\s+$/.test(tokens[i + 1])
-        ) {
-
-          i++;
-
-        }
-
         continue;
+
       }
+
+
+      for (
+        let i = 0;
+        i < word.length;
+        i++
+      ) {
+
+        const r =
+          row +
+          rowDirection * i;
+
+        const c =
+          column +
+          columnDirection * i;
+
+
+        puzzle[r][c] =
+          word[i];
+
+      }
+
+
+      return true;
+
     }
 
 
-    let matchFound = false;
+    return false;
 
+  }
+
+
+  /*
+  ----------------------------------------------------
+  GENERATE PUZZLE
+  ----------------------------------------------------
+  */
+
+  function generatePuzzle() {
 
     /*
-    First try exact vocabulary entries
-    and longer phrases.
+      If generation somehow gets unlucky,
+      restart the board.
     */
 
-    for (const entry of dictionary) {
+    for (
+      let restart = 0;
+      restart < 100;
+      restart++
+    ) {
 
-      const result =
-        phraseMatches(
-          tokens,
-          i,
-          entry.words
+      const puzzle =
+        emptyBoard();
+
+
+      let successful =
+        true;
+
+
+      /*
+        Long words first.
+        Easier to fit them before short words.
+      */
+
+      const orderedWords =
+        [...WORDS].sort(
+          (a, b) =>
+            b.length - a.length
         );
 
 
-      if (result !== null) {
+      for (
+        const word
+        of orderedWords
+      ) {
 
-        output +=
-          preserveCapitalization(
-            token,
-            entry.elefen
+        if (
+          !placeWord(
+            word,
+            puzzle
+          )
+        ) {
+
+          successful =
+            false;
+
+          break;
+
+        }
+
+      }
+
+
+      if (!successful) {
+
+        continue;
+
+      }
+
+
+      /*
+        Fill empty spaces
+        with random letters.
+      */
+
+      for (
+        let row = 0;
+        row < SIZE;
+        row++
+      ) {
+
+        for (
+          let column = 0;
+          column < SIZE;
+          column++
+        ) {
+
+          if (
+            puzzle[row][column] === ""
+          ) {
+
+            puzzle[row][column] =
+              LETTERS[
+                randomNumber(
+                  LETTERS.length
+                )
+              ];
+
+          }
+
+        }
+
+      }
+
+
+      board =
+        puzzle.map(
+          row =>
+            row.join("")
+        );
+
+
+      return true;
+
+    }
+
+
+    return false;
+
+  }
+
+
+  /*
+  ----------------------------------------------------
+  DRAW GRID
+  ----------------------------------------------------
+  */
+
+  function renderGrid() {
+
+    grid.innerHTML = "";
+
+
+    for (
+      let row = 0;
+      row < SIZE;
+      row++
+    ) {
+
+      for (
+        let column = 0;
+        column < SIZE;
+        column++
+      ) {
+
+        const cell =
+          document.createElement(
+            "div"
           );
 
 
-        i = result;
+        cell.className =
+          "cell";
 
-        matchFound = true;
+
+        cell.dataset.row =
+          row;
+
+
+        cell.dataset.column =
+          column;
+
+
+        cell.textContent =
+          board[row][column];
+
+
+        grid.appendChild(
+          cell
+        );
+
+      }
+
+    }
+
+  }
+
+
+  /*
+  ----------------------------------------------------
+  DRAW WORD LIST
+  ----------------------------------------------------
+  */
+
+  function renderWordList() {
+
+    wordList.innerHTML = "";
+
+
+    for (
+      const word
+      of WORDS
+    ) {
+
+      const item =
+        document.createElement(
+          "div"
+        );
+
+
+      item.className =
+        "word";
+
+
+      item.dataset.word =
+        word;
+
+
+      item.textContent =
+        word;
+
+
+      if (
+        foundWords.has(word)
+      ) {
+
+        item.classList.add(
+          "found"
+        );
+
+      }
+
+
+      wordList.appendChild(
+        item
+      );
+
+    }
+
+  }
+
+
+  /*
+  ----------------------------------------------------
+  GET CELL ELEMENT
+  ----------------------------------------------------
+  */
+
+  function getCellElement(
+    row,
+    column
+  ) {
+
+    return grid.querySelector(
+
+      '.cell[data-row="' +
+      row +
+      '"][data-column="' +
+      column +
+      '"]'
+
+    );
+
+  }
+
+
+  /*
+  ----------------------------------------------------
+  FIND CELL UNDER FINGER
+  ----------------------------------------------------
+  */
+
+  function getCellFromPoint(
+    x,
+    y
+  ) {
+
+    const element =
+      document.elementFromPoint(
+        x,
+        y
+      );
+
+
+    if (!element) {
+
+      return null;
+
+    }
+
+
+    const cell =
+      element.closest(
+        ".cell"
+      );
+
+
+    if (
+      !cell ||
+      !grid.contains(cell)
+    ) {
+
+      return null;
+
+    }
+
+
+    return {
+
+      row:
+        Number(
+          cell.dataset.row
+        ),
+
+      column:
+        Number(
+          cell.dataset.column
+        )
+
+    };
+
+  }
+
+
+  /*
+  ----------------------------------------------------
+  SNAP FINGER MOVEMENT
+  ----------------------------------------------------
+
+  This is important.
+
+  Humans do not drag in perfectly straight
+  pixel-perfect lines.
+
+  So the game snaps movement to:
+
+  horizontal
+  vertical
+  diagonal
+  */
+
+  function snappedPath(
+    start,
+    current
+  ) {
+
+    let rowDifference =
+      current.row -
+      start.row;
+
+
+    let columnDifference =
+      current.column -
+      start.column;
+
+
+    if (
+      rowDifference === 0 &&
+      columnDifference === 0
+    ) {
+
+      return [start];
+
+    }
+
+
+    const absoluteRow =
+      Math.abs(
+        rowDifference
+      );
+
+
+    const absoluteColumn =
+      Math.abs(
+        columnDifference
+      );
+
+
+    let rowStep = 0;
+
+    let columnStep = 0;
+
+    let steps = 0;
+
+
+    /*
+      Mostly vertical
+    */
+
+    if (
+      absoluteRow >
+      absoluteColumn * 1.7
+    ) {
+
+      rowStep =
+        Math.sign(
+          rowDifference
+        );
+
+
+      columnStep = 0;
+
+
+      steps =
+        absoluteRow;
+
+    }
+
+
+    /*
+      Mostly horizontal
+    */
+
+    else if (
+      absoluteColumn >
+      absoluteRow * 1.7
+    ) {
+
+      rowStep = 0;
+
+
+      columnStep =
+        Math.sign(
+          columnDifference
+        );
+
+
+      steps =
+        absoluteColumn;
+
+    }
+
+
+    /*
+      Diagonal
+    */
+
+    else {
+
+      rowStep =
+        Math.sign(
+          rowDifference
+        );
+
+
+      columnStep =
+        Math.sign(
+          columnDifference
+        );
+
+
+      steps =
+        Math.max(
+          absoluteRow,
+          absoluteColumn
+        );
+
+    }
+
+
+    const path = [];
+
+
+    for (
+      let i = 0;
+      i <= steps;
+      i++
+    ) {
+
+      const row =
+        start.row +
+        rowStep * i;
+
+
+      const column =
+        start.column +
+        columnStep * i;
+
+
+      if (
+        row < 0 ||
+        row >= SIZE ||
+        column < 0 ||
+        column >= SIZE
+      ) {
 
         break;
+
       }
+
+
+      path.push({
+
+        row,
+        column
+
+      });
+
+    }
+
+
+    return path;
+
+  }
+
+
+  /*
+  ----------------------------------------------------
+  CLEAR BLUE PREVIEW
+  ----------------------------------------------------
+  */
+
+  function clearPreview() {
+
+    const previewCells =
+      grid.querySelectorAll(
+        ".cell.preview"
+      );
+
+
+    previewCells.forEach(
+      cell =>
+        cell.classList.remove(
+          "preview"
+        )
+    );
+
+  }
+
+
+  /*
+  ----------------------------------------------------
+  SHOW CURRENT DRAG
+  ----------------------------------------------------
+  */
+
+  function showPreview(
+    path
+  ) {
+
+    clearPreview();
+
+
+    currentPath =
+      path;
+
+
+    for (
+      const position
+      of path
+    ) {
+
+      const cell =
+        getCellElement(
+          position.row,
+          position.column
+        );
+
+
+      if (
+        cell &&
+        !cell.classList.contains(
+          "found"
+        )
+      ) {
+
+        cell.classList.add(
+          "preview"
+        );
+
+      }
+
+    }
+
+  }
+
+
+  /*
+  ----------------------------------------------------
+  READ SELECTED LETTERS
+  ----------------------------------------------------
+  */
+
+  function getSelectedWord(
+    path
+  ) {
+
+    return path
+      .map(
+        position =>
+          board[
+            position.row
+          ][
+            position.column
+          ]
+      )
+      .join("");
+
+  }
+
+
+  /*
+  ----------------------------------------------------
+  TURN CORRECT WORD YELLOW
+  ----------------------------------------------------
+  */
+
+  function paintWordYellow(
+    path
+  ) {
+
+    for (
+      const position
+      of path
+    ) {
+
+      const cell =
+        getCellElement(
+          position.row,
+          position.column
+        );
+
+
+      if (cell) {
+
+        cell.classList.add(
+          "found"
+        );
+
+      }
+
+    }
+
+  }
+
+
+  /*
+  ----------------------------------------------------
+  UPDATE SCORE
+  ----------------------------------------------------
+  */
+
+  function updateScore() {
+
+    score.textContent =
+      foundWords.size +
+      " / " +
+      WORDS.length;
+
+
+    if (
+      foundWords.size ===
+      WORDS.length
+    ) {
+
+      win.classList.add(
+        "show"
+      );
+
+    }
+
+    else {
+
+      win.classList.remove(
+        "show"
+      );
+
+    }
+
+  }
+
+
+  /*
+  ----------------------------------------------------
+  FINISH SELECTION
+  ----------------------------------------------------
+  */
+
+  function finishSelection() {
+
+    if (
+      currentPath.length === 0
+    ) {
+
+      return;
+
+    }
+
+
+    const selected =
+      getSelectedWord(
+        currentPath
+      );
+
+
+    const backwards =
+      [...selected]
+        .reverse()
+        .join("");
+
+
+    const matchedWord =
+      WORDS.find(
+
+        word =>
+
+          !foundWords.has(word) &&
+
+          (
+            word === selected ||
+            word === backwards
+          )
+
+      );
+
+
+    clearPreview();
+
+
+    /*
+      CORRECT
+    */
+
+    if (matchedWord) {
+
+      foundWords.add(
+        matchedWord
+      );
+
+
+      paintWordYellow(
+        currentPath
+      );
+
+
+      renderWordList();
+
+
+      updateScore();
+
+
+      message.textContent =
+        matchedWord +
+        " found! ✨";
+
+
+      message.className =
+        "good";
+
     }
 
 
     /*
-    No exact vocabulary match?
-
-    Check whether it is automatically
-    recognizable as a plural noun.
+      WRONG
     */
 
-    if (!matchFound) {
+    else {
 
-      const pluralTranslation =
-        translatePluralNoun(token);
+      message.textContent =
+        "Nope. Try another one. 😎";
 
 
-      if (pluralTranslation) {
+      message.className =
+        "";
 
-        output +=
-          preserveCapitalization(
-            token,
-            pluralTranslation
-          );
-
-      } else {
-
-        // Unknown words stay English.
-        output += token;
-
-      }
     }
-  }
 
 
-  return output;
-}
+    currentPath = [];
 
-
-/*
-=========================================================
-MAIN SENTENCE TRANSLATOR
-=========================================================
-*/
-
-function translateSentence(text) {
-
-  /*
-  Check reported yes/no questions BEFORE ordinary
-  translation so English "if/whether" can become Elefen
-  "esce" and English backshift can be reversed.
-  */
-  const reportedQuestion =
-    translateReportedYesNoQuestion(text);
-
-
-  if (reportedQuestion !== null) {
-
-    return reportedQuestion;
+    startCell = null;
 
   }
-
-
-  const pastQuestion =
-    translatePastQuestion(text);
-
-
-  if (pastQuestion !== null) {
-
-    return pastQuestion;
-
-  }
-
-
-  return translateNormalSentence(text);
-}
-
-
-/*
-=========================================================
-TRANSLATE BUTTON
-=========================================================
-*/
-
-function translateText() {
-
-  const input =
-    document.getElementById("english").value;
 
 
   /*
-  Split the paragraph into individual sentences.
-
-  This lets grammar rules work on EACH sentence,
-  not just the first sentence in the textbox.
+  ----------------------------------------------------
+  START DRAG
+  ----------------------------------------------------
   */
 
-  const sentences =
-    input.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [];
+  function startDrag(
+    x,
+    y
+  ) {
 
-
-  const translated =
-    sentences.map(sentence => {
-
-      // Preserve spaces before each sentence.
-      const leadingSpaces =
-        sentence.match(/^\s*/)[0];
-
-      const cleanSentence =
-        sentence.trimStart();
-
-      return (
-        leadingSpaces +
-        translateSentence(cleanSentence)
+    const cell =
+      getCellFromPoint(
+        x,
+        y
       );
 
-    }).join("");
+
+    if (!cell) {
+
+      return false;
+
+    }
 
 
-  document.getElementById("elefen").value =
-    translated;
-}
+    dragging =
+      true;
 
 
-/*
-Connect Translate button
-*/
-
-document
-  .getElementById("translateButton")
-  .addEventListener(
-    "click",
-    translateText
-  );
+    startCell =
+      cell;
 
 
-/*
-Ctrl + Enter or Cmd + Enter
-also translates.
-*/
+    showPreview(
+      [cell]
+    );
 
-document
-  .getElementById("english")
-  .addEventListener(
-    "keydown",
-    function (event) {
+
+    return true;
+
+  }
+
+
+  /*
+  ----------------------------------------------------
+  MOVE FINGER
+  ----------------------------------------------------
+  */
+
+  function moveDrag(
+    x,
+    y
+  ) {
+
+    if (
+      !dragging ||
+      !startCell
+    ) {
+
+      return;
+
+    }
+
+
+    const cell =
+      getCellFromPoint(
+        x,
+        y
+      );
+
+
+    if (!cell) {
+
+      return;
+
+    }
+
+
+    const path =
+      snappedPath(
+        startCell,
+        cell
+      );
+
+
+    showPreview(
+      path
+    );
+
+  }
+
+
+  /*
+  ----------------------------------------------------
+  END DRAG
+  ----------------------------------------------------
+  */
+
+  function endDrag() {
+
+    if (!dragging) {
+
+      return;
+
+    }
+
+
+    dragging =
+      false;
+
+
+    finishSelection();
+
+  }
+
+
+  /*
+  ====================================================
+  POINTER EVENTS
+  ====================================================
+
+  Works with:
+
+  iPhone
+  iPad
+  Android
+  mouse
+  touchscreen laptops
+  */
+
+
+  grid.addEventListener(
+    "pointerdown",
+    event => {
+
+      /*
+        Stop Safari from treating this
+        as page movement.
+      */
+
+      event.preventDefault();
+
 
       if (
-        (event.ctrlKey || event.metaKey) &&
-        event.key === "Enter"
+        !startDrag(
+          event.clientX,
+          event.clientY
+        )
       ) {
 
-        translateText();
+        return;
 
       }
+
+
+      activePointer =
+        event.pointerId;
+
+
+      try {
+
+        grid.setPointerCapture(
+          activePointer
+        );
+
+      }
+
+      catch (error) {
+
+        /*
+          Some browsers may not support
+          pointer capture.
+
+          The game can still work.
+        */
+
+      }
+
     }
   );
 
+
+  grid.addEventListener(
+    "pointermove",
+    event => {
+
+      if (
+        !dragging ||
+        event.pointerId !==
+        activePointer
+      ) {
+
+        return;
+
+      }
+
+
+      event.preventDefault();
+
+
+      moveDrag(
+        event.clientX,
+        event.clientY
+      );
+
+    }
+  );
+
+
+  grid.addEventListener(
+    "pointerup",
+    event => {
+
+      if (
+        event.pointerId !==
+        activePointer
+      ) {
+
+        return;
+
+      }
+
+
+      event.preventDefault();
+
+
+      endDrag();
+
+
+      try {
+
+        if (
+          grid.hasPointerCapture(
+            activePointer
+          )
+        ) {
+
+          grid.releasePointerCapture(
+            activePointer
+          );
+
+        }
+
+      }
+
+      catch (error) {
+
+      }
+
+
+      activePointer = null;
+
+    }
+  );
+
+
+  grid.addEventListener(
+    "pointercancel",
+    () => {
+
+      dragging =
+        false;
+
+      activePointer =
+        null;
+
+      startCell =
+        null;
+
+      currentPath =
+        [];
+
+      clearPreview();
+
+    }
+  );
+
+
+  /*
+  ====================================================
+  EXTRA IOS TOUCH PROTECTION
+  ====================================================
+
+  This explicitly stops touch scrolling
+  inside the puzzle area.
+  */
+
+
+  grid.addEventListener(
+    "touchstart",
+    event => {
+
+      event.preventDefault();
+
+    },
+    {
+      passive: false
+    }
+  );
+
+
+  grid.addEventListener(
+    "touchmove",
+    event => {
+
+      event.preventDefault();
+
+    },
+    {
+      passive: false
+    }
+  );
+
+
+  /*
+  ----------------------------------------------------
+  RESET CURRENT PUZZLE
+  ----------------------------------------------------
+  */
+
+  resetButton.addEventListener(
+    "click",
+    () => {
+
+      foundWords.clear();
+
+
+      renderGrid();
+
+      renderWordList();
+
+      updateScore();
+
+
+      message.textContent =
+        "Finds reset.";
+
+
+      message.className =
+        "";
+
+    }
+  );
+
+
+  /*
+  ----------------------------------------------------
+  NEW PUZZLE
+  ----------------------------------------------------
+  */
+
+  newPuzzleButton.addEventListener(
+    "click",
+    () => {
+
+      foundWords.clear();
+
+
+      const success =
+        generatePuzzle();
+
+
+      if (!success) {
+
+        message.textContent =
+          "Couldn't generate puzzle. Try again.";
+
+        return;
+
+      }
+
+
+      renderGrid();
+
+      renderWordList();
+
+      updateScore();
+
+
+      message.textContent =
+        "Fresh puzzle. Go hunt. 🔎";
+
+
+      message.className =
+        "";
+
+    }
+  );
+
+
+  /*
+  ====================================================
+  START GAME
+  ====================================================
+  */
+
+
+  const generated =
+    generatePuzzle();
+
+
+  if (!generated) {
+
+    message.textContent =
+      "Puzzle generation failed.";
+
+    return;
+
+  }
+
+
+  renderGrid();
+
+  renderWordList();
+
+  updateScore();
+
+})();
 </script>
+
+</body>
+</html>
