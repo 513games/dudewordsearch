@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 
 <head>
+
 <meta charset="UTF-8">
 
 <meta
@@ -32,13 +33,16 @@
   --border: rgba(255, 255, 255, 0.10);
 }
 
+
 * {
   box-sizing: border-box;
 }
 
+
 html {
   background: var(--background);
 }
+
 
 body {
   margin: 0;
@@ -64,6 +68,7 @@ body {
   overscroll-behavior-y: contain;
 }
 
+
 main {
   width: min(100%, 900px);
 
@@ -76,6 +81,7 @@ main {
 /* =====================================
    CABEÇALHO
 ===================================== */
+
 
 .top {
   display: flex;
@@ -90,6 +96,7 @@ main {
   margin-bottom: 18px;
 }
 
+
 .kicker {
   color: var(--yellow);
 
@@ -102,6 +109,7 @@ main {
   text-transform: uppercase;
 }
 
+
 h1 {
   margin: 6px 0 0;
 
@@ -111,6 +119,7 @@ h1 {
 
   letter-spacing: -0.05em;
 }
+
 
 .puzzle-number {
   display: inline-block;
@@ -130,11 +139,11 @@ h1 {
   font-weight: 900;
 }
 
+
 .theme {
   display: inline-block;
 
   margin-left: 6px;
-
   margin-top: 12px;
 
   padding: 6px 10px;
@@ -149,6 +158,7 @@ h1 {
 
   font-weight: 900;
 }
+
 
 .description {
   max-width: 650px;
@@ -167,6 +177,7 @@ h1 {
    BOTÕES
 ===================================== */
 
+
 .buttons {
   display: flex;
 
@@ -174,6 +185,7 @@ h1 {
 
   flex-wrap: wrap;
 }
+
 
 button {
   min-height: 46px;
@@ -195,6 +207,7 @@ button {
   cursor: pointer;
 }
 
+
 button.primary {
   background: var(--yellow);
 
@@ -202,6 +215,7 @@ button.primary {
 
   color: #151800;
 }
+
 
 button:active {
   transform: scale(0.98);
@@ -211,6 +225,7 @@ button:active {
 /* =====================================
    LAYOUT
 ===================================== */
+
 
 .layout {
   display: grid;
@@ -224,6 +239,7 @@ button:active {
   align-items: start;
 }
 
+
 .card {
   padding: 12px;
 
@@ -236,8 +252,9 @@ button:active {
 
 
 /* =====================================
-   GRADE 11 x 11
+   GRADE 12 x 12
 ===================================== */
+
 
 .grid-wrapper {
   width: 100%;
@@ -247,15 +264,16 @@ button:active {
   justify-content: center;
 }
 
+
 #grid {
   display: grid;
 
   grid-template-columns:
-    repeat(11, minmax(0, 1fr));
+    repeat(12, minmax(0, 1fr));
 
   gap: 3px;
 
-  width: min(100%, 560px);
+  width: min(100%, 580px);
 
   padding: 8px;
 
@@ -276,6 +294,7 @@ button:active {
   -webkit-touch-callout: none;
 }
 
+
 .cell {
   aspect-ratio: 1 / 1;
 
@@ -285,7 +304,7 @@ button:active {
 
   place-items: center;
 
-  border-radius: 9px;
+  border-radius: 8px;
 
   background:
     rgba(255, 255, 255, 0.04);
@@ -294,9 +313,9 @@ button:active {
 
   font-size:
     clamp(
-      0.95rem,
-      4.6vw,
-      1.45rem
+      0.88rem,
+      4.1vw,
+      1.35rem
     );
 
   font-weight: 950;
@@ -313,6 +332,7 @@ button:active {
 
 /* AZUL ENQUANTO ARRASTA */
 
+
 .cell.preview {
   background:
     var(--blue-soft);
@@ -325,19 +345,18 @@ button:active {
     2px
     var(--blue);
 
-  transform:
-    scale(1.04);
+  transform: scale(1.04);
 }
 
 
 /* AMARELO QUANDO ENCONTRA */
 
+
 .cell.found {
   background:
     var(--yellow);
 
-  color:
-    #151800;
+  color: #151800;
 
   box-shadow:
     0
@@ -350,6 +369,7 @@ button:active {
 /* =====================================
    STATUS
 ===================================== */
+
 
 .status {
   min-height: 52px;
@@ -368,11 +388,13 @@ button:active {
   color: var(--muted);
 }
 
+
 .status strong {
   color: var(--text);
 
   font-weight: 950;
 }
+
 
 #message {
   color: var(--text);
@@ -380,9 +402,11 @@ button:active {
   font-weight: 900;
 }
 
+
 #message.good {
   color: var(--yellow);
 }
+
 
 .win {
   display: none;
@@ -402,14 +426,16 @@ button:active {
   text-align: center;
 }
 
+
 .win.show {
   display: block;
 }
 
 
 /* =====================================
-   LISTA DE PALAVRAS
+   PALAVRAS
 ===================================== */
+
 
 .side h2 {
   margin: 2px 0 12px;
@@ -417,11 +443,13 @@ button:active {
   font-size: 1.05rem;
 }
 
+
 #wordList {
   display: grid;
 
   gap: 8px;
 }
+
 
 .word {
   min-height: 42px;
@@ -444,6 +472,7 @@ button:active {
   letter-spacing: 0.03em;
 }
 
+
 .word.found {
   background: var(--yellow);
 
@@ -453,6 +482,7 @@ button:active {
     line-through
     2px;
 }
+
 
 .tip {
   margin: 13px 2px 2px;
@@ -469,11 +499,13 @@ button:active {
    CELULAR
 ===================================== */
 
+
 @media (max-width: 720px) {
 
   .layout {
     grid-template-columns: 1fr;
   }
+
 
   #wordList {
     grid-template-columns:
@@ -485,6 +517,7 @@ button:active {
 
 }
 
+
 @media (max-width: 390px) {
 
   main {
@@ -492,9 +525,11 @@ button:active {
     padding-right: 8px;
   }
 
+
   .card {
     padding: 9px;
   }
+
 
   #grid {
     padding: 6px;
@@ -502,16 +537,18 @@ button:active {
     gap: 2px;
   }
 
+
   .cell {
-    border-radius: 7px;
+    border-radius: 6px;
 
     font-size:
       clamp(
-        0.9rem,
-        4.5vw,
-        1.25rem
+        0.82rem,
+        4vw,
+        1.15rem
       );
   }
+
 
   .word {
     font-size: 0.9rem;
@@ -529,10 +566,6 @@ button:active {
 <main>
 
 
-<!-- =====================================
-     CABEÇALHO
-===================================== -->
-
 <section class="top">
 
 <div>
@@ -541,9 +574,11 @@ button:active {
     Encontre as palavras
   </div>
 
+
   <h1>
     Caça-palavras
   </h1>
+
 
   <div>
 
@@ -554,6 +589,7 @@ button:active {
       Jogo 1 de 3
     </span>
 
+
     <span
       id="theme"
       class="theme"
@@ -562,6 +598,7 @@ button:active {
     </span>
 
   </div>
+
 
   <p class="description">
 
@@ -584,6 +621,7 @@ button:active {
     Novo jogo
   </button>
 
+
   <button
     id="resetPuzzle"
     type="button"
@@ -597,10 +635,6 @@ button:active {
 
 
 
-<!-- =====================================
-     JOGO
-===================================== -->
-
 <section class="layout">
 
 
@@ -609,12 +643,10 @@ button:active {
 
   <div class="grid-wrapper">
 
-
     <div
       id="grid"
       aria-label="Caça-palavras"
     ></div>
-
 
   </div>
 
@@ -637,9 +669,10 @@ button:active {
 
 
     <div id="message">
-      Encontre uma palavra. 🔎
-    </div>
 
+      Encontre uma palavra. 🔎
+
+    </div>
 
   </div>
 
@@ -658,10 +691,6 @@ button:active {
 
 
 
-<!-- =====================================
-     LISTA DE PALAVRAS
-===================================== -->
-
 <aside class="card side">
 
 
@@ -675,8 +704,7 @@ button:active {
 
   <p class="tip">
 
-    As palavras podem estar na horizontal,
-    vertical ou diagonal, em qualquer direção.
+    As palavras podem estar em qualquer direção.
 
   </p>
 
@@ -698,586 +726,112 @@ button:active {
 
 /*
 =====================================================
-OS TRÊS JOGOS
+JOGOS
 =====================================================
-
-label = o que aparece na tela
-
-key = como a palavra fica escondida
-      dentro da grade, sem espaço ou acento
-
-path = posição fixa da palavra
 */
 
 
 const PUZZLES = [
 
 
-/*
-=====================================================
-JOGO 1
-CHARLIE BROWN JR. / SANTOS
-=====================================================
-*/
-
 {
+  theme: "Charlie Brown Jr. 🎸",
 
-theme:
-  "Charlie Brown Jr.",
+  words: [
 
+    { label: "CHORÃO", key: "CHORAO" },
 
-words: [
+    { label: "CBJR", key: "CBJR" },
 
+    { label: "LOUCO", key: "LOUCO" },
 
-{
-  label: "CHORÃO",
-  key: "CHORAO",
-  path: [
-    [8,8],
-    [8,7],
-    [8,6],
-    [8,5],
-    [8,4],
-    [8,3]
+    { label: "TATUAGEM", key: "TATUAGEM" },
+
+    { label: "AO VIVO", key: "AOVIVO" },
+
+    { label: "CHAMPIGNON", key: "CHAMPIGNON" },
+
+    { label: "ACÚSTICO", key: "ACUSTICO" },
+
+    { label: "DROGA", key: "DROGA" },
+
+    { label: "BRASIL", key: "BRASIL" },
+
+    { label: "SANTOS", key: "SANTOS" },
+
+    { label: "GUARUJÁ", key: "GUARUJA" },
+
+    { label: "PRAIA", key: "PRAIA" }
+
   ]
 },
 
 
+
 {
-  label: "CBJR",
-  key: "CBJR",
-  path: [
-    [4,10],
-    [5,10],
-    [6,10],
-    [7,10]
+  theme: "Brasil 🇧🇷",
+
+  words: [
+
+    { label: "SAUDADE", key: "SAUDADE" },
+
+    { label: "FUTEBOL", key: "FUTEBOL" },
+
+    { label: "CAFÉ", key: "CAFE" },
+
+    { label: "SAMBA", key: "SAMBA" },
+
+    { label: "BANDEIRA", key: "BANDEIRA" },
+
+    { label: "CARNAVAL", key: "CARNAVAL" },
+
+    { label: "CORAÇÃO", key: "CORACAO" },
+
+    { label: "MÚSICA", key: "MUSICA" },
+
+    { label: "CIDADE", key: "CIDADE" },
+
+    { label: "AMIZADE", key: "AMIZADE" },
+
+    { label: "FAMÍLIA", key: "FAMILIA" },
+
+    { label: "BRASILEIRO", key: "BRASILEIRO" }
+
   ]
 },
 
 
+
 {
-  label: "LOUCO",
-  key: "LOUCO",
-  path: [
-    [9,5],
-    [8,6],
-    [7,7],
-    [6,8],
-    [5,9]
+  theme: "Gírias 😎",
+
+  words: [
+
+    { label: "MANO", key: "MANO" },
+
+    { label: "CARA", key: "CARA" },
+
+    { label: "BELEZA", key: "BELEZA" },
+
+    { label: "VALEU", key: "VALEU" },
+
+    { label: "PÔ", key: "PO" },
+
+    { label: "TIPO", key: "TIPO" },
+
+    { label: "GALERA", key: "GALERA" },
+
+    { label: "GRANA", key: "GRANA" },
+
+    { label: "ROLÊ", key: "ROLE" },
+
+    { label: "TRETA", key: "TRETA" },
+
+    { label: "SACOU", key: "SACOU" },
+
+    { label: "DEMOROU", key: "DEMOROU" }
+
   ]
-},
-
-
-{
-  label: "TATUAGEM",
-  key: "TATUAGEM",
-  path: [
-    [3,3],
-    [3,4],
-    [3,5],
-    [3,6],
-    [3,7],
-    [3,8],
-    [3,9],
-    [3,10]
-  ]
-},
-
-
-{
-  label: "AO VIVO",
-  key: "AOVIVO",
-  path: [
-    [9,10],
-    [8,9],
-    [7,8],
-    [6,7],
-    [5,6],
-    [4,5]
-  ]
-},
-
-
-{
-  label: "CHAMPIGNON",
-  key: "CHAMPIGNON",
-  path: [
-    [1,9],
-    [2,8],
-    [3,7],
-    [4,6],
-    [5,5],
-    [6,4],
-    [7,3],
-    [8,2],
-    [9,1],
-    [10,0]
-  ]
-},
-
-
-{
-  label: "ACÚSTICO",
-  key: "ACUSTICO",
-  path: [
-    [7,2],
-    [6,2],
-    [5,2],
-    [4,2],
-    [3,2],
-    [2,2],
-    [1,2],
-    [0,2]
-  ]
-},
-
-
-{
-  label: "DROGA",
-  key: "DROGA",
-  path: [
-    [0,5],
-    [1,6],
-    [2,7],
-    [3,8],
-    [4,9]
-  ]
-},
-
-
-{
-  label: "BRASIL",
-  key: "BRASIL",
-  path: [
-    [2,6],
-    [2,5],
-    [2,4],
-    [2,3],
-    [2,2],
-    [2,1]
-  ]
-},
-
-
-{
-  label: "SANTOS",
-  key: "SANTOS",
-  path: [
-    [3,1],
-    [4,1],
-    [5,1],
-    [6,1],
-    [7,1],
-    [8,1]
-  ]
-},
-
-
-{
-  label: "GUARUJÁ",
-  key: "GUARUJA",
-  path: [
-    [10,2],
-    [9,3],
-    [8,4],
-    [7,5],
-    [6,6],
-    [5,7],
-    [4,8]
-  ]
-},
-
-
-{
-  label: "PRAIA",
-  key: "PRAIA",
-  path: [
-    [10,3],
-    [10,4],
-    [10,5],
-    [10,6],
-    [10,7]
-  ]
-}
-
-
-]
-
-},
-
-
-
-/*
-=====================================================
-JOGO 2
-BRASIL
-=====================================================
-*/
-
-{
-
-theme:
-  "Brasil 🇧🇷",
-
-
-words: [
-
-
-{
-  label: "SAUDADE",
-  key: "SAUDADE",
-  path: [
-    [4,1],
-    [5,2],
-    [6,3],
-    [7,4],
-    [8,5],
-    [9,6],
-    [10,7]
-  ]
-},
-
-
-{
-  label: "FUTEBOL",
-  key: "FUTEBOL",
-  path: [
-    [10,10],
-    [10,9],
-    [10,8],
-    [10,7],
-    [10,6],
-    [10,5],
-    [10,4]
-  ]
-},
-
-
-{
-  label: "CAFÉ",
-  key: "CAFE",
-  path: [
-    [4,8],
-    [3,8],
-    [2,8],
-    [1,8]
-  ]
-},
-
-
-{
-  label: "SAMBA",
-  key: "SAMBA",
-  path: [
-    [1,6],
-    [2,5],
-    [3,4],
-    [4,3],
-    [5,2]
-  ]
-},
-
-
-{
-  label: "BANDEIRA",
-  key: "BANDEIRA",
-  path: [
-    [0,2],
-    [0,3],
-    [0,4],
-    [0,5],
-    [0,6],
-    [0,7],
-    [0,8],
-    [0,9]
-  ]
-},
-
-
-{
-  label: "CARNAVAL",
-  key: "CARNAVAL",
-  path: [
-    [1,2],
-    [2,2],
-    [3,2],
-    [4,2],
-    [5,2],
-    [6,2],
-    [7,2],
-    [8,2]
-  ]
-},
-
-
-{
-  label: "CORAÇÃO",
-  key: "CORACAO",
-  path: [
-    [7,10],
-    [6,9],
-    [5,8],
-    [4,7],
-    [3,6],
-    [2,5],
-    [1,4]
-  ]
-},
-
-
-{
-  label: "MÚSICA",
-  key: "MUSICA",
-  path: [
-    [8,4],
-    [7,5],
-    [6,6],
-    [5,7],
-    [4,8],
-    [3,9]
-  ]
-},
-
-
-{
-  label: "CIDADE",
-  key: "CIDADE",
-  path: [
-    [9,8],
-    [9,7],
-    [9,6],
-    [9,5],
-    [9,4],
-    [9,3]
-  ]
-},
-
-
-{
-  label: "AMIZADE",
-  key: "AMIZADE",
-  path: [
-    [0,10],
-    [1,10],
-    [2,10],
-    [3,10],
-    [4,10],
-    [5,10],
-    [6,10]
-  ]
-},
-
-
-{
-  label: "FAMÍLIA",
-  key: "FAMILIA",
-  path: [
-    [2,4],
-    [3,5],
-    [4,6],
-    [5,7],
-    [6,8],
-    [7,9],
-    [8,10]
-  ]
-},
-
-
-{
-  label: "BRASILEIRO",
-  key: "BRASILEIRO",
-  path: [
-    [5,0],
-    [5,1],
-    [5,2],
-    [5,3],
-    [5,4],
-    [5,5],
-    [5,6],
-    [5,7],
-    [5,8],
-    [5,9]
-  ]
-}
-
-
-]
-
-},
-
-
-
-/*
-=====================================================
-JOGO 3
-GÍRIAS / PORTUGUÊS BRASILEIRO
-=====================================================
-*/
-
-{
-
-theme:
-  "Gírias 😎",
-
-
-words: [
-
-
-{
-  label: "MANO",
-  key: "MANO",
-  path: [
-    [5,4],
-    [4,4],
-    [3,4],
-    [2,4]
-  ]
-},
-
-
-{
-  label: "CARA",
-  key: "CARA",
-  path: [
-    [7,10],
-    [7,9],
-    [7,8],
-    [7,7]
-  ]
-},
-
-
-{
-  label: "BELEZA",
-  key: "BELEZA",
-  path: [
-    [4,2],
-    [5,3],
-    [6,4],
-    [7,5],
-    [8,6],
-    [9,7]
-  ]
-},
-
-
-{
-  label: "VALEU",
-  key: "VALEU",
-  path: [
-    [4,3],
-    [4,4],
-    [4,5],
-    [4,6],
-    [4,7]
-  ]
-},
-
-
-{
-  label: "PÔ",
-  key: "PO",
-  path: [
-    [4,8],
-    [5,7]
-  ]
-},
-
-
-{
-  label: "TIPO",
-  key: "TIPO",
-  path: [
-    [4,1],
-    [3,2],
-    [2,3],
-    [1,4]
-  ]
-},
-
-
-{
-  label: "GALERA",
-  key: "GALERA",
-  path: [
-    [1,6],
-    [2,6],
-    [3,6],
-    [4,6],
-    [5,6],
-    [6,6]
-  ]
-},
-
-
-{
-  label: "GRANA",
-  key: "GRANA",
-  path: [
-    [10,7],
-    [9,6],
-    [8,5],
-    [7,4],
-    [6,3]
-  ]
-},
-
-
-{
-  label: "ROLÊ",
-  key: "ROLE",
-  path: [
-    [3,8],
-    [3,7],
-    [3,6],
-    [3,5]
-  ]
-},
-
-
-{
-  label: "TRETA",
-  key: "TRETA",
-  path: [
-    [5,1],
-    [6,2],
-    [7,3],
-    [8,4],
-    [9,5]
-  ]
-},
-
-
-{
-  label: "SACOU",
-  key: "SACOU",
-  path: [
-    [8,7],
-    [7,7],
-    [6,7],
-    [5,7],
-    [4,7]
-  ]
-},
-
-
-{
-  label: "DEMOROU",
-  key: "DEMOROU",
-  path: [
-    [5,2],
-    [5,3],
-    [5,4],
-    [5,5],
-    [5,6],
-    [5,7],
-    [5,8]
-  ]
-}
-
-
-]
-
 }
 
 
@@ -1292,16 +846,97 @@ CONFIGURAÇÕES
 */
 
 
-const SIZE = 11;
+const SIZE = 12;
 
-const LETTERS =
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+/*
+Todas as oito direções.
+*/
+
+
+const DIRECTIONS = [
+
+  [-1, -1],
+
+  [-1, 0],
+
+  [-1, 1],
+
+  [0, -1],
+
+  [0, 1],
+
+  [1, -1],
+
+  [1, 0],
+
+  [1, 1]
+
+];
+
+
+/*
+Letras comuns aparecem mais vezes.
+
+Isso deixa a grade mais parecida
+com português e esconde melhor
+as palavras verdadeiras.
+*/
+
+
+const FILLER_LETTERS =
+
+  "AAAAAAAAAAAA" +
+
+  "EEEEEEEEEEE" +
+
+  "OOOOOOOOO" +
+
+  "SSSSSSSS" +
+
+  "RRRRRRRR" +
+
+  "IIIIIII" +
+
+  "NNNNNN" +
+
+  "DDDDD" +
+
+  "MMMMM" +
+
+  "UUUUU" +
+
+  "TTTTT" +
+
+  "CCCCC" +
+
+  "LLLL" +
+
+  "PPPP" +
+
+  "VVV" +
+
+  "GGG" +
+
+  "BBB" +
+
+  "FFF" +
+
+  "HH" +
+
+  "QQ" +
+
+  "J" +
+
+  "X" +
+
+  "Z";
 
 
 
 /*
 =====================================================
-ELEMENTOS HTML
+ELEMENTOS
 =====================================================
 */
 
@@ -1363,17 +998,19 @@ const resetButton =
 
 /*
 =====================================================
-ESTADO DO JOGO
+ESTADO
 =====================================================
 */
 
 
-let currentPuzzleIndex =
-  0;
+let currentPuzzleIndex = 0;
 
 
-let board =
-  [];
+let board = [];
+
+
+let placements =
+  new Map();
 
 
 let foundWords =
@@ -1399,7 +1036,7 @@ let activeTouchID =
 
 /*
 =====================================================
-JOGO ATUAL
+FUNÇÕES BÁSICAS
 =====================================================
 */
 
@@ -1413,22 +1050,65 @@ function getCurrentPuzzle() {
 }
 
 
+function randomNumber(
+  max
+) {
 
-/*
-=====================================================
-LETRA ALEATÓRIA
-=====================================================
-*/
+  return Math.floor(
+    Math.random() *
+    max
+  );
+
+}
 
 
-function randomLetter() {
+function randomFillerLetter() {
 
-  return LETTERS[
-    Math.floor(
-      Math.random() *
-      LETTERS.length
+  return FILLER_LETTERS[
+    randomNumber(
+      FILLER_LETTERS.length
     )
   ];
+
+}
+
+
+function shuffle(
+  array
+) {
+
+  const copy =
+    [...array];
+
+
+  for (
+    let i =
+      copy.length - 1;
+
+    i > 0;
+
+    i--
+  ) {
+
+
+    const j =
+      randomNumber(
+        i + 1
+      );
+
+
+    [
+      copy[i],
+      copy[j]
+    ] = [
+      copy[j],
+      copy[i]
+    ];
+
+  }
+
+
+  return copy;
 
 }
 
@@ -1436,79 +1116,577 @@ function randomLetter() {
 
 /*
 =====================================================
-CRIAR A GRADE
+CRIAR TABULEIRO VAZIO
 =====================================================
 */
 
 
-function buildPuzzle() {
+function emptyBoard() {
+
+  return Array.from(
+
+    {
+      length: SIZE
+    },
+
+    () =>
+      Array(
+        SIZE
+      ).fill("")
+
+  );
+
+}
+
+
+
+/*
+=====================================================
+CRIAR TODOS OS LUGARES POSSÍVEIS
+=====================================================
+*/
+
+
+function getCandidates(
+  key,
+  direction,
+  puzzleBoard
+) {
+
+
+  const rowDirection =
+    direction[0];
+
+
+  const columnDirection =
+    direction[1];
+
+
+  const candidates =
+    [];
+
+
+  for (
+    let row = 0;
+    row < SIZE;
+    row++
+  ) {
+
+
+    for (
+      let column = 0;
+      column < SIZE;
+      column++
+    ) {
+
+
+      const endRow =
+
+        row +
+
+        rowDirection *
+
+        (
+          key.length - 1
+        );
+
+
+      const endColumn =
+
+        column +
+
+        columnDirection *
+
+        (
+          key.length - 1
+        );
+
+
+      if (
+        endRow < 0 ||
+        endRow >= SIZE ||
+        endColumn < 0 ||
+        endColumn >= SIZE
+      ) {
+
+
+        continue;
+
+      }
+
+
+      let valid =
+        true;
+
+
+      let crossings =
+        0;
+
+
+      let edgeCells =
+        0;
+
+
+      let centerDistance =
+        0;
+
+
+      const path =
+        [];
+
+
+      for (
+        let index = 0;
+        index < key.length;
+        index++
+      ) {
+
+
+        const r =
+
+          row +
+
+          rowDirection *
+          index;
+
+
+        const c =
+
+          column +
+
+          columnDirection *
+          index;
+
+
+        const existing =
+          puzzleBoard[r][c];
+
+
+        if (
+          existing !== "" &&
+          existing !== key[index]
+        ) {
+
+
+          valid =
+            false;
+
+
+          break;
+
+        }
+
+
+        if (
+          existing ===
+          key[index]
+        ) {
+
+
+          crossings++;
+
+        }
+
+
+        if (
+          r === 0 ||
+          c === 0 ||
+          r === SIZE - 1 ||
+          c === SIZE - 1
+        ) {
+
+
+          edgeCells++;
+
+        }
+
+
+        centerDistance +=
+
+          Math.abs(
+            r -
+            (
+              SIZE - 1
+            ) / 2
+          )
+
+          +
+
+          Math.abs(
+            c -
+            (
+              SIZE - 1
+            ) / 2
+          );
+
+
+        path.push([
+          r,
+          c
+        ]);
+
+      }
+
+
+      if (!valid) {
+
+        continue;
+
+      }
+
+
+      /*
+      Higher score = better hiding spot.
+
+      Crossings make words harder.
+
+      Being away from the outer border
+      makes words less obvious.
+      */
+
+
+      const score =
+
+        crossings * 8
+
+        -
+
+        edgeCells * 1.5
+
+        -
+
+        centerDistance * 0.08
+
+        +
+
+        Math.random() * 3;
+
+
+      candidates.push({
+
+        path,
+
+        score
+
+      });
+
+    }
+
+  }
+
+
+  candidates.sort(
+    (
+      a,
+      b
+    ) =>
+      b.score -
+      a.score
+  );
+
+
+  return candidates;
+
+}
+
+
+
+/*
+=====================================================
+GERAR O CAÇA-PALAVRAS
+=====================================================
+*/
+
+
+function generatePuzzle() {
 
 
   const puzzle =
     getCurrentPuzzle();
 
 
-  board =
-    Array.from(
-
-      {
-        length:
-          SIZE
-      },
-
-      () =>
-
-        Array.from(
-
-          {
-            length:
-              SIZE
-          },
-
-          () =>
-            randomLetter()
-
-        )
-
-    );
-
-
   /*
-  Coloca as palavras verdadeiras.
+  Tenta reconstruir tudo se
+  alguma combinação ficar ruim.
   */
 
 
   for (
-    const word
-    of puzzle.words
+    let restart = 0;
+    restart < 100;
+    restart++
   ) {
 
 
-    word.path.forEach(
-
-      (
-        position,
-        index
-      ) => {
+    const puzzleBoard =
+      emptyBoard();
 
 
-        const row =
-          position[0];
+    const nextPlacements =
+      new Map();
 
 
-        const column =
-          position[1];
+    /*
+    Palavras maiores primeiro.
+    */
 
 
-        board[row][column] =
-          word.key[index];
+    const words =
+      [...puzzle.words]
+      .sort(
+        (
+          a,
+          b
+        ) =>
+          b.key.length -
+          a.key.length
+      );
 
+
+    /*
+    Garante uma boa mistura.
+
+    As primeiras oito palavras
+    recebem as oito direções
+    diferentes.
+    */
+
+
+    const directionPool = [
+
+      ...shuffle(
+        DIRECTIONS
+      ),
+
+      ...shuffle(
+        DIRECTIONS
+      ).slice(
+        0,
+        words.length - 8
+      )
+
+    ];
+
+
+    let successful =
+      true;
+
+
+    for (
+      let wordIndex = 0;
+      wordIndex < words.length;
+      wordIndex++
+    ) {
+
+
+      const word =
+        words[
+          wordIndex
+        ];
+
+
+      const preferredDirection =
+        directionPool[
+          wordIndex
+        ];
+
+
+      /*
+      Tenta primeiro a direção
+      planejada.
+
+      Se não der, tenta outra.
+      */
+
+
+      const directionsToTry = [
+
+        preferredDirection,
+
+        ...shuffle(
+          DIRECTIONS.filter(
+
+            direction =>
+
+              direction !==
+              preferredDirection
+
+          )
+        )
+
+      ];
+
+
+      let placed =
+        false;
+
+
+      for (
+        const direction
+        of directionsToTry
+      ) {
+
+
+        const candidates =
+
+          getCandidates(
+
+            word.key,
+
+            direction,
+
+            puzzleBoard
+
+          );
+
+
+        if (
+          candidates.length === 0
+        ) {
+
+
+          continue;
+
+        }
+
+
+        /*
+        Não escolhe sempre a posição
+        matematicamente perfeita.
+
+        Sorteia entre os melhores lugares
+        para a grade parecer natural.
+        */
+
+
+        const candidateLimit =
+
+          Math.min(
+            12,
+            candidates.length
+          );
+
+
+        const chosen =
+
+          candidates[
+            randomNumber(
+              candidateLimit
+            )
+          ];
+
+
+        chosen.path.forEach(
+
+          (
+            position,
+            index
+          ) => {
+
+
+            const row =
+              position[0];
+
+
+            const column =
+              position[1];
+
+
+            puzzleBoard[row][column] =
+              word.key[index];
+
+          }
+
+        );
+
+
+        nextPlacements.set(
+
+          word.key,
+
+          chosen.path
+
+        );
+
+
+        placed =
+          true;
+
+
+        break;
 
       }
 
-    );
+
+      if (!placed) {
+
+
+        successful =
+          false;
+
+
+        break;
+
+      }
+
+    }
+
+
+    if (!successful) {
+
+      continue;
+
+    }
+
+
+    /*
+    Preenche os espaços vazios.
+    */
+
+
+    for (
+      let row = 0;
+      row < SIZE;
+      row++
+    ) {
+
+
+      for (
+        let column = 0;
+        column < SIZE;
+        column++
+      ) {
+
+
+        if (
+          puzzleBoard[row][column] === ""
+        ) {
+
+
+          puzzleBoard[row][column] =
+            randomFillerLetter();
+
+        }
+
+      }
+
+    }
+
+
+    board =
+      puzzleBoard;
+
+
+    placements =
+      nextPlacements;
+
+
+    return true;
 
   }
+
+
+  return false;
 
 }
 
@@ -1543,6 +1721,7 @@ function renderGrid() {
 
 
       const cell =
+
         document.createElement(
           "div"
         );
@@ -1601,6 +1780,7 @@ function renderWordList() {
 
 
     const item =
+
       document.createElement(
         "div"
       );
@@ -1644,7 +1824,7 @@ function renderWordList() {
 
 /*
 =====================================================
-NÚMERO E TEMA
+INFORMAÇÕES DO JOGO
 =====================================================
 */
 
@@ -1659,7 +1839,9 @@ function updatePuzzleInfo() {
     (
       currentPuzzleIndex +
       1
-    ) +
+    )
+
+    +
 
     " de " +
 
@@ -1677,7 +1859,7 @@ function updatePuzzleInfo() {
 
 /*
 =====================================================
-PEGAR UMA CÉLULA
+PEGAR CÉLULA
 =====================================================
 */
 
@@ -1708,7 +1890,7 @@ function getCellElement(
 
 /*
 =====================================================
-DESCOBRIR QUAL LETRA ESTÁ SOB O DEDO
+CÉLULA SOB O DEDO
 =====================================================
 */
 
@@ -1720,6 +1902,7 @@ function getCellFromPoint(
 
 
   const element =
+
     document.elementFromPoint(
       x,
       y
@@ -1734,6 +1917,7 @@ function getCellFromPoint(
 
 
   const cell =
+
     element.closest(
       ".cell"
     );
@@ -1752,18 +1936,15 @@ function getCellFromPoint(
 
   return {
 
-
     row:
       Number(
         cell.dataset.row
       ),
 
-
     column:
       Number(
         cell.dataset.column
       )
-
 
   };
 
@@ -1773,7 +1954,7 @@ function getCellFromPoint(
 
 /*
 =====================================================
-FAZER O DEDO "GRUDAR" NUMA LINHA RETA
+LINHA RETA
 =====================================================
 */
 
@@ -1836,11 +2017,6 @@ function snappedPath(
 
 
 
-  /*
-  VERTICAL
-  */
-
-
   if (
     absoluteRow >
     absoluteColumn * 1.7
@@ -1864,12 +2040,6 @@ function snappedPath(
   }
 
 
-
-  /*
-  HORIZONTAL
-  */
-
-
   else if (
     absoluteColumn >
     absoluteRow * 1.7
@@ -1891,12 +2061,6 @@ function snappedPath(
       absoluteColumn;
 
   }
-
-
-
-  /*
-  DIAGONAL
-  */
 
 
   else {
@@ -1931,22 +2095,26 @@ function snappedPath(
 
 
   for (
-    let i = 0;
-    i <= steps;
-    i++
+    let index = 0;
+    index <= steps;
+    index++
   ) {
 
 
     const row =
 
       start.row +
-      rowStep * i;
+
+      rowStep *
+      index;
 
 
     const column =
 
       start.column +
-      columnStep * i;
+
+      columnStep *
+      index;
 
 
     if (
@@ -1980,7 +2148,7 @@ function snappedPath(
 
 /*
 =====================================================
-LIMPAR SELEÇÃO AZUL
+SELEÇÃO AZUL
 =====================================================
 */
 
@@ -2000,19 +2168,11 @@ function clearPreview() {
           "preview"
         );
 
-
       }
     );
 
 }
 
-
-
-/*
-=====================================================
-MOSTRAR SELEÇÃO AZUL
-=====================================================
-*/
 
 
 function showPreview(
@@ -2036,8 +2196,11 @@ function showPreview(
     const cell =
 
       getCellElement(
+
         position.row,
+
         position.column
+
       );
 
 
@@ -2069,14 +2232,14 @@ COMPARAR CAMINHOS
 
 
 function samePath(
-  pathA,
-  pathB
+  selectedPath,
+  correctPath
 ) {
 
 
   if (
-    pathA.length !==
-    pathB.length
+    selectedPath.length !==
+    correctPath.length
   ) {
 
 
@@ -2086,21 +2249,21 @@ function samePath(
 
 
   for (
-    let i = 0;
-    i < pathA.length;
-    i++
+    let index = 0;
+    index < selectedPath.length;
+    index++
   ) {
 
 
     if (
 
-      pathA[i].row !==
-        pathB[i][0]
+      selectedPath[index].row !==
+      correctPath[index][0]
 
       ||
 
-      pathA[i].column !==
-        pathB[i][1]
+      selectedPath[index].column !==
+      correctPath[index][1]
 
     ) {
 
@@ -2120,7 +2283,7 @@ function samePath(
 
 /*
 =====================================================
-VER SE ACHOU UMA PALAVRA
+VER SE ACHOU
 =====================================================
 */
 
@@ -2152,15 +2315,24 @@ function findMatchingWord(
     }
 
 
-    /*
-    DIREÇÃO NORMAL
-    */
+    const correctPath =
+
+      placements.get(
+        word.key
+      );
+
+
+    if (!correctPath) {
+
+      continue;
+
+    }
 
 
     if (
       samePath(
         path,
-        word.path
+        correctPath
       )
     ) {
 
@@ -2170,15 +2342,10 @@ function findMatchingWord(
     }
 
 
-    /*
-    DIREÇÃO CONTRÁRIA
-    */
-
-
     const backwards =
 
       [
-        ...word.path
+        ...correctPath
       ].reverse();
 
 
@@ -2224,8 +2391,11 @@ function paintWordYellow(
     const cell =
 
       getCellElement(
+
         position.row,
+
         position.column
+
       );
 
 
@@ -2246,7 +2416,7 @@ function paintWordYellow(
 
 /*
 =====================================================
-ATUALIZAR PLACAR
+PLACAR
 =====================================================
 */
 
@@ -2282,6 +2452,7 @@ function updateScore() {
 
 
     message.textContent =
+
       "Você encontrou todas! 🎉";
 
 
@@ -2321,12 +2492,6 @@ function finishSelection() {
       .length;
 
 
-  /*
-  Se terminou o jogo,
-  ignora novos movimentos.
-  */
-
-
   if (
     foundWords.size ===
     total
@@ -2359,12 +2524,6 @@ function finishSelection() {
 
 
   clearPreview();
-
-
-
-  /*
-  ACERTOU
-  */
 
 
   if (
@@ -2409,12 +2568,6 @@ function finishSelection() {
   }
 
 
-
-  /*
-  ERROU
-  */
-
-
   else {
 
 
@@ -2441,7 +2594,7 @@ function finishSelection() {
 
 /*
 =====================================================
-COMEÇAR A ARRASTAR
+ARRASTAR
 =====================================================
 */
 
@@ -2480,7 +2633,6 @@ function startDrag(
 
   if (!cell) {
 
-
     return false;
 
   }
@@ -2494,22 +2646,15 @@ function startDrag(
     cell;
 
 
-  showPreview(
-    [cell]
-  );
+  showPreview([
+    cell
+  ]);
 
 
   return true;
 
 }
 
-
-
-/*
-=====================================================
-MOVER O DEDO
-=====================================================
-*/
 
 
 function moveDrag(
@@ -2539,40 +2684,28 @@ function moveDrag(
 
   if (!cell) {
 
-
     return;
 
   }
 
 
-  const path =
+  showPreview(
 
     snappedPath(
       startCell,
       cell
-    );
+    )
 
-
-  showPreview(
-    path
   );
 
 }
 
 
 
-/*
-=====================================================
-TERMINAR O ARRASTO
-=====================================================
-*/
-
-
 function endDrag() {
 
 
   if (!dragging) {
-
 
     return;
 
@@ -2604,8 +2737,7 @@ grid.addEventListener(
 
 
     if (
-      event.changedTouches.length ===
-      0
+      event.changedTouches.length === 0
     ) {
 
 
@@ -2623,17 +2755,16 @@ grid.addEventListener(
 
 
     activeTouchID =
-
       touch.identifier;
 
 
     startDrag(
 
       touch.clientX,
+
       touch.clientY
 
     );
-
 
   },
 
@@ -2654,7 +2785,6 @@ grid.addEventListener(
 
     if (!dragging) {
 
-
       return;
 
     }
@@ -2674,10 +2804,8 @@ grid.addEventListener(
 
 
       if (
-
         possibleTouch.identifier ===
         activeTouchID
-
       ) {
 
 
@@ -2694,7 +2822,6 @@ grid.addEventListener(
 
     if (!touch) {
 
-
       return;
 
     }
@@ -2703,10 +2830,10 @@ grid.addEventListener(
     moveDrag(
 
       touch.clientX,
+
       touch.clientY
 
     );
-
 
   },
 
@@ -2733,7 +2860,6 @@ grid.addEventListener(
 
     activeTouchID =
       null;
-
 
   },
 
@@ -2773,7 +2899,6 @@ grid.addEventListener(
 
     clearPreview();
 
-
   },
 
   {
@@ -2786,7 +2911,7 @@ grid.addEventListener(
 
 /*
 =====================================================
-MOUSE / COMPUTADOR
+MOUSE
 =====================================================
 */
 
@@ -2804,10 +2929,10 @@ grid.addEventListener(
     startDrag(
 
       event.clientX,
+
       event.clientY
 
     );
-
 
   }
 
@@ -2824,7 +2949,6 @@ window.addEventListener(
 
     if (!dragging) {
 
-
       return;
 
     }
@@ -2833,10 +2957,10 @@ window.addEventListener(
     moveDrag(
 
       event.clientX,
+
       event.clientY
 
     );
-
 
   }
 
@@ -2862,6 +2986,9 @@ window.addEventListener(
 /*
 =====================================================
 RECOMEÇAR
+
+Mantém a mesma grade.
+Só apaga os acertos.
 =====================================================
 */
 
@@ -2928,7 +3055,7 @@ newPuzzleButton.addEventListener(
     foundWords.clear();
 
 
-    buildPuzzle();
+    generatePuzzle();
 
 
     renderGrid();
@@ -2963,7 +3090,7 @@ INICIAR
 */
 
 
-buildPuzzle();
+generatePuzzle();
 
 
 renderGrid();
