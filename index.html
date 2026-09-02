@@ -457,7 +457,6 @@ const PUZZLES = [
     foundEmoji: "🤬",
     winMessage: "🎉 Holy shit. You found them all.",
     words: [
-      { label: "FUCK", key: "FUCK" },
       { label: "SHIT", key: "SHIT" },
       { label: "DICKHEAD", key: "DICKHEAD" },
       { label: "BITCH", key: "BITCH" },
@@ -465,21 +464,13 @@ const PUZZLES = [
       { label: "PRICK", key: "PRICK" },
       { label: "BASTARD", key: "BASTARD" },
       { label: "DUMBASS", key: "DUMBASS" },
-      { label: "MOTHERFUCKER", key: "MOTHERFUCKER" }
-    ],
+      { label: "MOTHERFUCKER", key: "MOTHERFUCKER" },
+      { label: "KISSASS", key: "KISSASS" }
 
-    /*
-      FUCK already exists inside MOTHERFUCKER.
-      We deliberately use those same four cells
-      as the one valid FUCK answer.
-    */
-    embeddedWords: [
-      {
-        child: "FUCK",
-        parent: "MOTHERFUCKER",
-        start: 6
-      }
-    ]
+      ],
+  
+    embeddedWords: [],
+    
   },
 
   {
