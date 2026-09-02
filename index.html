@@ -88,6 +88,15 @@ h1 {
   letter-spacing: -0.05em;
 }
 
+.main-logo {
+  display: block;
+  width: min(100%, 560px);
+  height: auto;
+  margin: 6px 0 8px;
+  object-fit: contain;
+  object-position: left center;
+}
+
 .badges {
   display: flex;
   gap: 6px;
@@ -382,7 +391,11 @@ button:active {
   <div>
     <div id="kicker" class="kicker">Find the beers</div>
 
-    <h1>Dude Word Search</h1>
+    <img
+      src="fffff.png"
+      alt="Dude Word Search"
+      class="main-logo"
+    >
 
     <div class="badges">
       <span class="puzzle-number">12 across × 13 down</span>
