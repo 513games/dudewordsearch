@@ -6,25 +6,30 @@
   name="viewport"
   content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
 >
-<meta name="theme-color" content="#090e1c">
+<meta name="theme-color" content="#1976d2">
 <title>Dude Word Search</title>
 
 <style>
 :root {
-  --background: #090e1c;
-  --panel: #111a31;
-  --panel-light: #18233f;
-  --text: #f7f9ff;
-  --muted: #a9b4ce;
-  --blue: #73adff;
-  --blue-soft: rgba(115, 173, 255, 0.28);
-  --yellow: #fff52e;
-  --yellow-glow: rgba(255, 245, 46, 0.35);
-  --border: rgba(255, 255, 255, 0.10);
+  --blue: #1976d2;
+  --blue-dark: #0d47a1;
+  --blue-light: #72baff;
+  --yellow: #ffd400;
+  --black: #111111;
+  --page: #f4f5f7;
+  --card: #ffffff;
+  --soft: #eef6ff;
+  --text: #171717;
+  --muted: #666666;
+  --border: #111111;
 }
 
 * { box-sizing: border-box; }
-html { background: var(--background); }
+
+html {
+  background: var(--page);
+  -webkit-text-size-adjust: 100%;
+}
 
 body {
   margin: 0;
@@ -38,11 +43,16 @@ body {
     sans-serif;
   background:
     radial-gradient(
-      circle at top,
-      rgba(55, 95, 220, 0.20),
-      transparent 34rem
+      circle at top left,
+      rgba(114, 186, 255, 0.65) 0%,
+      transparent 28rem
     ),
-    var(--background);
+    radial-gradient(
+      circle at bottom right,
+      rgba(255, 212, 0, 0.36) 0%,
+      transparent 24rem
+    ),
+    var(--page);
   overscroll-behavior-y: contain;
 }
 
@@ -63,7 +73,7 @@ main {
 }
 
 .kicker {
-  color: var(--yellow);
+  color: var(--blue-dark);
   font-size: 0.78rem;
   font-weight: 950;
   letter-spacing: 0.17em;
@@ -72,6 +82,7 @@ main {
 
 h1 {
   margin: 6px 0 0;
+  color: var(--black);
   font-size: clamp(2.2rem, 9vw, 4rem);
   line-height: 0.95;
   letter-spacing: -0.05em;
@@ -88,19 +99,20 @@ h1 {
 .theme {
   display: inline-block;
   padding: 6px 10px;
+  border: 2px solid var(--black);
   border-radius: 10px;
   font-size: 0.85rem;
   font-weight: 900;
 }
 
 .puzzle-number {
-  background: rgba(255, 255, 255, 0.07);
-  color: var(--muted);
+  background: var(--black);
+  color: white;
 }
 
 .theme {
-  background: rgba(255, 245, 46, 0.10);
-  color: var(--yellow);
+  background: var(--yellow);
+  color: var(--black);
 }
 
 .description {
@@ -113,17 +125,18 @@ h1 {
 
 /* CATEGORY PICKER */
 .category-bar {
-  margin-bottom: 14px;
-  padding: 12px;
-  border: 1px solid var(--border);
+  margin-bottom: 16px;
+  padding: 13px;
+  border: 3px solid var(--black);
   border-radius: 18px;
-  background: rgba(17, 26, 49, 0.92);
+  background: white;
+  box-shadow: 0 5px 0 var(--black);
 }
 
 .category-label {
   display: block;
   margin-bottom: 7px;
-  color: var(--muted);
+  color: var(--black);
   font-size: 0.75rem;
   font-weight: 950;
   letter-spacing: 0.12em;
@@ -134,13 +147,15 @@ select {
   width: 100%;
   min-height: 50px;
   padding: 0 42px 0 14px;
-  border: 2px solid rgba(255,255,255,0.16);
+  border: 3px solid var(--black);
   border-radius: 14px;
-  background: var(--panel-light);
-  color: var(--text);
+  background: var(--blue-light);
+  color: var(--black);
   font: inherit;
   font-size: 1rem;
   font-weight: 900;
+  box-shadow: 0 4px 0 var(--black);
+  cursor: pointer;
 }
 
 /* BUTTONS */
@@ -153,22 +168,27 @@ select {
 button {
   min-height: 46px;
   padding: 0 16px;
-  border: 1px solid var(--border);
+  border: 3px solid var(--black);
   border-radius: 15px;
-  background: var(--panel-light);
-  color: var(--text);
+  background: white;
+  color: var(--black);
   font: inherit;
   font-weight: 900;
+  box-shadow: 0 4px 0 var(--black);
   cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 button.primary {
   background: var(--yellow);
-  border-color: transparent;
-  color: #151800;
+  color: var(--black);
 }
 
-button:active { transform: scale(0.98); }
+button:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 var(--black);
+}
 
 /* LAYOUT */
 .layout {
@@ -180,9 +200,10 @@ button:active { transform: scale(0.98); }
 
 .card {
   padding: 12px;
-  border: 1px solid var(--border);
+  border: 3px solid var(--black);
   border-radius: 22px;
-  background: rgba(17, 26, 49, 0.92);
+  background: white;
+  box-shadow: 0 5px 0 var(--black);
 }
 
 /* 12 ACROSS x 13 DOWN */
@@ -198,9 +219,9 @@ button:active { transform: scale(0.98); }
   gap: 3px;
   width: min(100%, 580px);
   padding: 8px;
-  border: 1px solid var(--border);
+  border: 3px solid var(--black);
   border-radius: 18px;
-  background: #0c1428;
+  background: var(--blue-light);
   touch-action: none;
   overscroll-behavior: none;
   user-select: none;
@@ -213,9 +234,10 @@ button:active { transform: scale(0.98); }
   min-width: 0;
   display: grid;
   place-items: center;
+  border: 1px solid rgba(17, 17, 17, 0.18);
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--text);
+  background: white;
+  color: var(--black);
   font-size: clamp(0.88rem, 4.1vw, 1.35rem);
   font-weight: 950;
   line-height: 1;
@@ -227,15 +249,17 @@ button:active { transform: scale(0.98); }
 }
 
 .cell.preview {
-  background: var(--blue-soft);
-  box-shadow: inset 0 0 0 2px var(--blue);
+  background: var(--blue);
+  color: white;
+  box-shadow: inset 0 0 0 2px var(--black);
   transform: scale(1.04);
 }
 
 .cell.found {
   background: var(--yellow);
-  color: #151800;
-  box-shadow: 0 0 13px var(--yellow-glow);
+  color: var(--black);
+  border-color: var(--black);
+  box-shadow: inset 0 0 0 2px var(--black);
 }
 
 /* STATUS */
@@ -251,24 +275,28 @@ button:active { transform: scale(0.98); }
 }
 
 .status strong {
-  color: var(--text);
+  color: var(--black);
   font-weight: 950;
 }
 
 #message {
-  color: var(--text);
+  color: var(--black);
   font-weight: 900;
 }
 
-#message.good { color: var(--yellow); }
+#message.good {
+  color: var(--blue-dark);
+}
 
 .win {
   display: none;
   margin-top: 8px;
   padding: 14px;
+  border: 3px solid var(--black);
   border-radius: 14px;
   background: var(--yellow);
-  color: #151800;
+  color: var(--black);
+  box-shadow: 0 4px 0 var(--black);
   font-weight: 950;
   text-align: center;
 }
@@ -278,6 +306,7 @@ button:active { transform: scale(0.98); }
 /* WORD LIST */
 .side h2 {
   margin: 2px 0 12px;
+  color: var(--black);
   font-size: 1.05rem;
 }
 
@@ -291,16 +320,19 @@ button:active { transform: scale(0.98); }
   display: flex;
   align-items: center;
   padding: 8px 10px;
+  border: 2px solid var(--black);
   border-radius: 11px;
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--text);
+  background: var(--blue-light);
+  color: var(--black);
+  box-shadow: 0 3px 0 var(--black);
   font-weight: 900;
   letter-spacing: 0.03em;
 }
 
 .word.found {
   background: var(--yellow);
-  color: #151800;
+  color: var(--black);
+  border-color: var(--black);
   text-decoration: line-through 2px;
 }
 
@@ -348,13 +380,13 @@ button:active { transform: scale(0.98); }
 
 <section class="top">
   <div>
-    <div id="kicker" class="kicker">Find the damn words</div>
+    <div id="kicker" class="kicker">Find the beers</div>
 
     <h1>Dude Word Search</h1>
 
     <div class="badges">
       <span class="puzzle-number">12 across × 13 down</span>
-      <span id="theme" class="theme">🤬 Cuss Words</span>
+      <span id="theme" class="theme">🍺 Beer Names</span>
     </div>
 
     <p id="description" class="description">
