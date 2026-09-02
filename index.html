@@ -382,6 +382,7 @@ button:active { transform: scale(0.98); }
   <select id="categorySelect">
     <option value="cuss">🤬 Cuss Words</option>
     <option value="football">🏈 Football Teams</option>
+    <option value="beer">🍺 Beer Names</option>
   </select>
 </section>
 
@@ -455,6 +456,27 @@ const PUZZLES = [
       }
     ]
   },
+
+  {
+  id: "beer",
+  theme: "🍺 Beer Names",
+  kicker: "Find the beers",
+  foundEmoji: "🍺",
+  winMessage: "🍺 Cheers. You found them all.",
+  words: [
+    { label: "BUDWEISER", key: "BUDWEISER" },
+    { label: "COORS", key: "COORS" },
+    { label: "MODELO", key: "MODELO" },
+    { label: "CORONA", key: "CORONA" },
+    { label: "HEINEKEN", key: "HEINEKEN" },
+    { label: "MILLER", key: "MILLER" },
+    { label: "GUINNESS", key: "GUINNESS" },
+    { label: "MICHELOB", key: "MICHELOB" },
+    { label: "BUSCH", key: "BUSCH" }
+    { label: "FOURLOKO", key: "FOURLOKO" }
+  ],
+  embeddedWords: []
+},
 
   {
     id: "football",
