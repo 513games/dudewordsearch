@@ -392,14 +392,13 @@ button:active {
     <div id="kicker" class="kicker">Find the beers</div>
 
     <img
-      src="ffff.png"
+      src="./dws.png?v=2"
       alt="Dude Word Search"
       class="main-logo"
     >
 
     <div class="badges">
-      <span class="puzzle-number">12 across × 13 down</span>
-      <span id="theme" class="theme">🍺 Beer Names</span>
+      <span id="theme" class="theme">ðº Beer Names</span>
     </div>
 
     <p id="description" class="description">
@@ -426,14 +425,14 @@ button:active {
   </label>
 
   <select id="categorySelect">
-    <option value="beer">🍺 Beer Names</option>
-    <option value="football">🏈 Football Teams</option>
-    <option value="tools">🛠️ Tools</option>
-    <option value="trucks">🚚 Trucks</option>
-    <option value="grillbbq">🥩 Grill & BBQ</option>
-    <option value="dadstuff">👨 Dad Stuff</option>
-    <option value="rockbands">🎸 Rock Bands</option>
-    <option value="fishing">🎣 Fishing</option>
+    <option value="beer">ðº Beer Names</option>
+    <option value="football">ð Football Teams</option>
+    <option value="tools">ð ï¸ Tools</option>
+    <option value="trucks">ð Trucks</option>
+    <option value="grillbbq">ð¥© Grill & BBQ</option>
+    <option value="dadstuff">ð¨ Dad Stuff</option>
+    <option value="rockbands">ð¸ Rock Bands</option>
+    <option value="fishing">ð£ Fishing</option>
   </select>
 </section>
 
@@ -449,7 +448,7 @@ button:active {
         found
       </div>
 
-      <div id="message">Find a word. 🔎</div>
+      <div id="message">Find a word. ð</div>
     </div>
 
     <div id="win" class="win"></div>
@@ -478,10 +477,10 @@ button:active {
 const PUZZLES = [
   {
   id: "beer",
-  theme: "🍺 Beer Names",
+  theme: "ðº Beer Names",
   kicker: "Find the beers",
-  foundEmoji: "🍺",
-  winMessage: "🍺 Cheers. You found them all.",
+  foundEmoji: "ðº",
+  winMessage: "ðº Cheers. You found them all.",
   words: [
     { label: "BUDWEISER", key: "BUDWEISER" },
     { label: "COORS", key: "COORS" },
@@ -500,10 +499,10 @@ const PUZZLES = [
   {
 
   id: "tools",
-  theme: "🛠️ Tools",
+  theme: "ð ï¸ Tools",
   kicker: "Find the tools",
-  foundEmoji: "🛠️",
-  winMessage: "🛠️ Toolbox cleared. You found them all.",
+  foundEmoji: "ð ï¸",
+  winMessage: "ð ï¸ Toolbox cleared. You found them all.",
   words: [
     { label: "HAMMER", key: "HAMMER" },
     { label: "WRENCH", key: "WRENCH" },
@@ -525,10 +524,10 @@ const PUZZLES = [
 
   {
   id: "trucks",
-  theme: "🚚 Trucks",
+  theme: "ð Trucks",
   kicker: "Find the truck names",
-  foundEmoji: "🚚",
-  winMessage: "🚚 Truck puzzle cleared. You found them all.",
+  foundEmoji: "ð",
+  winMessage: "ð Truck puzzle cleared. You found them all.",
      words: [
     { label: "KING RANCH", key: "KINGRANCH" },
     { label: "SILVERADO", key: "SILVERADO" },
@@ -547,10 +546,10 @@ const PUZZLES = [
 
   {
   id: "grillbbq",
-  theme: "🥩 Grill & BBQ",
+  theme: "ð¥© Grill & BBQ",
   kicker: "Find the grill words",
-  foundEmoji: "🥩",
-  winMessage: "🥩 Grill cleared. You found them all.",
+  foundEmoji: "ð¥©",
+  winMessage: "ð¥© Grill cleared. You found them all.",
   words: [
     { label: "BRISKET", key: "BRISKET" },
     { label: "RIBEYE", key: "RIBEYE" },
@@ -569,10 +568,10 @@ const PUZZLES = [
 
   {
   id: "dadstuff",
-  theme: "👨 Dad Stuff",
+  theme: "ð¨ Dad Stuff",
   kicker: "Find the dad stuff",
-  foundEmoji: "👨",
-  winMessage: "👨 Dad mode complete. You found them all.",
+  foundEmoji: "ð¨",
+  winMessage: "ð¨ Dad mode complete. You found them all.",
   words: [
     { label: "THERMOSTAT", key: "THERMOSTAT" },
     { label: "LAWNMOWER", key: "LAWNMOWER" },
@@ -591,10 +590,10 @@ const PUZZLES = [
 
   {
   id: "rockbands",
-  theme: "🎸 Rock Bands",
+  theme: "ð¸ Rock Bands",
   kicker: "Find the rock bands",
-  foundEmoji: "🎸",
-  winMessage: "🎸 Rock on. You found them all.",
+  foundEmoji: "ð¸",
+  winMessage: "ð¸ Rock on. You found them all.",
   words: [
     { label: "METALLICA", key: "METALLICA" },
     { label: "NIRVANA", key: "NIRVANA" },
@@ -613,10 +612,10 @@ const PUZZLES = [
 
   {
   id: "fishing",
-  theme: "🎣 Fishing",
+  theme: "ð£ Fishing",
   kicker: "Find the fishing words",
-  foundEmoji: "🎣",
-  winMessage: "🎣 Nice catch. You found them all.",
+  foundEmoji: "ð£",
+  winMessage: "ð£ Nice catch. You found them all.",
   words: [
     { label: "BASS", key: "BASS" },
     { label: "TROUT", key: "TROUT" },
@@ -636,10 +635,10 @@ const PUZZLES = [
   
   {
     id: "football",
-    theme: "🏈 Football Teams",
+    theme: "ð Football Teams",
     kicker: "Find the teams",
-    foundEmoji: "🏈",
-    winMessage: "🏈 Touchdown. You found every team.",
+    foundEmoji: "ð",
+    winMessage: "ð Touchdown. You found every team.",
     words: [
       { label: "BENGALS", key: "BENGALS" },
       { label: "RAMS", key: "RAMS" },
@@ -1331,7 +1330,7 @@ function updateScore() {
   if (foundWords.size === total) {
     win.textContent = puzzle.winMessage;
     win.classList.add("show");
-    message.textContent = "You found them all. 🔥";
+    message.textContent = "You found them all. ð¥";
     message.className = "good";
   }
   else {
@@ -1372,7 +1371,7 @@ function finishSelection() {
     }
   }
   else {
-    message.textContent = "Nope. Keep looking. 😎";
+    message.textContent = "Nope. Keep looking. ð";
     message.className = "";
   }
 
@@ -1536,7 +1535,7 @@ function loadNewBoard() {
   renderWordList();
   updatePuzzleInfo();
   updateScore();
-  message.textContent = "Good luck. 🔎";
+  message.textContent = "Good luck. ð";
   message.className = "";
 }
 
@@ -1545,7 +1544,7 @@ resetButton.addEventListener("click", () => {
   renderGrid();
   renderWordList();
   updateScore();
-  message.textContent = "Same board. Start over. 🔎";
+  message.textContent = "Same board. Start over. ð";
   message.className = "";
 });
 
