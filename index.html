@@ -1,54 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
 <meta
   name="viewport"
   content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
 >
-
 <meta name="theme-color" content="#090e1c">
-
-<title>Cuss Word Search</title>
+<title>Word Search</title>
 
 <style>
-
 :root {
   --background: #090e1c;
   --panel: #111a31;
   --panel-light: #18233f;
-
   --text: #f7f9ff;
   --muted: #a9b4ce;
-
   --blue: #73adff;
   --blue-soft: rgba(115, 173, 255, 0.28);
-
   --yellow: #fff52e;
   --yellow-glow: rgba(255, 245, 46, 0.35);
-
   --border: rgba(255, 255, 255, 0.10);
 }
 
-
-* {
-  box-sizing: border-box;
-}
-
-
-html {
-  background: var(--background);
-}
-
+* { box-sizing: border-box; }
+html { background: var(--background); }
 
 body {
   margin: 0;
-
   color: var(--text);
-
   font-family:
     ui-rounded,
     "SF Pro Rounded",
@@ -56,7 +36,6 @@ body {
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
-
   background:
     radial-gradient(
       circle at top,
@@ -64,264 +43,182 @@ body {
       transparent 34rem
     ),
     var(--background);
-
   overscroll-behavior-y: contain;
 }
 
-
 main {
   width: min(100%, 900px);
-
   margin: 0 auto;
-
   padding: 24px 12px 50px;
 }
 
-
-/* =====================================
-   HEADER
-===================================== */
-
-
+/* HEADER */
 .top {
   display: flex;
-
   justify-content: space-between;
   align-items: flex-end;
-
   gap: 16px;
-
   flex-wrap: wrap;
-
   margin-bottom: 18px;
 }
 
-
 .kicker {
   color: var(--yellow);
-
   font-size: 0.78rem;
-
   font-weight: 950;
-
   letter-spacing: 0.17em;
-
   text-transform: uppercase;
 }
 
-
 h1 {
   margin: 6px 0 0;
-
   font-size: clamp(2.2rem, 9vw, 4rem);
-
   line-height: 0.95;
-
   letter-spacing: -0.05em;
 }
 
-
-.puzzle-number {
-  display: inline-block;
-
+.badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
   margin-top: 12px;
-
-  padding: 6px 10px;
-
-  border-radius: 10px;
-
-  background: rgba(255, 255, 255, 0.07);
-
-  color: var(--muted);
-
-  font-size: 0.85rem;
-
-  font-weight: 900;
 }
 
-
+.puzzle-number,
 .theme {
   display: inline-block;
-
-  margin-left: 6px;
-  margin-top: 12px;
-
   padding: 6px 10px;
-
   border-radius: 10px;
-
-  background: rgba(255, 245, 46, 0.10);
-
-  color: var(--yellow);
-
   font-size: 0.85rem;
-
   font-weight: 900;
 }
 
+.puzzle-number {
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--muted);
+}
+
+.theme {
+  background: rgba(255, 245, 46, 0.10);
+  color: var(--yellow);
+}
 
 .description {
   max-width: 650px;
-
   margin: 10px 0 0;
-
   color: var(--muted);
-
   font-size: 1rem;
-
   line-height: 1.5;
 }
 
-
-/* =====================================
-   BUTTONS
-===================================== */
-
-
-.buttons {
-  display: flex;
-
-  gap: 9px;
-
-  flex-wrap: wrap;
-}
-
-
-button {
-  min-height: 46px;
-
-  padding: 0 16px;
-
-  border: 1px solid var(--border);
-
-  border-radius: 15px;
-
-  background: var(--panel-light);
-
-  color: var(--text);
-
-  font: inherit;
-
-  font-weight: 900;
-
-  cursor: pointer;
-}
-
-
-button.primary {
-  background: var(--yellow);
-
-  border-color: transparent;
-
-  color: #151800;
-}
-
-
-button:active {
-  transform: scale(0.98);
-}
-
-
-/* =====================================
-   LAYOUT
-===================================== */
-
-
-.layout {
-  display: grid;
-
-  grid-template-columns:
-    minmax(0, 1fr)
-    230px;
-
-  gap: 16px;
-
-  align-items: start;
-}
-
-
-.card {
+/* CATEGORY PICKER */
+.category-bar {
+  margin-bottom: 14px;
   padding: 12px;
-
   border: 1px solid var(--border);
-
-  border-radius: 22px;
-
+  border-radius: 18px;
   background: rgba(17, 26, 49, 0.92);
 }
 
+.category-label {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
 
-/* =====================================
-   12 x 12 GRID
-===================================== */
+select {
+  width: 100%;
+  min-height: 50px;
+  padding: 0 42px 0 14px;
+  border: 2px solid rgba(255,255,255,0.16);
+  border-radius: 14px;
+  background: var(--panel-light);
+  color: var(--text);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 900;
+}
 
+/* BUTTONS */
+.buttons {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+}
 
+button {
+  min-height: 46px;
+  padding: 0 16px;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: var(--panel-light);
+  color: var(--text);
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+button.primary {
+  background: var(--yellow);
+  border-color: transparent;
+  color: #151800;
+}
+
+button:active { transform: scale(0.98); }
+
+/* LAYOUT */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 230px;
+  gap: 16px;
+  align-items: start;
+}
+
+.card {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: rgba(17, 26, 49, 0.92);
+}
+
+/* 12 ACROSS x 13 DOWN */
 .grid-wrapper {
   width: 100%;
-
   display: flex;
-
   justify-content: center;
 }
 
-
 #grid {
   display: grid;
-
-  grid-template-columns:
-    repeat(12, minmax(0, 1fr));
-
+  grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: 3px;
-
   width: min(100%, 580px);
-
   padding: 8px;
-
   border: 1px solid var(--border);
-
   border-radius: 18px;
-
   background: #0c1428;
-
   touch-action: none;
-
   overscroll-behavior: none;
-
   user-select: none;
-
   -webkit-user-select: none;
-
   -webkit-touch-callout: none;
 }
 
-
 .cell {
   aspect-ratio: 1 / 1;
-
   min-width: 0;
-
   display: grid;
-
   place-items: center;
-
   border-radius: 8px;
-
-  background:
-    rgba(255, 255, 255, 0.04);
-
+  background: rgba(255, 255, 255, 0.04);
   color: var(--text);
-
-  font-size:
-    clamp(
-      0.88rem,
-      4.1vw,
-      1.35rem
-    );
-
+  font-size: clamp(0.88rem, 4.1vw, 1.35rem);
   font-weight: 950;
-
   line-height: 1;
-
   transition:
     background 0.10s ease,
     color 0.10s ease,
@@ -329,3118 +226,1179 @@ button:active {
     box-shadow 0.10s ease;
 }
 
-
-/* BLUE WHILE DRAGGING */
-
-
 .cell.preview {
-  background:
-    var(--blue-soft);
-
-  box-shadow:
-    inset
-    0
-    0
-    0
-    2px
-    var(--blue);
-
+  background: var(--blue-soft);
+  box-shadow: inset 0 0 0 2px var(--blue);
   transform: scale(1.04);
 }
 
-
-/* YELLOW WHEN FOUND */
-
-
 .cell.found {
-  background:
-    var(--yellow);
-
+  background: var(--yellow);
   color: #151800;
-
-  box-shadow:
-    0
-    0
-    13px
-    var(--yellow-glow);
+  box-shadow: 0 0 13px var(--yellow-glow);
 }
 
-
-/* =====================================
-   STATUS
-===================================== */
-
-
+/* STATUS */
 .status {
   min-height: 52px;
-
   display: flex;
-
   justify-content: space-between;
   align-items: center;
-
   gap: 10px;
-
   flex-wrap: wrap;
-
   padding: 12px 5px 0;
-
   color: var(--muted);
 }
-
 
 .status strong {
   color: var(--text);
-
   font-weight: 950;
 }
-
 
 #message {
   color: var(--text);
-
   font-weight: 900;
 }
 
-
-#message.good {
-  color: var(--yellow);
-}
-
+#message.good { color: var(--yellow); }
 
 .win {
   display: none;
-
   margin-top: 8px;
-
   padding: 14px;
-
   border-radius: 14px;
-
   background: var(--yellow);
-
   color: #151800;
-
   font-weight: 950;
-
   text-align: center;
 }
 
+.win.show { display: block; }
 
-.win.show {
-  display: block;
-}
-
-
-/* =====================================
-   WORD LIST
-===================================== */
-
-
+/* WORD LIST */
 .side h2 {
   margin: 2px 0 12px;
-
   font-size: 1.05rem;
 }
 
-
 #wordList {
   display: grid;
-
   gap: 8px;
 }
 
-
 .word {
   min-height: 42px;
-
   display: flex;
-
   align-items: center;
-
   padding: 8px 10px;
-
   border-radius: 11px;
-
-  background:
-    rgba(255, 255, 255, 0.04);
-
+  background: rgba(255, 255, 255, 0.04);
   color: var(--text);
-
   font-weight: 900;
-
   letter-spacing: 0.03em;
 }
 
-
 .word.found {
   background: var(--yellow);
-
   color: #151800;
-
-  text-decoration:
-    line-through
-    2px;
+  text-decoration: line-through 2px;
 }
-
 
 .tip {
   margin: 13px 2px 2px;
-
   color: var(--muted);
-
   font-size: 0.84rem;
-
   line-height: 1.45;
 }
 
-
-/* =====================================
-   MOBILE
-===================================== */
-
-
+/* MOBILE */
 @media (max-width: 720px) {
-
-  .layout {
-    grid-template-columns: 1fr;
-  }
-
+  .layout { grid-template-columns: 1fr; }
 
   #wordList {
-    grid-template-columns:
-      repeat(
-        2,
-        minmax(0, 1fr)
-      );
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
 }
 
-
 @media (max-width: 390px) {
-
   main {
     padding-left: 8px;
     padding-right: 8px;
   }
 
-
-  .card {
-    padding: 9px;
-  }
-
+  .card { padding: 9px; }
 
   #grid {
     padding: 6px;
-
     gap: 2px;
   }
 
-
   .cell {
     border-radius: 6px;
-
-    font-size:
-      clamp(
-        0.82rem,
-        4vw,
-        1.15rem
-      );
+    font-size: clamp(0.82rem, 4vw, 1.15rem);
   }
 
-
-  .word {
-    font-size: 0.9rem;
-  }
-
+  .word { font-size: 0.9rem; }
 }
-
 </style>
-
 </head>
 
-
 <body>
-
 <main>
 
-
 <section class="top">
-
-<div>
-
-  <div class="kicker">
-    Find the damn words
-  </div>
-
-
-  <h1>
-    Cuss Word Search
-  </h1>
-
-
   <div>
+    <div id="kicker" class="kicker">Find the damn words</div>
 
-    <span
-      class="puzzle-number"
-    >
-      12 × 12
-    </span>
+    <h1>Word Search</h1>
 
+    <div class="badges">
+      <span class="puzzle-number">12 across × 13 down</span>
+      <span id="theme" class="theme">🤬 Cuss Words</span>
+    </div>
 
-    <span
-      class="theme"
-    >
-      🤬 Cuss Words
-    </span>
-
+    <p id="description" class="description">
+      Drag across the hidden words. They can go up, down, sideways,
+      diagonal, forward, or backward.
+    </p>
   </div>
 
+  <div class="buttons">
+    <button id="newPuzzle" class="primary" type="button">
+      Shuffle Board
+    </button>
 
-  <p class="description">
-
-    Drag across the hidden words.
-
-    They can go up, down, sideways,
-    diagonal, forward, or backward.
-
-  </p>
-
-</div>
-
-
-<div class="buttons">
-
-  <button
-    id="newPuzzle"
-    class="primary"
-    type="button"
-  >
-    New Puzzle
-  </button>
-
-
-  <button
-    id="resetPuzzle"
-    type="button"
-  >
-    Reset
-  </button>
-
-</div>
-
+    <button id="resetPuzzle" type="button">
+      Reset
+    </button>
+  </div>
 </section>
 
+<section class="category-bar">
+  <label class="category-label" for="categorySelect">
+    Choose a puzzle
+  </label>
 
+  <select id="categorySelect">
+    <option value="cuss">🤬 Cuss Words</option>
+    <option value="football">🏈 Football Teams</option>
+  </select>
+</section>
 
 <section class="layout">
-
-
-<div class="card">
-
-
-  <div class="grid-wrapper">
-
-    <div
-      id="grid"
-      aria-label="Cuss word search"
-    ></div>
-
-  </div>
-
-
-  <div
-    class="status"
-    aria-live="polite"
-  >
-
-
-    <div>
-
-      <strong id="score">
-        0 / 9
-      </strong>
-
-      found
-
+  <div class="card">
+    <div class="grid-wrapper">
+      <div id="grid" aria-label="Word search grid"></div>
     </div>
 
+    <div class="status" aria-live="polite">
+      <div>
+        <strong id="score">0 / 9</strong>
+        found
+      </div>
 
-    <div id="message">
-
-      Find a word. 🔎
-
+      <div id="message">Find a word. 🔎</div>
     </div>
 
+    <div id="win" class="win"></div>
   </div>
 
+  <aside class="card side">
+    <h2>Find These</h2>
+    <div id="wordList"></div>
 
-  <div
-    id="win"
-    class="win"
-  >
-
-    🎉 Holy shit. You found them all.
-
-  </div>
-
-
-</div>
-
-
-
-<aside class="card side">
-
-
-  <h2>
-    Find These
-  </h2>
-
-
-  <div id="wordList"></div>
-
-
-  <p class="tip">
-
-    Words can run in all eight directions.
-
-    There is only one valid location
-    for each listed word.
-
-  </p>
-
-
-</aside>
-
-
+    <p class="tip">
+      Words can run in all eight directions.<br><br>
+      Every new board scrambles the locations again.
+    </p>
+  </aside>
 </section>
-
 
 </main>
 
-
-
 <script>
-
 (() => {
 
+/* =====================================================
+   PUZZLE CATEGORIES
+===================================================== */
 
-/*
-=====================================================
-PUZZLE
-=====================================================
-*/
+const PUZZLES = [
+  {
+    id: "cuss",
+    theme: "🤬 Cuss Words",
+    kicker: "Find the damn words",
+    foundEmoji: "🤬",
+    winMessage: "🎉 Holy shit. You found them all.",
+    words: [
+      { label: "FUCK", key: "FUCK" },
+      { label: "SHIT", key: "SHIT" },
+      { label: "DICKHEAD", key: "DICKHEAD" },
+      { label: "BITCH", key: "BITCH" },
+      { label: "ASSHOLE", key: "ASSHOLE" },
+      { label: "PRICK", key: "PRICK" },
+      { label: "BASTARD", key: "BASTARD" },
+      { label: "DUMBASS", key: "DUMBASS" },
+      { label: "MOTHERFUCKER", key: "MOTHERFUCKER" }
+    ],
 
+    /*
+      FUCK already exists inside MOTHERFUCKER.
+      We deliberately use those same four cells
+      as the one valid FUCK answer.
+    */
+    embeddedWords: [
+      {
+        child: "FUCK",
+        parent: "MOTHERFUCKER",
+        start: 6
+      }
+    ]
+  },
 
-const PUZZLE = {
+  {
+    id: "football",
+    theme: "🏈 Football Teams",
+    kicker: "Find the teams",
+    foundEmoji: "🏈",
+    winMessage: "🏈 Touchdown. You found every team.",
+    words: [
+      { label: "BENGALS", key: "BENGALS" },
+      { label: "RAMS", key: "RAMS" },
+      { label: "BROWNS", key: "BROWNS" },
+      { label: "CHIEFS", key: "CHIEFS" },
+      { label: "PATRIOTS", key: "PATRIOTS" },
+      { label: "PANTHERS", key: "PANTHERS" },
+      { label: "FALCONS", key: "FALCONS" },
+      { label: "BRONCOS", key: "BRONCOS" },
+      { label: "RAIDERS", key: "RAIDERS" },
+      { label: "DOLPHINS", key: "DOLPHINS" }
+    ],
+    embeddedWords: []
+  }
+];
 
-  words: [
+/* =====================================================
+   BOARD SETTINGS
+===================================================== */
 
-    {
-      label: "FUCK",
-      key: "FUCK"
-    },
-
-    {
-      label: "SHIT",
-      key: "SHIT"
-    },
-
-    {
-      label: "DICKHEAD",
-      key: "DICKHEAD"
-    },
-
-    {
-      label: "BITCH",
-      key: "BITCH"
-    },
-
-    {
-      label: "ASSHOLE",
-      key: "ASSHOLE"
-    },
-
-    {
-      label: "PRICK",
-      key: "PRICK"
-    },
-
-    {
-      label: "BASTARD",
-      key: "BASTARD"
-    },
-
-    {
-      label: "DUMBASS",
-      key: "DUMBASS"
-    },
-
-    {
-      label: "MOTHERFUCKER",
-      key: "MOTHERFUCKER"
-    }
-
-  ]
-
-};
-
-
-
-/*
-=====================================================
-SETTINGS
-=====================================================
-*/
-
-
-const SIZE = 12;
-
-
-/*
-All eight possible directions.
-*/
-
+const ROWS = 13;
+const COLS = 12;
 
 const DIRECTIONS = [
-
   [-1, -1],
-
   [-1, 0],
-
   [-1, 1],
-
   [0, -1],
-
   [0, 1],
-
   [1, -1],
-
   [1, 0],
-
   [1, 1]
-
 ];
 
-
 /*
-For checking whether a word
-appears more than once we only
-need four physical line directions.
-
-The reverse spelling is checked
-at the same time.
+  Four physical directions are enough when checking
+  duplicates because each line is also checked reversed.
 */
-
-
 const CHECK_DIRECTIONS = [
-
   [0, 1],
-
   [1, 0],
-
   [1, 1],
-
   [1, -1]
-
 ];
-
-
-/*
-English-ish letter frequencies.
-
-This makes the filler look more
-natural than completely random
-A-Z letters.
-*/
-
 
 const FILLER_LETTERS =
-
   "EEEEEEEEEEEE" +
-
   "TTTTTTTTTT" +
-
   "AAAAAAAAA" +
-
   "OOOOOOOO" +
-
   "IIIIIIII" +
-
   "NNNNNNNN" +
-
   "SSSSSSS" +
-
   "HHHHHH" +
-
   "RRRRRR" +
-
   "DDDDD" +
-
   "LLLLL" +
-
   "UUUU" +
-
   "CCCC" +
-
   "MMMM" +
-
   "FFFF" +
-
   "WWWW" +
-
   "YYYY" +
-
   "GGG" +
-
   "PPP" +
-
   "BBB" +
-
   "VV" +
-
   "KK" +
-
   "J" +
-
   "X" +
-
   "Q" +
-
   "Z";
 
+/* =====================================================
+   ELEMENTS
+===================================================== */
 
+const grid = document.getElementById("grid");
+const wordList = document.getElementById("wordList");
+const score = document.getElementById("score");
+const message = document.getElementById("message");
+const win = document.getElementById("win");
+const theme = document.getElementById("theme");
+const kicker = document.getElementById("kicker");
+const categorySelect = document.getElementById("categorySelect");
+const newPuzzleButton = document.getElementById("newPuzzle");
+const resetButton = document.getElementById("resetPuzzle");
 
-/*
-=====================================================
-ELEMENTS
-=====================================================
-*/
+/* =====================================================
+   STATE
+===================================================== */
 
-
-const grid =
-  document.getElementById(
-    "grid"
-  );
-
-
-const wordList =
-  document.getElementById(
-    "wordList"
-  );
-
-
-const score =
-  document.getElementById(
-    "score"
-  );
-
-
-const message =
-  document.getElementById(
-    "message"
-  );
-
-
-const win =
-  document.getElementById(
-    "win"
-  );
-
-
-const newPuzzleButton =
-  document.getElementById(
-    "newPuzzle"
-  );
-
-
-const resetButton =
-  document.getElementById(
-    "resetPuzzle"
-  );
-
-
-
-/*
-=====================================================
-STATE
-=====================================================
-*/
-
-
+let currentPuzzleIndex = 0;
 let board = [];
+let placements = new Map();
+let foundWords = new Set();
+let dragging = false;
+let startCell = null;
+let currentPath = [];
+let activeTouchID = null;
 
+/* =====================================================
+   BASIC HELPERS
+===================================================== */
 
-let placements =
-  new Map();
-
-
-let foundWords =
-  new Set();
-
-
-let dragging =
-  false;
-
-
-let startCell =
-  null;
-
-
-let currentPath =
-  [];
-
-
-let activeTouchID =
-  null;
-
-
-
-/*
-=====================================================
-BASIC FUNCTIONS
-=====================================================
-*/
-
-
-function randomNumber(
-  max
-) {
-
-  return Math.floor(
-    Math.random() *
-    max
-  );
-
+function getCurrentPuzzle() {
+  return PUZZLES[currentPuzzleIndex];
 }
 
-
+function randomNumber(max) {
+  return Math.floor(Math.random() * max);
+}
 
 function randomFillerLetter() {
-
-  return FILLER_LETTERS[
-    randomNumber(
-      FILLER_LETTERS.length
-    )
-  ];
-
+  return FILLER_LETTERS[randomNumber(FILLER_LETTERS.length)];
 }
 
+function shuffle(array) {
+  const copy = [...array];
 
-
-function shuffle(
-  array
-) {
-
-  const copy =
-    [...array];
-
-
-  for (
-    let i =
-      copy.length - 1;
-
-    i > 0;
-
-    i--
-  ) {
-
-
-    const j =
-      randomNumber(
-        i + 1
-      );
-
-
-    [
-      copy[i],
-      copy[j]
-    ] = [
-      copy[j],
-      copy[i]
-    ];
-
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = randomNumber(i + 1);
+    [copy[i], copy[j]] = [copy[j], copy[i]];
   }
 
-
   return copy;
-
 }
-
-
-
-/*
-=====================================================
-EMPTY BOARD
-=====================================================
-*/
-
 
 function emptyBoard() {
-
   return Array.from(
-
-    {
-      length: SIZE
-    },
-
-    () =>
-      Array(
-        SIZE
-      ).fill("")
-
+    { length: ROWS },
+    () => Array(COLS).fill("")
   );
-
 }
 
+/* =====================================================
+   PLACEMENT CANDIDATES
+===================================================== */
 
+function getCandidates(key, direction, puzzleBoard, existingPlacements) {
+  const rowDirection = direction[0];
+  const columnDirection = direction[1];
+  const candidates = [];
 
-/*
-=====================================================
-PLACEMENT CANDIDATES
-=====================================================
-*/
-
-
-function getCandidates(
-  key,
-  direction,
-  puzzleBoard,
-  existingPlacements
-) {
-
-
-  const rowDirection =
-    direction[0];
-
-
-  const columnDirection =
-    direction[1];
-
-
-  const candidates =
-    [];
-
-
-  for (
-    let row = 0;
-    row < SIZE;
-    row++
-  ) {
-
-
-    for (
-      let column = 0;
-      column < SIZE;
-      column++
-    ) {
-
-
-      const endRow =
-
-        row +
-
-        rowDirection *
-        (
-          key.length - 1
-        );
-
-
-      const endColumn =
-
-        column +
-
-        columnDirection *
-        (
-          key.length - 1
-        );
-
+  for (let row = 0; row < ROWS; row++) {
+    for (let column = 0; column < COLS; column++) {
+      const endRow = row + rowDirection * (key.length - 1);
+      const endColumn = column + columnDirection * (key.length - 1);
 
       if (
         endRow < 0 ||
-        endRow >= SIZE ||
+        endRow >= ROWS ||
         endColumn < 0 ||
-        endColumn >= SIZE
+        endColumn >= COLS
       ) {
-
         continue;
-
       }
 
+      let valid = true;
+      let crossings = 0;
+      let edgeCells = 0;
+      let centerDistance = 0;
+      const path = [];
 
-      let valid =
-        true;
+      for (let index = 0; index < key.length; index++) {
+        const r = row + rowDirection * index;
+        const c = column + columnDirection * index;
+        const existing = puzzleBoard[r][c];
 
-
-      let crossings =
-        0;
-
-
-      let edgeCells =
-        0;
-
-
-      let centerDistance =
-        0;
-
-
-      const path =
-        [];
-
-
-      for (
-        let index = 0;
-        index < key.length;
-        index++
-      ) {
-
-
-        const r =
-
-          row +
-
-          rowDirection *
-          index;
-
-
-        const c =
-
-          column +
-
-          columnDirection *
-          index;
-
-
-        const existing =
-          puzzleBoard[r][c];
-
-
-        if (
-          existing !== "" &&
-          existing !== key[index]
-        ) {
-
-
-          valid =
-            false;
-
-
+        if (existing !== "" && existing !== key[index]) {
+          valid = false;
           break;
-
         }
 
-
-        if (
-          existing === key[index]
-        ) {
-
+        if (existing === key[index]) {
           crossings++;
-
         }
-
 
         if (
           r === 0 ||
           c === 0 ||
-          r === SIZE - 1 ||
-          c === SIZE - 1
+          r === ROWS - 1 ||
+          c === COLS - 1
         ) {
-
           edgeCells++;
-
         }
-
 
         centerDistance +=
+          Math.abs(r - (ROWS - 1) / 2) +
+          Math.abs(c - (COLS - 1) / 2);
 
-          Math.abs(
-            r -
-            (
-              SIZE - 1
-            ) / 2
-          )
-
-          +
-
-          Math.abs(
-            c -
-            (
-              SIZE - 1
-            ) / 2
-          );
-
-
-        path.push([
-          r,
-          c
-        ]);
-
+        path.push([r, c]);
       }
-
 
       if (!valid) {
-
         continue;
-
       }
 
+      let spreadScore = 0;
 
-      /*
-      Reward positions spread away
-      from already placed words.
-      */
+      if (existingPlacements.size > 0) {
+        const middle = path[Math.floor(path.length / 2)];
+        let nearest = Infinity;
 
-
-      let spreadScore =
-        0;
-
-
-      if (
-        existingPlacements.size > 0
-      ) {
-
-
-        const middle =
-
-          path[
-            Math.floor(
-              path.length / 2
-            )
-          ];
-
-
-        let nearest =
-          Infinity;
-
-
-        for (
-          const placedPath
-          of existingPlacements.values()
-        ) {
-
-
-          if (
-            placedPath.length === 0
-          ) {
-
+        for (const placedPath of existingPlacements.values()) {
+          if (!placedPath || placedPath.length === 0) {
             continue;
-
           }
 
-
           const placedMiddle =
-
-            placedPath[
-              Math.floor(
-                placedPath.length / 2
-              )
-            ];
-
+            placedPath[Math.floor(placedPath.length / 2)];
 
           const distance =
+            Math.abs(middle[0] - placedMiddle[0]) +
+            Math.abs(middle[1] - placedMiddle[1]);
 
-            Math.abs(
-              middle[0] -
-              placedMiddle[0]
-            )
-
-            +
-
-            Math.abs(
-              middle[1] -
-              placedMiddle[1]
-            );
-
-
-          nearest =
-            Math.min(
-              nearest,
-              distance
-            );
-
+          nearest = Math.min(nearest, distance);
         }
 
-
-        if (
-          nearest !== Infinity
-        ) {
-
-          spreadScore =
-            nearest * 1.5;
-
+        if (nearest !== Infinity) {
+          spreadScore = nearest * 1.5;
         }
-
       }
 
-
-      /*
-      Harder puzzle:
-
-      - some crossings are useful
-      - edges are encouraged
-      - words are spread around
-        the entire board
-      - randomness prevents a
-        predictable layout
-      */
-
-
       const candidateScore =
-
-        crossings * 4
-
-        +
-
-        edgeCells * 2.2
-
-        +
-
-        centerDistance * 0.12
-
-        +
-
-        spreadScore
-
-        +
-
+        crossings * 4 +
+        edgeCells * 2.2 +
+        centerDistance * 0.12 +
+        spreadScore +
         Math.random() * 5;
 
-
       candidates.push({
-
         path,
-
-        score:
-          candidateScore
-
+        score: candidateScore
       });
-
     }
-
   }
 
-
-  candidates.sort(
-    (
-      a,
-      b
-    ) =>
-      b.score -
-      a.score
-  );
-
-
+  candidates.sort((a, b) => b.score - a.score);
   return candidates;
-
 }
 
+/* =====================================================
+   UNIQUE-WORD VALIDATION
+===================================================== */
 
+function countWordOccurrences(puzzleBoard, key) {
+  const reverseKey = [...key].reverse().join("");
+  let count = 0;
 
-/*
-=====================================================
-COUNT WORD OCCURRENCES
-=====================================================
-*/
+  for (const direction of CHECK_DIRECTIONS) {
+    const rowDirection = direction[0];
+    const columnDirection = direction[1];
 
-
-function countWordOccurrences(
-  puzzleBoard,
-  key
-) {
-
-
-  const reverseKey =
-    [...key]
-    .reverse()
-    .join("");
-
-
-  let count =
-    0;
-
-
-  for (
-    const direction
-    of CHECK_DIRECTIONS
-  ) {
-
-
-    const rowDirection =
-      direction[0];
-
-
-    const columnDirection =
-      direction[1];
-
-
-    for (
-      let row = 0;
-      row < SIZE;
-      row++
-    ) {
-
-
-      for (
-        let column = 0;
-        column < SIZE;
-        column++
-      ) {
-
-
-        const endRow =
-
-          row +
-
-          rowDirection *
-          (
-            key.length - 1
-          );
-
-
-        const endColumn =
-
-          column +
-
-          columnDirection *
-          (
-            key.length - 1
-          );
-
+    for (let row = 0; row < ROWS; row++) {
+      for (let column = 0; column < COLS; column++) {
+        const endRow = row + rowDirection * (key.length - 1);
+        const endColumn = column + columnDirection * (key.length - 1);
 
         if (
           endRow < 0 ||
-          endRow >= SIZE ||
+          endRow >= ROWS ||
           endColumn < 0 ||
-          endColumn >= SIZE
+          endColumn >= COLS
         ) {
-
           continue;
-
         }
 
+        let text = "";
 
-        let text =
-          "";
-
-
-        for (
-          let index = 0;
-          index < key.length;
-          index++
-        ) {
-
-
+        for (let index = 0; index < key.length; index++) {
           text +=
-
-            puzzleBoard[
-              row +
-              rowDirection *
-              index
-            ][
-              column +
-              columnDirection *
-              index
-            ];
-
+            puzzleBoard[row + rowDirection * index]
+                       [column + columnDirection * index];
         }
 
-
-        if (
-          text === key ||
-          text === reverseKey
-        ) {
-
+        if (text === key || text === reverseKey) {
           count++;
-
         }
-
       }
-
     }
-
   }
-
 
   return count;
-
 }
 
-
-
-/*
-=====================================================
-VALIDATE UNIQUE WORDS
-=====================================================
-*/
-
-
-function hasExactlyOneOfEachWord(
-  puzzleBoard
-) {
-
-
-  for (
-    const word
-    of PUZZLE.words
-  ) {
-
-
-    if (
-      countWordOccurrences(
-        puzzleBoard,
-        word.key
-      ) !== 1
-    ) {
-
+function hasExactlyOneOfEachWord(puzzleBoard, puzzle) {
+  for (const word of puzzle.words) {
+    if (countWordOccurrences(puzzleBoard, word.key) !== 1) {
       return false;
-
     }
-
   }
-
 
   return true;
-
 }
 
+/* =====================================================
+   BOARD SPREAD
+===================================================== */
 
+function usesWholeBoard(nextPlacements) {
+  let minimumRow = ROWS;
+  let maximumRow = -1;
+  let minimumColumn = COLS;
+  let maximumColumn = -1;
 
-/*
-=====================================================
-CHECK BOARD SPREAD
-=====================================================
-*/
-
-
-function usesWholeBoard(
-  nextPlacements
-) {
-
-
-  let minimumRow =
-    SIZE;
-
-
-  let maximumRow =
-    -1;
-
-
-  let minimumColumn =
-    SIZE;
-
-
-  let maximumColumn =
-    -1;
-
-
-  for (
-    const path
-    of nextPlacements.values()
-  ) {
-
-
-    for (
-      const position
-      of path
-    ) {
-
-
-      minimumRow =
-        Math.min(
-          minimumRow,
-          position[0]
-        );
-
-
-      maximumRow =
-        Math.max(
-          maximumRow,
-          position[0]
-        );
-
-
-      minimumColumn =
-        Math.min(
-          minimumColumn,
-          position[1]
-        );
-
-
-      maximumColumn =
-        Math.max(
-          maximumColumn,
-          position[1]
-        );
-
+  for (const path of nextPlacements.values()) {
+    if (!path) {
+      continue;
     }
 
+    for (const position of path) {
+      minimumRow = Math.min(minimumRow, position[0]);
+      maximumRow = Math.max(maximumRow, position[0]);
+      minimumColumn = Math.min(minimumColumn, position[1]);
+      maximumColumn = Math.max(maximumColumn, position[1]);
+    }
   }
-
 
   return (
-
     minimumRow <= 1 &&
-
-    maximumRow >= SIZE - 2 &&
-
+    maximumRow >= ROWS - 2 &&
     minimumColumn <= 1 &&
-
-    maximumColumn >= SIZE - 2
-
+    maximumColumn >= COLS - 2
   );
-
 }
 
-
-
-/*
-=====================================================
-GENERATE PUZZLE
-=====================================================
-*/
-
+/* =====================================================
+   GENERATE PUZZLE
+===================================================== */
 
 function generatePuzzle() {
+  const puzzle = getCurrentPuzzle();
 
-
-  /*
-  FUCK is contained inside
-  MOTHERFUCKER.
-
-  We deliberately use those
-  same four cells for FUCK.
-
-  Otherwise FUCK would always
-  appear at least twice.
-  */
-
-
-  const wordsToPlace =
-
-    PUZZLE.words
-
-    .filter(
-      word =>
-        word.key !== "FUCK"
-    )
-
-    .sort(
-      (
-        a,
-        b
-      ) =>
-        b.key.length -
-        a.key.length
-    );
-
-
-  /*
-  There are eight independently
-  placed words and eight directions.
-
-  This encourages a strong mixture
-  of directions.
-  */
-
-
-  for (
-    let restart = 0;
-    restart < 400;
-    restart++
-  ) {
-
-
-    const puzzleBoard =
-      emptyBoard();
-
-
-    const nextPlacements =
-      new Map();
-
-
-    const plannedDirections =
-      shuffle(
-        DIRECTIONS
-      );
-
-
-    let successful =
-      true;
-
-
-    for (
-      let wordIndex = 0;
-      wordIndex < wordsToPlace.length;
-      wordIndex++
-    ) {
-
-
-      const word =
-        wordsToPlace[
-          wordIndex
-        ];
-
-
-      const preferredDirection =
-        plannedDirections[
-          wordIndex %
-          plannedDirections.length
-        ];
-
-
-      const otherDirections =
-
-        shuffle(
-          DIRECTIONS.filter(
-            direction =>
-              direction !==
-              preferredDirection
-          )
-        );
-
-
-      const directionsToTry = [
-
-        preferredDirection,
-
-        ...otherDirections
-
-      ];
-
-
-      let placed =
-        false;
-
-
-      for (
-        const direction
-        of directionsToTry
-      ) {
-
-
-        const candidates =
-
-          getCandidates(
-
-            word.key,
-
-            direction,
-
-            puzzleBoard,
-
-            nextPlacements
-
-          );
-
-
-        if (
-          candidates.length === 0
-        ) {
-
-          continue;
-
-        }
-
-
-        /*
-        Choose from the strongest
-        candidates instead of always
-        choosing #1.
-        */
-
-
-        const candidateLimit =
-
-          Math.min(
-            8,
-            candidates.length
-          );
-
-
-        const chosen =
-
-          candidates[
-            randomNumber(
-              candidateLimit
-            )
-          ];
-
-
-        chosen.path.forEach(
-
-          (
-            position,
-            index
-          ) => {
-
-
-            const row =
-              position[0];
-
-
-            const column =
-              position[1];
-
-
-            puzzleBoard[row][column] =
-              word.key[index];
-
-          }
-
-        );
-
-
-        nextPlacements.set(
-
-          word.key,
-
-          chosen.path
-
-        );
-
-
-        /*
-        FUCK occupies letters 7-10
-        of MOTHERFUCKER:
-
-        M O T H E R F U C K E R
-                    ^ ^ ^ ^
-        */
-
-
-        if (
-          word.key ===
-          "MOTHERFUCKER"
-        ) {
-
-
-          nextPlacements.set(
-
-            "FUCK",
-
-            chosen.path.slice(
-              6,
-              10
-            )
-
-          );
-
-        }
-
-
-        placed =
-          true;
-
-
-        break;
-
-      }
-
-
-      if (!placed) {
-
-
-        successful =
-          false;
-
-
-        break;
-
-      }
-
-    }
-
-
-    if (!successful) {
-
-      continue;
-
-    }
-
-
-    /*
-    Make sure the actual hidden
-    words cover nearly the entire
-    12x12 playing area.
-    */
-
-
-    if (
-      !usesWholeBoard(
-        nextPlacements
-      )
-    ) {
-
-      continue;
-
-    }
-
-
-    /*
-    Try many different filler grids
-    without moving the hidden words.
-
-    Any filler arrangement that
-    accidentally creates a second
-    target word is rejected.
-    */
-
-
-    for (
-      let fillerAttempt = 0;
-      fillerAttempt < 250;
-      fillerAttempt++
-    ) {
-
-
-      const filledBoard =
-
-        puzzleBoard.map(
-          row =>
-            [...row]
-        );
-
-
-      for (
-        let row = 0;
-        row < SIZE;
-        row++
-      ) {
-
-
-        for (
-          let column = 0;
-          column < SIZE;
-          column++
-        ) {
-
-
-          if (
-            filledBoard[row][column] === ""
-          ) {
-
-
-            filledBoard[row][column] =
-              randomFillerLetter();
-
-          }
-
-        }
-
-      }
-
-
-      /*
-      This is the important part.
-
-      Every listed target must appear
-      exactly ONCE anywhere in the grid.
-      */
-
-
-      if (
-        hasExactlyOneOfEachWord(
-          filledBoard
-        )
-      ) {
-
-
-        board =
-          filledBoard;
-
-
-        placements =
-          nextPlacements;
-
-
-        return true;
-
-      }
-
-    }
-
-  }
-
-
-  return false;
-
-}
-
-
-
-/*
-=====================================================
-RENDER GRID
-=====================================================
-*/
-
-
-function renderGrid() {
-
-
-  grid.innerHTML =
-    "";
-
-
-  for (
-    let row = 0;
-    row < SIZE;
-    row++
-  ) {
-
-
-    for (
-      let column = 0;
-      column < SIZE;
-      column++
-    ) {
-
-
-      const cell =
-
-        document.createElement(
-          "div"
-        );
-
-
-      cell.className =
-        "cell";
-
-
-      cell.dataset.row =
-        row;
-
-
-      cell.dataset.column =
-        column;
-
-
-      cell.textContent =
-        board[row][column];
-
-
-      grid.appendChild(
-        cell
-      );
-
-    }
-
-  }
-
-}
-
-
-
-/*
-=====================================================
-WORD LIST
-=====================================================
-*/
-
-
-function renderWordList() {
-
-
-  wordList.innerHTML =
-    "";
-
-
-  for (
-    const word
-    of PUZZLE.words
-  ) {
-
-
-    const item =
-
-      document.createElement(
-        "div"
-      );
-
-
-    item.className =
-      "word";
-
-
-    item.dataset.key =
-      word.key;
-
-
-    item.textContent =
-      word.label;
-
-
-    if (
-      foundWords.has(
-        word.key
-      )
-    ) {
-
-
-      item.classList.add(
-        "found"
-      );
-
-    }
-
-
-    wordList.appendChild(
-      item
-    );
-
-  }
-
-}
-
-
-
-/*
-=====================================================
-GET CELL
-=====================================================
-*/
-
-
-function getCellElement(
-  row,
-  column
-) {
-
-
-  return grid.querySelector(
-
-    '.cell[data-row="' +
-
-    row +
-
-    '"][data-column="' +
-
-    column +
-
-    '"]'
-
+  const embeddedChildren = new Set(
+    (puzzle.embeddedWords || []).map(item => item.child)
   );
 
+  const wordsToPlace = puzzle.words
+    .filter(word => !embeddedChildren.has(word.key))
+    .sort((a, b) => b.key.length - a.key.length);
+
+  for (let restart = 0; restart < 600; restart++) {
+    const puzzleBoard = emptyBoard();
+    const nextPlacements = new Map();
+
+    const directionPool = [];
+
+    while (directionPool.length < wordsToPlace.length) {
+      directionPool.push(...shuffle(DIRECTIONS));
+    }
+
+    let successful = true;
+
+    for (let wordIndex = 0; wordIndex < wordsToPlace.length; wordIndex++) {
+      const word = wordsToPlace[wordIndex];
+      const preferredDirection = directionPool[wordIndex];
+
+      const directionsToTry = [
+        preferredDirection,
+        ...shuffle(
+          DIRECTIONS.filter(
+            direction => direction !== preferredDirection
+          )
+        )
+      ];
+
+      let placed = false;
+
+      for (const direction of directionsToTry) {
+        const candidates = getCandidates(
+          word.key,
+          direction,
+          puzzleBoard,
+          nextPlacements
+        );
+
+        if (candidates.length === 0) {
+          continue;
+        }
+
+        const candidateLimit = Math.min(10, candidates.length);
+        const chosen = candidates[randomNumber(candidateLimit)];
+
+        chosen.path.forEach((position, index) => {
+          const row = position[0];
+          const column = position[1];
+          puzzleBoard[row][column] = word.key[index];
+        });
+
+        nextPlacements.set(word.key, chosen.path);
+        placed = true;
+        break;
+      }
+
+      if (!placed) {
+        successful = false;
+        break;
+      }
+    }
+
+    if (!successful) {
+      continue;
+    }
+
+    /* Build any child word that intentionally shares a parent word. */
+    for (const embedded of puzzle.embeddedWords || []) {
+      const parentPath = nextPlacements.get(embedded.parent);
+      const childWord = puzzle.words.find(
+        word => word.key === embedded.child
+      );
+
+      if (!parentPath || !childWord) {
+        successful = false;
+        break;
+      }
+
+      const childPath = parentPath.slice(
+        embedded.start,
+        embedded.start + childWord.key.length
+      );
+
+      if (childPath.length !== childWord.key.length) {
+        successful = false;
+        break;
+      }
+
+      nextPlacements.set(embedded.child, childPath);
+    }
+
+    if (!successful) {
+      continue;
+    }
+
+    if (
+      puzzle.words.some(
+        word => !nextPlacements.has(word.key)
+      )
+    ) {
+      continue;
+    }
+
+    if (!usesWholeBoard(nextPlacements)) {
+      continue;
+    }
+
+    /*
+      Fill blank cells. If the filler accidentally creates
+      another copy of a listed answer, reject it and refill.
+    */
+    for (let fillerAttempt = 0; fillerAttempt < 300; fillerAttempt++) {
+      const filledBoard = puzzleBoard.map(row => [...row]);
+
+      for (let row = 0; row < ROWS; row++) {
+        for (let column = 0; column < COLS; column++) {
+          if (filledBoard[row][column] === "") {
+            filledBoard[row][column] = randomFillerLetter();
+          }
+        }
+      }
+
+      if (hasExactlyOneOfEachWord(filledBoard, puzzle)) {
+        board = filledBoard;
+        placements = nextPlacements;
+        return true;
+      }
+    }
+  }
+
+  return false;
 }
 
+/* =====================================================
+   RENDER
+===================================================== */
 
+function renderGrid() {
+  grid.innerHTML = "";
 
-/*
-=====================================================
-CELL UNDER FINGER
-=====================================================
-*/
+  for (let row = 0; row < ROWS; row++) {
+    for (let column = 0; column < COLS; column++) {
+      const cell = document.createElement("div");
+      cell.className = "cell";
+      cell.dataset.row = row;
+      cell.dataset.column = column;
+      cell.textContent = board[row][column];
+      grid.appendChild(cell);
+    }
+  }
+}
 
+function renderWordList() {
+  const puzzle = getCurrentPuzzle();
+  wordList.innerHTML = "";
 
-function getCellFromPoint(
-  x,
-  y
-) {
+  for (const word of puzzle.words) {
+    const item = document.createElement("div");
+    item.className = "word";
+    item.dataset.key = word.key;
+    item.textContent = word.label;
 
+    if (foundWords.has(word.key)) {
+      item.classList.add("found");
+    }
 
-  const element =
+    wordList.appendChild(item);
+  }
+}
 
-    document.elementFromPoint(
-      x,
-      y
-    );
+function updatePuzzleInfo() {
+  const puzzle = getCurrentPuzzle();
+  theme.textContent = puzzle.theme;
+  kicker.textContent = puzzle.kicker;
+}
 
+/* =====================================================
+   GRID SELECTION HELPERS
+===================================================== */
+
+function getCellElement(row, column) {
+  return grid.querySelector(
+    '.cell[data-row="' + row + '"][data-column="' + column + '"]'
+  );
+}
+
+function getCellFromPoint(x, y) {
+  const element = document.elementFromPoint(x, y);
 
   if (!element) {
-
     return null;
-
   }
 
+  const cell = element.closest(".cell");
 
-  const cell =
-
-    element.closest(
-      ".cell"
-    );
-
-
-  if (
-    !cell ||
-    !grid.contains(cell)
-  ) {
-
+  if (!cell || !grid.contains(cell)) {
     return null;
-
   }
-
 
   return {
-
-    row:
-      Number(
-        cell.dataset.row
-      ),
-
-    column:
-      Number(
-        cell.dataset.column
-      )
-
+    row: Number(cell.dataset.row),
+    column: Number(cell.dataset.column)
   };
-
 }
 
+function snappedPath(start, current) {
+  const rowDifference = current.row - start.row;
+  const columnDifference = current.column - start.column;
 
-
-/*
-=====================================================
-STRAIGHT-LINE SELECTION
-=====================================================
-*/
-
-
-function snappedPath(
-  start,
-  current
-) {
-
-
-  const rowDifference =
-
-    current.row -
-    start.row;
-
-
-  const columnDifference =
-
-    current.column -
-    start.column;
-
-
-  if (
-    rowDifference === 0 &&
-    columnDifference === 0
-  ) {
-
-
-    return [
-      start
-    ];
-
+  if (rowDifference === 0 && columnDifference === 0) {
+    return [start];
   }
 
+  const absoluteRow = Math.abs(rowDifference);
+  const absoluteColumn = Math.abs(columnDifference);
 
-  const absoluteRow =
+  let rowStep = 0;
+  let columnStep = 0;
+  let steps = 0;
 
-    Math.abs(
-      rowDifference
-    );
-
-
-  const absoluteColumn =
-
-    Math.abs(
-      columnDifference
-    );
-
-
-  let rowStep =
-    0;
-
-
-  let columnStep =
-    0;
-
-
-  let steps =
-    0;
-
-
-
-  if (
-    absoluteRow >
-    absoluteColumn * 1.7
-  ) {
-
-
-    rowStep =
-
-      Math.sign(
-        rowDifference
-      );
-
-
-    columnStep =
-      0;
-
-
-    steps =
-      absoluteRow;
-
+  if (absoluteRow > absoluteColumn * 1.7) {
+    rowStep = Math.sign(rowDifference);
+    columnStep = 0;
+    steps = absoluteRow;
   }
-
-
-  else if (
-    absoluteColumn >
-    absoluteRow * 1.7
-  ) {
-
-
-    rowStep =
-      0;
-
-
-    columnStep =
-
-      Math.sign(
-        columnDifference
-      );
-
-
-    steps =
-      absoluteColumn;
-
+  else if (absoluteColumn > absoluteRow * 1.7) {
+    rowStep = 0;
+    columnStep = Math.sign(columnDifference);
+    steps = absoluteColumn;
   }
-
-
   else {
-
-
-    rowStep =
-
-      Math.sign(
-        rowDifference
-      );
-
-
-    columnStep =
-
-      Math.sign(
-        columnDifference
-      );
-
-
-    steps =
-
-      Math.max(
-        absoluteRow,
-        absoluteColumn
-      );
-
+    rowStep = Math.sign(rowDifference);
+    columnStep = Math.sign(columnDifference);
+    steps = Math.max(absoluteRow, absoluteColumn);
   }
 
+  const path = [];
 
-  const path =
-    [];
-
-
-  for (
-    let index = 0;
-    index <= steps;
-    index++
-  ) {
-
-
-    const row =
-
-      start.row +
-
-      rowStep *
-      index;
-
-
-    const column =
-
-      start.column +
-
-      columnStep *
-      index;
-
+  for (let index = 0; index <= steps; index++) {
+    const row = start.row + rowStep * index;
+    const column = start.column + columnStep * index;
 
     if (
       row < 0 ||
-      row >= SIZE ||
+      row >= ROWS ||
       column < 0 ||
-      column >= SIZE
+      column >= COLS
     ) {
-
       break;
-
     }
 
-
-    path.push({
-
-      row,
-      column
-
-    });
-
+    path.push({ row, column });
   }
-
 
   return path;
-
 }
 
-
-
-/*
-=====================================================
-BLUE SELECTION
-=====================================================
-*/
-
+/* =====================================================
+   PREVIEW
+===================================================== */
 
 function clearPreview() {
-
-
   grid
-    .querySelectorAll(
-      ".cell.preview"
-    )
-    .forEach(
-      cell => {
-
-
-        cell.classList.remove(
-          "preview"
-        );
-
-      }
-    );
-
+    .querySelectorAll(".cell.preview")
+    .forEach(cell => cell.classList.remove("preview"));
 }
 
-
-
-function showPreview(
-  path
-) {
-
-
+function showPreview(path) {
   clearPreview();
+  currentPath = path;
 
+  for (const position of path) {
+    const cell = getCellElement(position.row, position.column);
 
-  currentPath =
-    path;
-
-
-  for (
-    const position
-    of path
-  ) {
-
-
-    const cell =
-
-      getCellElement(
-
-        position.row,
-
-        position.column
-
-      );
-
-
-    if (
-      cell &&
-      !cell.classList.contains(
-        "found"
-      )
-    ) {
-
-
-      cell.classList.add(
-        "preview"
-      );
-
+    if (cell && !cell.classList.contains("found")) {
+      cell.classList.add("preview");
     }
-
   }
-
 }
 
+/* =====================================================
+   MATCH WORD
+===================================================== */
 
-
-/*
-=====================================================
-COMPARE PATHS
-=====================================================
-*/
-
-
-function samePath(
-  selectedPath,
-  correctPath
-) {
-
-
-  if (
-    selectedPath.length !==
-    correctPath.length
-  ) {
-
+function samePath(selectedPath, correctPath) {
+  if (selectedPath.length !== correctPath.length) {
     return false;
-
   }
 
-
-  for (
-    let index = 0;
-    index < selectedPath.length;
-    index++
-  ) {
-
-
+  for (let index = 0; index < selectedPath.length; index++) {
     if (
-
-      selectedPath[index].row !==
-      correctPath[index][0]
-
-      ||
-
-      selectedPath[index].column !==
-      correctPath[index][1]
-
+      selectedPath[index].row !== correctPath[index][0] ||
+      selectedPath[index].column !== correctPath[index][1]
     ) {
-
       return false;
-
     }
-
   }
-
 
   return true;
-
 }
 
+function findMatchingWord(path) {
+  const puzzle = getCurrentPuzzle();
 
-
-/*
-=====================================================
-MATCH WORD
-=====================================================
-*/
-
-
-function findMatchingWord(
-  path
-) {
-
-
-  for (
-    const word
-    of PUZZLE.words
-  ) {
-
-
-    if (
-      foundWords.has(
-        word.key
-      )
-    ) {
-
+  for (const word of puzzle.words) {
+    if (foundWords.has(word.key)) {
       continue;
-
     }
 
-
-    const correctPath =
-
-      placements.get(
-        word.key
-      );
-
+    const correctPath = placements.get(word.key);
 
     if (!correctPath) {
-
       continue;
-
     }
 
-
-    if (
-      samePath(
-        path,
-        correctPath
-      )
-    ) {
-
+    if (samePath(path, correctPath)) {
       return word;
-
     }
 
+    const backwards = [...correctPath].reverse();
 
-    const backwards =
-
-      [
-        ...correctPath
-      ].reverse();
-
-
-    if (
-      samePath(
-        path,
-        backwards
-      )
-    ) {
-
+    if (samePath(path, backwards)) {
       return word;
-
     }
-
   }
-
 
   return null;
-
 }
 
-
-
-/*
-=====================================================
-PAINT FOUND WORD
-=====================================================
-*/
-
-
-function paintWordYellow(
-  path
-) {
-
-
-  for (
-    const position
-    of path
-  ) {
-
-
-    const cell =
-
-      getCellElement(
-
-        position.row,
-
-        position.column
-
-      );
-
+function paintWordYellow(path) {
+  for (const position of path) {
+    const cell = getCellElement(position.row, position.column);
 
     if (cell) {
-
-
-      cell.classList.add(
-        "found"
-      );
-
+      cell.classList.add("found");
     }
-
   }
-
 }
 
-
-
-/*
-=====================================================
-SCORE
-=====================================================
-*/
-
+/* =====================================================
+   SCORE
+===================================================== */
 
 function updateScore() {
+  const puzzle = getCurrentPuzzle();
+  const total = puzzle.words.length;
 
+  score.textContent = foundWords.size + " / " + total;
 
-  const total =
-    PUZZLE.words.length;
-
-
-  score.textContent =
-
-    foundWords.size +
-
-    " / " +
-
-    total;
-
-
-  if (
-    foundWords.size ===
-    total
-  ) {
-
-
-    win.classList.add(
-      "show"
-    );
-
-
-    message.textContent =
-      "You found every damn one. 😂";
-
-
-    message.className =
-      "good";
-
+  if (foundWords.size === total) {
+    win.textContent = puzzle.winMessage;
+    win.classList.add("show");
+    message.textContent = "You found them all. 🔥";
+    message.className = "good";
   }
-
-
   else {
-
-
-    win.classList.remove(
-      "show"
-    );
-
+    win.classList.remove("show");
   }
-
 }
 
-
-
-/*
-=====================================================
-FINISH SELECTION
-=====================================================
-*/
-
+/* =====================================================
+   FINISH SELECTION
+===================================================== */
 
 function finishSelection() {
+  const puzzle = getCurrentPuzzle();
+  const total = puzzle.words.length;
 
-
-  const total =
-    PUZZLE.words.length;
-
-
-  if (
-    foundWords.size ===
-    total
-  ) {
-
-
+  if (foundWords.size === total) {
     clearPreview();
-
     return;
-
   }
 
-
-  if (
-    currentPath.length ===
-    0
-  ) {
-
+  if (currentPath.length === 0) {
     return;
-
   }
 
-
-  const matchedWord =
-
-    findMatchingWord(
-      currentPath
-    );
-
-
+  const matchedWord = findMatchingWord(currentPath);
   clearPreview();
 
-
-  if (
-    matchedWord
-  ) {
-
-
-    foundWords.add(
-      matchedWord.key
-    );
-
-
-    paintWordYellow(
-      currentPath
-    );
-
-
+  if (matchedWord) {
+    foundWords.add(matchedWord.key);
+    paintWordYellow(currentPath);
     renderWordList();
-
-
     updateScore();
 
-
-    if (
-      foundWords.size !==
-      total
-    ) {
-
-
+    if (foundWords.size !== total) {
       message.textContent =
-
-        matchedWord.label +
-
-        " found! 🤬";
-
-
-      message.className =
-        "good";
-
+        matchedWord.label + " found! " + puzzle.foundEmoji;
+      message.className = "good";
     }
-
   }
-
-
   else {
-
-
-    message.textContent =
-      "Nope. Keep looking. 😎";
-
-
-    message.className =
-      "";
-
+    message.textContent = "Nope. Keep looking. 😎";
+    message.className = "";
   }
 
-
-  currentPath =
-    [];
-
-
-  startCell =
-    null;
-
+  currentPath = [];
+  startCell = null;
 }
 
+/* =====================================================
+   DRAGGING
+===================================================== */
 
+function startDrag(x, y) {
+  const total = getCurrentPuzzle().words.length;
 
-/*
-=====================================================
-DRAGGING
-=====================================================
-*/
-
-
-function startDrag(
-  x,
-  y
-) {
-
-
-  const total =
-    PUZZLE.words.length;
-
-
-  if (
-    foundWords.size ===
-    total
-  ) {
-
+  if (foundWords.size === total) {
     return false;
-
   }
 
-
-  const cell =
-
-    getCellFromPoint(
-      x,
-      y
-    );
-
+  const cell = getCellFromPoint(x, y);
 
   if (!cell) {
-
     return false;
-
   }
 
-
-  dragging =
-    true;
-
-
-  startCell =
-    cell;
-
-
-  showPreview([
-    cell
-  ]);
-
-
+  dragging = true;
+  startCell = cell;
+  showPreview([cell]);
   return true;
-
 }
 
-
-
-function moveDrag(
-  x,
-  y
-) {
-
-
-  if (
-    !dragging ||
-    !startCell
-  ) {
-
+function moveDrag(x, y) {
+  if (!dragging || !startCell) {
     return;
-
   }
 
-
-  const cell =
-
-    getCellFromPoint(
-      x,
-      y
-    );
-
+  const cell = getCellFromPoint(x, y);
 
   if (!cell) {
-
     return;
-
   }
 
-
-  showPreview(
-
-    snappedPath(
-      startCell,
-      cell
-    )
-
-  );
-
+  showPreview(snappedPath(startCell, cell));
 }
-
-
 
 function endDrag() {
-
-
   if (!dragging) {
-
     return;
-
   }
 
-
-  dragging =
-    false;
-
-
+  dragging = false;
   finishSelection();
-
 }
 
-
-
-/*
-=====================================================
-IPHONE / IPAD
-=====================================================
-*/
-
+/* =====================================================
+   TOUCH
+===================================================== */
 
 grid.addEventListener(
-
   "touchstart",
-
   event => {
-
-
-    if (
-      event.changedTouches.length === 0
-    ) {
-
+    if (event.changedTouches.length === 0) {
       return;
-
     }
 
-
     event.preventDefault();
-
-
-    const touch =
-      event.changedTouches[0];
-
-
-    activeTouchID =
-      touch.identifier;
-
-
-    startDrag(
-
-      touch.clientX,
-
-      touch.clientY
-
-    );
-
+    const touch = event.changedTouches[0];
+    activeTouchID = touch.identifier;
+    startDrag(touch.clientX, touch.clientY);
   },
-
-  {
-    passive: false
-  }
-
+  { passive: false }
 );
 
-
-
 grid.addEventListener(
-
   "touchmove",
-
   event => {
-
-
     if (!dragging) {
-
       return;
-
     }
-
 
     event.preventDefault();
+    let touch = null;
 
-
-    let touch =
-      null;
-
-
-    for (
-      const possibleTouch
-      of event.touches
-    ) {
-
-
-      if (
-        possibleTouch.identifier ===
-        activeTouchID
-      ) {
-
-
-        touch =
-          possibleTouch;
-
-
+    for (const possibleTouch of event.touches) {
+      if (possibleTouch.identifier === activeTouchID) {
+        touch = possibleTouch;
         break;
-
       }
-
     }
-
 
     if (!touch) {
-
       return;
-
     }
 
-
-    moveDrag(
-
-      touch.clientX,
-
-      touch.clientY
-
-    );
-
+    moveDrag(touch.clientX, touch.clientY);
   },
-
-  {
-    passive: false
-  }
-
+  { passive: false }
 );
 
-
-
 grid.addEventListener(
-
   "touchend",
-
   event => {
-
-
     event.preventDefault();
-
-
     endDrag();
-
-
-    activeTouchID =
-      null;
-
+    activeTouchID = null;
   },
-
-  {
-    passive: false
-  }
-
+  { passive: false }
 );
 
-
-
 grid.addEventListener(
-
   "touchcancel",
-
   event => {
-
-
     event.preventDefault();
-
-
-    dragging =
-      false;
-
-
-    activeTouchID =
-      null;
-
-
-    currentPath =
-      [];
-
-
-    startCell =
-      null;
-
-
+    dragging = false;
+    activeTouchID = null;
+    currentPath = [];
+    startCell = null;
     clearPreview();
-
   },
-
-  {
-    passive: false
-  }
-
+  { passive: false }
 );
 
+/* =====================================================
+   MOUSE
+===================================================== */
 
+grid.addEventListener("mousedown", event => {
+  event.preventDefault();
+  startDrag(event.clientX, event.clientY);
+});
 
-/*
-=====================================================
-MOUSE
-=====================================================
-*/
-
-
-grid.addEventListener(
-
-  "mousedown",
-
-  event => {
-
-
-    event.preventDefault();
-
-
-    startDrag(
-
-      event.clientX,
-
-      event.clientY
-
-    );
-
+window.addEventListener("mousemove", event => {
+  if (!dragging) {
+    return;
   }
 
-);
+  moveDrag(event.clientX, event.clientY);
+});
 
+window.addEventListener("mouseup", () => {
+  endDrag();
+});
 
+/* =====================================================
+   BOARD CONTROLS
+===================================================== */
 
-window.addEventListener(
+function loadNewBoard() {
+  foundWords.clear();
+  win.classList.remove("show");
+  message.textContent = "Scrambling a new board...";
+  message.className = "";
 
-  "mousemove",
+  const success = generatePuzzle();
 
-  event => {
-
-
-    if (!dragging) {
-
-      return;
-
-    }
-
-
-    moveDrag(
-
-      event.clientX,
-
-      event.clientY
-
-    );
-
+  if (!success) {
+    message.textContent = "Couldn't build one. Tap Shuffle Board again.";
+    return;
   }
-
-);
-
-
-
-window.addEventListener(
-
-  "mouseup",
-
-  () => {
-
-
-    endDrag();
-
-  }
-
-);
-
-
-
-/*
-=====================================================
-RESET
-
-Keeps the same board.
-Only clears found words.
-=====================================================
-*/
-
-
-resetButton.addEventListener(
-
-  "click",
-
-  () => {
-
-
-    foundWords.clear();
-
-
-    renderGrid();
-
-
-    renderWordList();
-
-
-    updateScore();
-
-
-    message.textContent =
-      "Let's go again. 🔎";
-
-
-    message.className =
-      "";
-
-  }
-
-);
-
-
-
-/*
-=====================================================
-NEW PUZZLE
-
-Same words.
-Entirely new 12x12 layout.
-=====================================================
-*/
-
-
-newPuzzleButton.addEventListener(
-
-  "click",
-
-  () => {
-
-
-    foundWords.clear();
-
-
-    message.textContent =
-      "Building a nasty one...";
-
-
-    message.className =
-      "";
-
-
-    const success =
-      generatePuzzle();
-
-
-    if (!success) {
-
-
-      message.textContent =
-        "Couldn't build one. Try again.";
-
-
-      return;
-
-    }
-
-
-    renderGrid();
-
-
-    renderWordList();
-
-
-    updateScore();
-
-
-    message.textContent =
-      "Good luck, asshole. 😂";
-
-
-    message.className =
-      "";
-
-  }
-
-);
-
-
-
-/*
-=====================================================
-START
-=====================================================
-*/
-
-
-const generated =
-  generatePuzzle();
-
-
-if (generated) {
-
 
   renderGrid();
-
-
   renderWordList();
-
-
+  updatePuzzleInfo();
   updateScore();
-
+  message.textContent = "Good luck. 🔎";
+  message.className = "";
 }
 
+resetButton.addEventListener("click", () => {
+  foundWords.clear();
+  renderGrid();
+  renderWordList();
+  updateScore();
+  message.textContent = "Same board. Start over. 🔎";
+  message.className = "";
+});
 
-else {
+newPuzzleButton.addEventListener("click", () => {
+  loadNewBoard();
+});
 
+categorySelect.addEventListener("change", () => {
+  const selectedID = categorySelect.value;
+  const nextIndex = PUZZLES.findIndex(
+    puzzle => puzzle.id === selectedID
+  );
 
-  message.textContent =
-    "Puzzle generation failed. Tap New Puzzle.";
+  if (nextIndex === -1) {
+    return;
+  }
 
-}
+  currentPuzzleIndex = nextIndex;
+  loadNewBoard();
+});
 
+/* =====================================================
+   START
+===================================================== */
+
+categorySelect.value = PUZZLES[currentPuzzleIndex].id;
+updatePuzzleInfo();
+loadNewBoard();
 
 })();
-
 </script>
 
 </body>
-
 </html>
