@@ -143,12 +143,16 @@ h1 {
 }
 
 .category-label {
-  display: block;
-  margin-bottom: 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 10px;
   color: var(--black);
-  font-size: 0.75rem;
+  font-size: 0.82rem;
   font-weight: 950;
   letter-spacing: 0.12em;
+  text-align: center;
   text-transform: uppercase;
 }
 
@@ -420,8 +424,8 @@ button:active {
 
 <section class="category-bar">
   <label class="category-label" for="categorySelect">
-    Choose a puzzle
-  </label>
+  ⬇️ Choose a Puzzle ⬇️
+</label>
 
   <select id="categorySelect">
     <option value="beer">&#x1F37A; Beer Names</option>
