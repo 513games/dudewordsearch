@@ -388,10 +388,143 @@ button:active {
 
   .word { font-size: 0.9rem; }
 }
+
+/* ======================================================
+   DECORATIVE LETTER BACKGROUND
+   Subtle blue / yellow / black letter graffiti
+====================================================== */
+
+body {
+  position: relative;
+  overflow-x: hidden;
+}
+
+.letter-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+
+.letter-bg .bg-letter {
+  position: absolute;
+  font-weight: 950;
+  line-height: 1;
+  opacity: 0.10;
+  filter: saturate(1.05);
+}
+
+.letter-bg .blue {
+  color: var(--blue);
+}
+
+.letter-bg .yellow {
+  color: var(--yellow);
+  -webkit-text-stroke: 1px rgba(17, 17, 17, 0.22);
+}
+
+.letter-bg .black {
+  color: var(--black);
+}
+
+/* LEFT SIDE */
+.letter-bg .b1  { left: 2%;  top: 7%;  font-size: 88px;  transform: rotate(-18deg); }
+.letter-bg .b2  { left: 10%; top: 20%; font-size: 52px;  transform: rotate(24deg); }
+.letter-bg .b3  { left: 3%;  top: 39%; font-size: 112px; transform: rotate(176deg); }
+.letter-bg .b4  { left: 13%; top: 57%; font-size: 62px;  transform: rotate(-33deg); }
+.letter-bg .b5  { left: 4%;  top: 75%; font-size: 96px;  transform: rotate(14deg); }
+.letter-bg .b6  { left: 16%; top: 88%; font-size: 48px;  transform: rotate(190deg); }
+
+/* RIGHT SIDE */
+.letter-bg .b7  { right: 3%;  top: 10%; font-size: 82px;  transform: rotate(17deg); }
+.letter-bg .b8  { right: 12%; top: 27%; font-size: 54px;  transform: rotate(182deg); }
+.letter-bg .b9  { right: 2%;  top: 45%; font-size: 106px; transform: rotate(-16deg); }
+.letter-bg .b10 { right: 14%; top: 63%; font-size: 58px;  transform: rotate(31deg); }
+.letter-bg .b11 { right: 4%;  top: 80%; font-size: 92px;  transform: rotate(184deg); }
+.letter-bg .b12 { right: 17%; top: 92%; font-size: 46px;  transform: rotate(-22deg); }
+
+/* A FEW SMALLER ONES CLOSER TO THE CENTER EDGES */
+.letter-bg .b13 { left: 21%;  top: 12%; font-size: 40px; transform: rotate(181deg); }
+.letter-bg .b14 { right: 22%; top: 18%; font-size: 42px; transform: rotate(-27deg); }
+.letter-bg .b15 { left: 20%;  top: 68%; font-size: 44px; transform: rotate(12deg); }
+.letter-bg .b16 { right: 20%; top: 71%; font-size: 44px; transform: rotate(188deg); }
+.letter-bg .b17 { left: 24%;  top: 94%; font-size: 38px; transform: rotate(-15deg); }
+.letter-bg .b18 { right: 24%; top: 38%; font-size: 38px; transform: rotate(23deg); }
+
+main {
+  position: relative;
+  z-index: 1;
+}
+
+/* Keep phones cleaner than desktop */
+@media (max-width: 720px) {
+  .letter-bg .bg-letter {
+    opacity: 0.055;
+  }
+
+  .letter-bg .b2,
+  .letter-bg .b4,
+  .letter-bg .b6,
+  .letter-bg .b8,
+  .letter-bg .b10,
+  .letter-bg .b12,
+  .letter-bg .b13,
+  .letter-bg .b14,
+  .letter-bg .b15,
+  .letter-bg .b16,
+  .letter-bg .b17,
+  .letter-bg .b18 {
+    display: none;
+  }
+
+  .letter-bg .b1,
+  .letter-bg .b3,
+  .letter-bg .b5,
+  .letter-bg .b7,
+  .letter-bg .b9,
+  .letter-bg .b11 {
+    font-size: 58px;
+  }
+
+  .letter-bg .b1 { left: -1%; }
+  .letter-bg .b3 { left: -3%; }
+  .letter-bg .b5 { left: -2%; }
+
+  .letter-bg .b7 { right: -1%; }
+  .letter-bg .b9 { right: -3%; }
+  .letter-bg .b11 { right: -2%; }
+}
+
 </style>
 </head>
 
 <body>
+
+<div class="letter-bg" aria-hidden="true">
+  <span class="bg-letter blue b1">A</span>
+  <span class="bg-letter yellow b2">R</span>
+  <span class="bg-letter black b3">Q</span>
+  <span class="bg-letter blue b4">M</span>
+  <span class="bg-letter yellow b5">K</span>
+  <span class="bg-letter black b6">S</span>
+
+  <span class="bg-letter yellow b7">B</span>
+  <span class="bg-letter black b8">X</span>
+  <span class="bg-letter blue b9">T</span>
+  <span class="bg-letter yellow b10">N</span>
+  <span class="bg-letter black b11">W</span>
+  <span class="bg-letter blue b12">Z</span>
+
+  <span class="bg-letter black b13">D</span>
+  <span class="bg-letter blue b14">U</span>
+  <span class="bg-letter yellow b15">D</span>
+  <span class="bg-letter black b16">E</span>
+  <span class="bg-letter blue b17">Y</span>
+  <span class="bg-letter yellow b18">J</span>
+</div>
+
 <main>
 
 <section class="top">
