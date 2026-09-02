@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 
 <head>
 
@@ -12,7 +12,7 @@
 
 <meta name="theme-color" content="#090e1c">
 
-<title>Caça-palavras</title>
+<title>Cuss Word Search</title>
 
 <style>
 
@@ -79,7 +79,7 @@ main {
 
 
 /* =====================================
-   CABEÇALHO
+   HEADER
 ===================================== */
 
 
@@ -174,7 +174,7 @@ h1 {
 
 
 /* =====================================
-   BOTÕES
+   BUTTONS
 ===================================== */
 
 
@@ -252,7 +252,7 @@ button:active {
 
 
 /* =====================================
-   GRADE 12 x 12
+   12 x 12 GRID
 ===================================== */
 
 
@@ -330,7 +330,7 @@ button:active {
 }
 
 
-/* AZUL ENQUANTO ARRASTA */
+/* BLUE WHILE DRAGGING */
 
 
 .cell.preview {
@@ -349,7 +349,7 @@ button:active {
 }
 
 
-/* AMARELO QUANDO ENCONTRA */
+/* YELLOW WHEN FOUND */
 
 
 .cell.found {
@@ -433,7 +433,7 @@ button:active {
 
 
 /* =====================================
-   PALAVRAS
+   WORD LIST
 ===================================== */
 
 
@@ -496,7 +496,7 @@ button:active {
 
 
 /* =====================================
-   CELULAR
+   MOBILE
 ===================================== */
 
 
@@ -571,30 +571,28 @@ button:active {
 <div>
 
   <div class="kicker">
-    Encontre as palavras
+    Find the damn words
   </div>
 
 
   <h1>
-    Caça-palavras
+    Cuss Word Search
   </h1>
 
 
   <div>
 
     <span
-      id="puzzleNumber"
       class="puzzle-number"
     >
-      Jogo 1 de 3
+      12 × 12
     </span>
 
 
     <span
-      id="theme"
       class="theme"
     >
-      Charlie Brown Jr.
+      🤬 Cuss Words
     </span>
 
   </div>
@@ -602,9 +600,10 @@ button:active {
 
   <p class="description">
 
-    Deslize o dedo sobre uma palavra escondida.
+    Drag across the hidden words.
 
-    As palavras corretas ficam amarelas.
+    They can go up, down, sideways,
+    diagonal, forward, or backward.
 
   </p>
 
@@ -618,7 +617,7 @@ button:active {
     class="primary"
     type="button"
   >
-    Novo jogo
+    New Puzzle
   </button>
 
 
@@ -626,7 +625,7 @@ button:active {
     id="resetPuzzle"
     type="button"
   >
-    Recomeçar
+    Reset
   </button>
 
 </div>
@@ -645,7 +644,7 @@ button:active {
 
     <div
       id="grid"
-      aria-label="Caça-palavras"
+      aria-label="Cuss word search"
     ></div>
 
   </div>
@@ -660,17 +659,17 @@ button:active {
     <div>
 
       <strong id="score">
-        0 / 12
+        0 / 9
       </strong>
 
-      encontradas
+      found
 
     </div>
 
 
     <div id="message">
 
-      Encontre uma palavra. 🔎
+      Find a word. 🔎
 
     </div>
 
@@ -682,7 +681,7 @@ button:active {
     class="win"
   >
 
-    🎉 Completo! Você encontrou todas as palavras.
+    🎉 Holy shit. You found them all.
 
   </div>
 
@@ -695,7 +694,7 @@ button:active {
 
 
   <h2>
-    Palavras
+    Find These
   </h2>
 
 
@@ -704,7 +703,10 @@ button:active {
 
   <p class="tip">
 
-    As palavras podem estar em qualquer direção.
+    Words can run in all eight directions.
+
+    There is only one valid location
+    for each listed word.
 
   </p>
 
@@ -726,122 +728,69 @@ button:active {
 
 /*
 =====================================================
-JOGOS
+PUZZLE
 =====================================================
 */
 
 
-const PUZZLES = [
-
-
-{
-  theme: "Charlie Brown Jr. 🎸",
+const PUZZLE = {
 
   words: [
 
-    { label: "CHORÃO", key: "CHORAO" },
+    {
+      label: "FUCK",
+      key: "FUCK"
+    },
 
-    { label: "CBJR", key: "CBJR" },
+    {
+      label: "SHIT",
+      key: "SHIT"
+    },
 
-    { label: "LOUCO", key: "LOUCO" },
+    {
+      label: "DICKHEAD",
+      key: "DICKHEAD"
+    },
 
-    { label: "TATUAGEM", key: "TATUAGEM" },
+    {
+      label: "BITCH",
+      key: "BITCH"
+    },
 
-    { label: "AO VIVO", key: "AOVIVO" },
+    {
+      label: "ASSHOLE",
+      key: "ASSHOLE"
+    },
 
-    { label: "CHAMPIGNON", key: "CHAMPIGNON" },
+    {
+      label: "PRICK",
+      key: "PRICK"
+    },
 
-    { label: "ACÚSTICO", key: "ACUSTICO" },
+    {
+      label: "BASTARD",
+      key: "BASTARD"
+    },
 
-    { label: "DROGA", key: "DROGA" },
+    {
+      label: "DUMBASS",
+      key: "DUMBASS"
+    },
 
-    { label: "BRASIL", key: "BRASIL" },
-
-    { label: "SANTOS", key: "SANTOS" },
-
-    { label: "GUARUJÁ", key: "GUARUJA" },
-
-    { label: "PRAIA", key: "PRAIA" }
-
-  ]
-},
-
-
-
-{
-  theme: "Brasil 🇧🇷",
-
-  words: [
-
-    { label: "SAUDADE", key: "SAUDADE" },
-
-    { label: "FUTEBOL", key: "FUTEBOL" },
-
-    { label: "CAFÉ", key: "CAFE" },
-
-    { label: "SAMBA", key: "SAMBA" },
-
-    { label: "BANDEIRA", key: "BANDEIRA" },
-
-    { label: "CARNAVAL", key: "CARNAVAL" },
-
-    { label: "CORAÇÃO", key: "CORACAO" },
-
-    { label: "MÚSICA", key: "MUSICA" },
-
-    { label: "CIDADE", key: "CIDADE" },
-
-    { label: "AMIZADE", key: "AMIZADE" },
-
-    { label: "FAMÍLIA", key: "FAMILIA" },
-
-    { label: "BRASILEIRO", key: "BRASILEIRO" }
+    {
+      label: "MOTHERFUCKER",
+      key: "MOTHERFUCKER"
+    }
 
   ]
-},
 
-
-
-{
-  theme: "Gírias 😎",
-
-  words: [
-
-    { label: "MANO", key: "MANO" },
-
-    { label: "CARA", key: "CARA" },
-
-    { label: "BELEZA", key: "BELEZA" },
-
-    { label: "VALEU", key: "VALEU" },
-
-    { label: "PÔ", key: "PO" },
-
-    { label: "TIPO", key: "TIPO" },
-
-    { label: "GALERA", key: "GALERA" },
-
-    { label: "GRANA", key: "GRANA" },
-
-    { label: "ROLÊ", key: "ROLE" },
-
-    { label: "TRETA", key: "TRETA" },
-
-    { label: "SACOU", key: "SACOU" },
-
-    { label: "DEMOROU", key: "DEMOROU" }
-
-  ]
-}
-
-
-];
+};
 
 
 
 /*
 =====================================================
-CONFIGURAÇÕES
+SETTINGS
 =====================================================
 */
 
@@ -850,7 +799,7 @@ const SIZE = 12;
 
 
 /*
-Todas as oito direções.
+All eight possible directions.
 */
 
 
@@ -876,59 +825,88 @@ const DIRECTIONS = [
 
 
 /*
-Letras comuns aparecem mais vezes.
+For checking whether a word
+appears more than once we only
+need four physical line directions.
 
-Isso deixa a grade mais parecida
-com português e esconde melhor
-as palavras verdadeiras.
+The reverse spelling is checked
+at the same time.
+*/
+
+
+const CHECK_DIRECTIONS = [
+
+  [0, 1],
+
+  [1, 0],
+
+  [1, 1],
+
+  [1, -1]
+
+];
+
+
+/*
+English-ish letter frequencies.
+
+This makes the filler look more
+natural than completely random
+A-Z letters.
 */
 
 
 const FILLER_LETTERS =
 
-  "AAAAAAAAAAAA" +
+  "EEEEEEEEEEEE" +
 
-  "EEEEEEEEEEE" +
+  "TTTTTTTTTT" +
 
-  "OOOOOOOOO" +
+  "AAAAAAAAA" +
 
-  "SSSSSSSS" +
+  "OOOOOOOO" +
 
-  "RRRRRRRR" +
+  "IIIIIIII" +
 
-  "IIIIIII" +
+  "NNNNNNNN" +
 
-  "NNNNNN" +
+  "SSSSSSS" +
+
+  "HHHHHH" +
+
+  "RRRRRR" +
 
   "DDDDD" +
 
-  "MMMMM" +
+  "LLLLL" +
 
-  "UUUUU" +
+  "UUUU" +
 
-  "TTTTT" +
+  "CCCC" +
 
-  "CCCCC" +
+  "MMMM" +
 
-  "LLLL" +
+  "FFFF" +
 
-  "PPPP" +
+  "WWWW" +
 
-  "VVV" +
+  "YYYY" +
 
   "GGG" +
 
+  "PPP" +
+
   "BBB" +
 
-  "FFF" +
+  "VV" +
 
-  "HH" +
-
-  "QQ" +
+  "KK" +
 
   "J" +
 
   "X" +
+
+  "Q" +
 
   "Z";
 
@@ -936,7 +914,7 @@ const FILLER_LETTERS =
 
 /*
 =====================================================
-ELEMENTOS
+ELEMENTS
 =====================================================
 */
 
@@ -971,18 +949,6 @@ const win =
   );
 
 
-const puzzleNumber =
-  document.getElementById(
-    "puzzleNumber"
-  );
-
-
-const theme =
-  document.getElementById(
-    "theme"
-  );
-
-
 const newPuzzleButton =
   document.getElementById(
     "newPuzzle"
@@ -998,12 +964,9 @@ const resetButton =
 
 /*
 =====================================================
-ESTADO
+STATE
 =====================================================
 */
-
-
-let currentPuzzleIndex = 0;
 
 
 let board = [];
@@ -1036,18 +999,9 @@ let activeTouchID =
 
 /*
 =====================================================
-FUNÇÕES BÁSICAS
+BASIC FUNCTIONS
 =====================================================
 */
-
-
-function getCurrentPuzzle() {
-
-  return PUZZLES[
-    currentPuzzleIndex
-  ];
-
-}
 
 
 function randomNumber(
@@ -1062,6 +1016,7 @@ function randomNumber(
 }
 
 
+
 function randomFillerLetter() {
 
   return FILLER_LETTERS[
@@ -1071,6 +1026,7 @@ function randomFillerLetter() {
   ];
 
 }
+
 
 
 function shuffle(
@@ -1116,7 +1072,7 @@ function shuffle(
 
 /*
 =====================================================
-CRIAR TABULEIRO VAZIO
+EMPTY BOARD
 =====================================================
 */
 
@@ -1142,7 +1098,7 @@ function emptyBoard() {
 
 /*
 =====================================================
-CRIAR TODOS OS LUGARES POSSÍVEIS
+PLACEMENT CANDIDATES
 =====================================================
 */
 
@@ -1150,7 +1106,8 @@ CRIAR TODOS OS LUGARES POSSÍVEIS
 function getCandidates(
   key,
   direction,
-  puzzleBoard
+  puzzleBoard,
+  existingPlacements
 ) {
 
 
@@ -1185,7 +1142,6 @@ function getCandidates(
         row +
 
         rowDirection *
-
         (
           key.length - 1
         );
@@ -1196,7 +1152,6 @@ function getCandidates(
         column +
 
         columnDirection *
-
         (
           key.length - 1
         );
@@ -1208,7 +1163,6 @@ function getCandidates(
         endColumn < 0 ||
         endColumn >= SIZE
       ) {
-
 
         continue;
 
@@ -1278,10 +1232,8 @@ function getCandidates(
 
 
         if (
-          existing ===
-          key[index]
+          existing === key[index]
         ) {
-
 
           crossings++;
 
@@ -1294,7 +1246,6 @@ function getCandidates(
           r === SIZE - 1 ||
           c === SIZE - 1
         ) {
-
 
           edgeCells++;
 
@@ -1336,37 +1287,132 @@ function getCandidates(
 
 
       /*
-      Higher score = better hiding spot.
-
-      Crossings make words harder.
-
-      Being away from the outer border
-      makes words less obvious.
+      Reward positions spread away
+      from already placed words.
       */
 
 
-      const score =
+      let spreadScore =
+        0;
 
-        crossings * 8
 
-        -
+      if (
+        existingPlacements.size > 0
+      ) {
 
-        edgeCells * 1.5
 
-        -
+        const middle =
 
-        centerDistance * 0.08
+          path[
+            Math.floor(
+              path.length / 2
+            )
+          ];
+
+
+        let nearest =
+          Infinity;
+
+
+        for (
+          const placedPath
+          of existingPlacements.values()
+        ) {
+
+
+          if (
+            placedPath.length === 0
+          ) {
+
+            continue;
+
+          }
+
+
+          const placedMiddle =
+
+            placedPath[
+              Math.floor(
+                placedPath.length / 2
+              )
+            ];
+
+
+          const distance =
+
+            Math.abs(
+              middle[0] -
+              placedMiddle[0]
+            )
+
+            +
+
+            Math.abs(
+              middle[1] -
+              placedMiddle[1]
+            );
+
+
+          nearest =
+            Math.min(
+              nearest,
+              distance
+            );
+
+        }
+
+
+        if (
+          nearest !== Infinity
+        ) {
+
+          spreadScore =
+            nearest * 1.5;
+
+        }
+
+      }
+
+
+      /*
+      Harder puzzle:
+
+      - some crossings are useful
+      - edges are encouraged
+      - words are spread around
+        the entire board
+      - randomness prevents a
+        predictable layout
+      */
+
+
+      const candidateScore =
+
+        crossings * 4
 
         +
 
-        Math.random() * 3;
+        edgeCells * 2.2
+
+        +
+
+        centerDistance * 0.12
+
+        +
+
+        spreadScore
+
+        +
+
+        Math.random() * 5;
 
 
       candidates.push({
 
         path,
 
-        score
+        score:
+          candidateScore
 
       });
 
@@ -1393,7 +1439,264 @@ function getCandidates(
 
 /*
 =====================================================
-GERAR O CAÇA-PALAVRAS
+COUNT WORD OCCURRENCES
+=====================================================
+*/
+
+
+function countWordOccurrences(
+  puzzleBoard,
+  key
+) {
+
+
+  const reverseKey =
+    [...key]
+    .reverse()
+    .join("");
+
+
+  let count =
+    0;
+
+
+  for (
+    const direction
+    of CHECK_DIRECTIONS
+  ) {
+
+
+    const rowDirection =
+      direction[0];
+
+
+    const columnDirection =
+      direction[1];
+
+
+    for (
+      let row = 0;
+      row < SIZE;
+      row++
+    ) {
+
+
+      for (
+        let column = 0;
+        column < SIZE;
+        column++
+      ) {
+
+
+        const endRow =
+
+          row +
+
+          rowDirection *
+          (
+            key.length - 1
+          );
+
+
+        const endColumn =
+
+          column +
+
+          columnDirection *
+          (
+            key.length - 1
+          );
+
+
+        if (
+          endRow < 0 ||
+          endRow >= SIZE ||
+          endColumn < 0 ||
+          endColumn >= SIZE
+        ) {
+
+          continue;
+
+        }
+
+
+        let text =
+          "";
+
+
+        for (
+          let index = 0;
+          index < key.length;
+          index++
+        ) {
+
+
+          text +=
+
+            puzzleBoard[
+              row +
+              rowDirection *
+              index
+            ][
+              column +
+              columnDirection *
+              index
+            ];
+
+        }
+
+
+        if (
+          text === key ||
+          text === reverseKey
+        ) {
+
+          count++;
+
+        }
+
+      }
+
+    }
+
+  }
+
+
+  return count;
+
+}
+
+
+
+/*
+=====================================================
+VALIDATE UNIQUE WORDS
+=====================================================
+*/
+
+
+function hasExactlyOneOfEachWord(
+  puzzleBoard
+) {
+
+
+  for (
+    const word
+    of PUZZLE.words
+  ) {
+
+
+    if (
+      countWordOccurrences(
+        puzzleBoard,
+        word.key
+      ) !== 1
+    ) {
+
+      return false;
+
+    }
+
+  }
+
+
+  return true;
+
+}
+
+
+
+/*
+=====================================================
+CHECK BOARD SPREAD
+=====================================================
+*/
+
+
+function usesWholeBoard(
+  nextPlacements
+) {
+
+
+  let minimumRow =
+    SIZE;
+
+
+  let maximumRow =
+    -1;
+
+
+  let minimumColumn =
+    SIZE;
+
+
+  let maximumColumn =
+    -1;
+
+
+  for (
+    const path
+    of nextPlacements.values()
+  ) {
+
+
+    for (
+      const position
+      of path
+    ) {
+
+
+      minimumRow =
+        Math.min(
+          minimumRow,
+          position[0]
+        );
+
+
+      maximumRow =
+        Math.max(
+          maximumRow,
+          position[0]
+        );
+
+
+      minimumColumn =
+        Math.min(
+          minimumColumn,
+          position[1]
+        );
+
+
+      maximumColumn =
+        Math.max(
+          maximumColumn,
+          position[1]
+        );
+
+    }
+
+  }
+
+
+  return (
+
+    minimumRow <= 1 &&
+
+    maximumRow >= SIZE - 2 &&
+
+    minimumColumn <= 1 &&
+
+    maximumColumn >= SIZE - 2
+
+  );
+
+}
+
+
+
+/*
+=====================================================
+GENERATE PUZZLE
 =====================================================
 */
 
@@ -1401,19 +1704,49 @@ GERAR O CAÇA-PALAVRAS
 function generatePuzzle() {
 
 
-  const puzzle =
-    getCurrentPuzzle();
+  /*
+  FUCK is contained inside
+  MOTHERFUCKER.
+
+  We deliberately use those
+  same four cells for FUCK.
+
+  Otherwise FUCK would always
+  appear at least twice.
+  */
+
+
+  const wordsToPlace =
+
+    PUZZLE.words
+
+    .filter(
+      word =>
+        word.key !== "FUCK"
+    )
+
+    .sort(
+      (
+        a,
+        b
+      ) =>
+        b.key.length -
+        a.key.length
+    );
 
 
   /*
-  Tenta reconstruir tudo se
-  alguma combinação ficar ruim.
+  There are eight independently
+  placed words and eight directions.
+
+  This encourages a strong mixture
+  of directions.
   */
 
 
   for (
     let restart = 0;
-    restart < 100;
+    restart < 400;
     restart++
   ) {
 
@@ -1426,46 +1759,10 @@ function generatePuzzle() {
       new Map();
 
 
-    /*
-    Palavras maiores primeiro.
-    */
-
-
-    const words =
-      [...puzzle.words]
-      .sort(
-        (
-          a,
-          b
-        ) =>
-          b.key.length -
-          a.key.length
+    const plannedDirections =
+      shuffle(
+        DIRECTIONS
       );
-
-
-    /*
-    Garante uma boa mistura.
-
-    As primeiras oito palavras
-    recebem as oito direções
-    diferentes.
-    */
-
-
-    const directionPool = [
-
-      ...shuffle(
-        DIRECTIONS
-      ),
-
-      ...shuffle(
-        DIRECTIONS
-      ).slice(
-        0,
-        words.length - 8
-      )
-
-    ];
 
 
     let successful =
@@ -1474,45 +1771,40 @@ function generatePuzzle() {
 
     for (
       let wordIndex = 0;
-      wordIndex < words.length;
+      wordIndex < wordsToPlace.length;
       wordIndex++
     ) {
 
 
       const word =
-        words[
+        wordsToPlace[
           wordIndex
         ];
 
 
       const preferredDirection =
-        directionPool[
-          wordIndex
+        plannedDirections[
+          wordIndex %
+          plannedDirections.length
         ];
 
 
-      /*
-      Tenta primeiro a direção
-      planejada.
+      const otherDirections =
 
-      Se não der, tenta outra.
-      */
+        shuffle(
+          DIRECTIONS.filter(
+            direction =>
+              direction !==
+              preferredDirection
+          )
+        );
 
 
       const directionsToTry = [
 
         preferredDirection,
 
-        ...shuffle(
-          DIRECTIONS.filter(
-
-            direction =>
-
-              direction !==
-              preferredDirection
-
-          )
-        )
+        ...otherDirections
 
       ];
 
@@ -1535,7 +1827,9 @@ function generatePuzzle() {
 
             direction,
 
-            puzzleBoard
+            puzzleBoard,
+
+            nextPlacements
 
           );
 
@@ -1544,25 +1838,22 @@ function generatePuzzle() {
           candidates.length === 0
         ) {
 
-
           continue;
 
         }
 
 
         /*
-        Não escolhe sempre a posição
-        matematicamente perfeita.
-
-        Sorteia entre os melhores lugares
-        para a grade parecer natural.
+        Choose from the strongest
+        candidates instead of always
+        choosing #1.
         */
 
 
         const candidateLimit =
 
           Math.min(
-            12,
+            8,
             candidates.length
           );
 
@@ -1609,6 +1900,35 @@ function generatePuzzle() {
         );
 
 
+        /*
+        FUCK occupies letters 7-10
+        of MOTHERFUCKER:
+
+        M O T H E R F U C K E R
+                    ^ ^ ^ ^
+        */
+
+
+        if (
+          word.key ===
+          "MOTHERFUCKER"
+        ) {
+
+
+          nextPlacements.set(
+
+            "FUCK",
+
+            chosen.path.slice(
+              6,
+              10
+            )
+
+          );
+
+        }
+
+
         placed =
           true;
 
@@ -1640,48 +1960,105 @@ function generatePuzzle() {
 
 
     /*
-    Preenche os espaços vazios.
+    Make sure the actual hidden
+    words cover nearly the entire
+    12x12 playing area.
+    */
+
+
+    if (
+      !usesWholeBoard(
+        nextPlacements
+      )
+    ) {
+
+      continue;
+
+    }
+
+
+    /*
+    Try many different filler grids
+    without moving the hidden words.
+
+    Any filler arrangement that
+    accidentally creates a second
+    target word is rejected.
     */
 
 
     for (
-      let row = 0;
-      row < SIZE;
-      row++
+      let fillerAttempt = 0;
+      fillerAttempt < 250;
+      fillerAttempt++
     ) {
 
 
+      const filledBoard =
+
+        puzzleBoard.map(
+          row =>
+            [...row]
+        );
+
+
       for (
-        let column = 0;
-        column < SIZE;
-        column++
+        let row = 0;
+        row < SIZE;
+        row++
       ) {
 
 
-        if (
-          puzzleBoard[row][column] === ""
+        for (
+          let column = 0;
+          column < SIZE;
+          column++
         ) {
 
 
-          puzzleBoard[row][column] =
-            randomFillerLetter();
+          if (
+            filledBoard[row][column] === ""
+          ) {
+
+
+            filledBoard[row][column] =
+              randomFillerLetter();
+
+          }
 
         }
 
       }
 
+
+      /*
+      This is the important part.
+
+      Every listed target must appear
+      exactly ONCE anywhere in the grid.
+      */
+
+
+      if (
+        hasExactlyOneOfEachWord(
+          filledBoard
+        )
+      ) {
+
+
+        board =
+          filledBoard;
+
+
+        placements =
+          nextPlacements;
+
+
+        return true;
+
+      }
+
     }
-
-
-    board =
-      puzzleBoard;
-
-
-    placements =
-      nextPlacements;
-
-
-    return true;
 
   }
 
@@ -1694,7 +2071,7 @@ function generatePuzzle() {
 
 /*
 =====================================================
-DESENHAR A GRADE
+RENDER GRID
 =====================================================
 */
 
@@ -1757,16 +2134,12 @@ function renderGrid() {
 
 /*
 =====================================================
-LISTA DE PALAVRAS
+WORD LIST
 =====================================================
 */
 
 
 function renderWordList() {
-
-
-  const puzzle =
-    getCurrentPuzzle();
 
 
   wordList.innerHTML =
@@ -1775,7 +2148,7 @@ function renderWordList() {
 
   for (
     const word
-    of puzzle.words
+    of PUZZLE.words
   ) {
 
 
@@ -1824,42 +2197,7 @@ function renderWordList() {
 
 /*
 =====================================================
-INFORMAÇÕES DO JOGO
-=====================================================
-*/
-
-
-function updatePuzzleInfo() {
-
-
-  puzzleNumber.textContent =
-
-    "Jogo " +
-
-    (
-      currentPuzzleIndex +
-      1
-    )
-
-    +
-
-    " de " +
-
-    PUZZLES.length;
-
-
-  theme.textContent =
-
-    getCurrentPuzzle()
-      .theme;
-
-}
-
-
-
-/*
-=====================================================
-PEGAR CÉLULA
+GET CELL
 =====================================================
 */
 
@@ -1890,7 +2228,7 @@ function getCellElement(
 
 /*
 =====================================================
-CÉLULA SOB O DEDO
+CELL UNDER FINGER
 =====================================================
 */
 
@@ -1928,7 +2266,6 @@ function getCellFromPoint(
     !grid.contains(cell)
   ) {
 
-
     return null;
 
   }
@@ -1954,7 +2291,7 @@ function getCellFromPoint(
 
 /*
 =====================================================
-LINHA RETA
+STRAIGHT-LINE SELECTION
 =====================================================
 */
 
@@ -2124,7 +2461,6 @@ function snappedPath(
       column >= SIZE
     ) {
 
-
       break;
 
     }
@@ -2148,7 +2484,7 @@ function snappedPath(
 
 /*
 =====================================================
-SELEÇÃO AZUL
+BLUE SELECTION
 =====================================================
 */
 
@@ -2226,7 +2562,7 @@ function showPreview(
 
 /*
 =====================================================
-COMPARAR CAMINHOS
+COMPARE PATHS
 =====================================================
 */
 
@@ -2241,7 +2577,6 @@ function samePath(
     selectedPath.length !==
     correctPath.length
   ) {
-
 
     return false;
 
@@ -2267,7 +2602,6 @@ function samePath(
 
     ) {
 
-
       return false;
 
     }
@@ -2283,7 +2617,7 @@ function samePath(
 
 /*
 =====================================================
-VER SE ACHOU
+MATCH WORD
 =====================================================
 */
 
@@ -2293,13 +2627,9 @@ function findMatchingWord(
 ) {
 
 
-  const puzzle =
-    getCurrentPuzzle();
-
-
   for (
     const word
-    of puzzle.words
+    of PUZZLE.words
   ) {
 
 
@@ -2308,7 +2638,6 @@ function findMatchingWord(
         word.key
       )
     ) {
-
 
       continue;
 
@@ -2336,7 +2665,6 @@ function findMatchingWord(
       )
     ) {
 
-
       return word;
 
     }
@@ -2356,7 +2684,6 @@ function findMatchingWord(
       )
     ) {
 
-
       return word;
 
     }
@@ -2372,7 +2699,7 @@ function findMatchingWord(
 
 /*
 =====================================================
-DEIXAR AMARELO
+PAINT FOUND WORD
 =====================================================
 */
 
@@ -2416,7 +2743,7 @@ function paintWordYellow(
 
 /*
 =====================================================
-PLACAR
+SCORE
 =====================================================
 */
 
@@ -2425,10 +2752,7 @@ function updateScore() {
 
 
   const total =
-
-    getCurrentPuzzle()
-      .words
-      .length;
+    PUZZLE.words.length;
 
 
   score.textContent =
@@ -2452,8 +2776,7 @@ function updateScore() {
 
 
     message.textContent =
-
-      "Você encontrou todas! 🎉";
+      "You found every damn one. 😂";
 
 
     message.className =
@@ -2477,7 +2800,7 @@ function updateScore() {
 
 /*
 =====================================================
-TERMINAR SELEÇÃO
+FINISH SELECTION
 =====================================================
 */
 
@@ -2486,10 +2809,7 @@ function finishSelection() {
 
 
   const total =
-
-    getCurrentPuzzle()
-      .words
-      .length;
+    PUZZLE.words.length;
 
 
   if (
@@ -2509,7 +2829,6 @@ function finishSelection() {
     currentPath.length ===
     0
   ) {
-
 
     return;
 
@@ -2557,7 +2876,7 @@ function finishSelection() {
 
         matchedWord.label +
 
-        " encontrada! ✨";
+        " found! 🤬";
 
 
       message.className =
@@ -2572,7 +2891,7 @@ function finishSelection() {
 
 
     message.textContent =
-      "Tente outra. 😎";
+      "Nope. Keep looking. 😎";
 
 
     message.className =
@@ -2594,7 +2913,7 @@ function finishSelection() {
 
 /*
 =====================================================
-ARRASTAR
+DRAGGING
 =====================================================
 */
 
@@ -2606,17 +2925,13 @@ function startDrag(
 
 
   const total =
-
-    getCurrentPuzzle()
-      .words
-      .length;
+    PUZZLE.words.length;
 
 
   if (
     foundWords.size ===
     total
   ) {
-
 
     return false;
 
@@ -2667,7 +2982,6 @@ function moveDrag(
     !dragging ||
     !startCell
   ) {
-
 
     return;
 
@@ -2740,7 +3054,6 @@ grid.addEventListener(
       event.changedTouches.length === 0
     ) {
 
-
       return;
 
     }
@@ -2750,7 +3063,6 @@ grid.addEventListener(
 
 
     const touch =
-
       event.changedTouches[0];
 
 
@@ -2985,10 +3297,10 @@ window.addEventListener(
 
 /*
 =====================================================
-RECOMEÇAR
+RESET
 
-Mantém a mesma grade.
-Só apaga os acertos.
+Keeps the same board.
+Only clears found words.
 =====================================================
 */
 
@@ -3013,7 +3325,7 @@ resetButton.addEventListener(
 
 
     message.textContent =
-      "Vamos de novo. 🔎";
+      "Let's go again. 🔎";
 
 
     message.className =
@@ -3027,9 +3339,10 @@ resetButton.addEventListener(
 
 /*
 =====================================================
-NOVO JOGO
+NEW PUZZLE
 
-1 → 2 → 3 → 1
+Same words.
+Entirely new 12x12 layout.
 =====================================================
 */
 
@@ -3041,21 +3354,31 @@ newPuzzleButton.addEventListener(
   () => {
 
 
-    currentPuzzleIndex =
-
-      (
-        currentPuzzleIndex + 1
-      )
-
-      %
-
-      PUZZLES.length;
-
-
     foundWords.clear();
 
 
-    generatePuzzle();
+    message.textContent =
+      "Building a nasty one...";
+
+
+    message.className =
+      "";
+
+
+    const success =
+      generatePuzzle();
+
+
+    if (!success) {
+
+
+      message.textContent =
+        "Couldn't build one. Try again.";
+
+
+      return;
+
+    }
 
 
     renderGrid();
@@ -3064,14 +3387,11 @@ newPuzzleButton.addEventListener(
     renderWordList();
 
 
-    updatePuzzleInfo();
-
-
     updateScore();
 
 
     message.textContent =
-      "Boa caça! 🔎";
+      "Good luck, asshole. 😂";
 
 
     message.className =
@@ -3085,24 +3405,36 @@ newPuzzleButton.addEventListener(
 
 /*
 =====================================================
-INICIAR
+START
 =====================================================
 */
 
 
-generatePuzzle();
+const generated =
+  generatePuzzle();
 
 
-renderGrid();
+if (generated) {
 
 
-renderWordList();
+  renderGrid();
 
 
-updatePuzzleInfo();
+  renderWordList();
 
 
-updateScore();
+  updateScore();
+
+}
+
+
+else {
+
+
+  message.textContent =
+    "Puzzle generation failed. Tap New Puzzle.";
+
+}
 
 
 })();
