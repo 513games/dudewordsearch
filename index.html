@@ -392,13 +392,13 @@ button:active {
     <div id="kicker" class="kicker">Find the beers</div>
 
     <img
-      src="./ffff.png?v=2"
+      src="./ffff.png"
       alt="Dude Word Search"
       class="main-logo"
     >
 
     <div class="badges">
-      <span id="theme" class="theme">ðº Beer Names</span>
+      <span id="theme" class="theme">&#x1F37A; Beer Names</span>
     </div>
 
     <p id="description" class="description">
@@ -425,14 +425,14 @@ button:active {
   </label>
 
   <select id="categorySelect">
-    <option value="beer">ðº Beer Names</option>
-    <option value="football">ð Football Teams</option>
-    <option value="tools">ð ï¸ Tools</option>
-    <option value="trucks">ð Trucks</option>
-    <option value="grillbbq">ð¥© Grill & BBQ</option>
-    <option value="dadstuff">ð¨ Dad Stuff</option>
-    <option value="rockbands">ð¸ Rock Bands</option>
-    <option value="fishing">ð£ Fishing</option>
+    <option value="beer">&#x1F37A; Beer Names</option>
+    <option value="football">&#x1F3C8; Football Teams</option>
+    <option value="tools">&#x1F6E0;&#xFE0F; Tools</option>
+    <option value="trucks">&#x1F69A; Trucks</option>
+    <option value="grillbbq">&#x1F969; Grill &amp; BBQ</option>
+    <option value="dadstuff">&#x1F468; Dad Stuff</option>
+    <option value="rockbands">&#x1F3B8; Rock Bands</option>
+    <option value="fishing">&#x1F3A3; Fishing</option>
   </select>
 </section>
 
@@ -448,7 +448,7 @@ button:active {
         found
       </div>
 
-      <div id="message">Find a word. ð</div>
+      <div id="message">Find a word. &#x1F50E;</div>
     </div>
 
     <div id="win" class="win"></div>
@@ -477,10 +477,10 @@ button:active {
 const PUZZLES = [
   {
   id: "beer",
-  theme: "ðº Beer Names",
+  theme: "\u{1F37A} Beer Names",
   kicker: "Find the beers",
-  foundEmoji: "ðº",
-  winMessage: "ðº Cheers. You found them all.",
+  foundEmoji: "\u{1F37A}",
+  winMessage: "\u{1F37A} Cheers. You found them all.",
   words: [
     { label: "BUDWEISER", key: "BUDWEISER" },
     { label: "COORS", key: "COORS" },
@@ -499,10 +499,10 @@ const PUZZLES = [
   {
 
   id: "tools",
-  theme: "ð ï¸ Tools",
+  theme: "\u{1F6E0}\u{FE0F} Tools",
   kicker: "Find the tools",
-  foundEmoji: "ð ï¸",
-  winMessage: "ð ï¸ Toolbox cleared. You found them all.",
+  foundEmoji: "\u{1F6E0}\u{FE0F}",
+  winMessage: "\u{1F6E0}\u{FE0F} Toolbox cleared. You found them all.",
   words: [
     { label: "HAMMER", key: "HAMMER" },
     { label: "WRENCH", key: "WRENCH" },
@@ -524,10 +524,10 @@ const PUZZLES = [
 
   {
   id: "trucks",
-  theme: "ð Trucks",
+  theme: "\u{1F69A} Trucks",
   kicker: "Find the truck names",
-  foundEmoji: "ð",
-  winMessage: "ð Truck puzzle cleared. You found them all.",
+  foundEmoji: "\u{1F69A}",
+  winMessage: "\u{1F69A} Truck puzzle cleared. You found them all.",
      words: [
     { label: "KING RANCH", key: "KINGRANCH" },
     { label: "SILVERADO", key: "SILVERADO" },
@@ -546,10 +546,10 @@ const PUZZLES = [
 
   {
   id: "grillbbq",
-  theme: "ð¥© Grill & BBQ",
+  theme: "\u{1F969} Grill & BBQ",
   kicker: "Find the grill words",
-  foundEmoji: "ð¥©",
-  winMessage: "ð¥© Grill cleared. You found them all.",
+  foundEmoji: "\u{1F969}",
+  winMessage: "\u{1F969} Grill cleared. You found them all.",
   words: [
     { label: "BRISKET", key: "BRISKET" },
     { label: "RIBEYE", key: "RIBEYE" },
@@ -568,10 +568,10 @@ const PUZZLES = [
 
   {
   id: "dadstuff",
-  theme: "ð¨ Dad Stuff",
+  theme: "\u{1F468} Dad Stuff",
   kicker: "Find the dad stuff",
-  foundEmoji: "ð¨",
-  winMessage: "ð¨ Dad mode complete. You found them all.",
+  foundEmoji: "\u{1F468}",
+  winMessage: "\u{1F468} Dad mode complete. You found them all.",
   words: [
     { label: "THERMOSTAT", key: "THERMOSTAT" },
     { label: "LAWNMOWER", key: "LAWNMOWER" },
@@ -590,10 +590,10 @@ const PUZZLES = [
 
   {
   id: "rockbands",
-  theme: "ð¸ Rock Bands",
+  theme: "\u{1F3B8} Rock Bands",
   kicker: "Find the rock bands",
-  foundEmoji: "ð¸",
-  winMessage: "ð¸ Rock on. You found them all.",
+  foundEmoji: "\u{1F3B8}",
+  winMessage: "\u{1F3B8} Rock on. You found them all.",
   words: [
     { label: "METALLICA", key: "METALLICA" },
     { label: "NIRVANA", key: "NIRVANA" },
@@ -612,10 +612,10 @@ const PUZZLES = [
 
   {
   id: "fishing",
-  theme: "ð£ Fishing",
+  theme: "\u{1F3A3} Fishing",
   kicker: "Find the fishing words",
-  foundEmoji: "ð£",
-  winMessage: "ð£ Nice catch. You found them all.",
+  foundEmoji: "\u{1F3A3}",
+  winMessage: "\u{1F3A3} Nice catch. You found them all.",
   words: [
     { label: "BASS", key: "BASS" },
     { label: "TROUT", key: "TROUT" },
@@ -635,10 +635,10 @@ const PUZZLES = [
   
   {
     id: "football",
-    theme: "ð Football Teams",
+    theme: "\u{1F3C8} Football Teams",
     kicker: "Find the teams",
-    foundEmoji: "ð",
-    winMessage: "ð Touchdown. You found every team.",
+    foundEmoji: "\u{1F3C8}",
+    winMessage: "\u{1F3C8} Touchdown. You found every team.",
     words: [
       { label: "BENGALS", key: "BENGALS" },
       { label: "RAMS", key: "RAMS" },
@@ -1330,7 +1330,7 @@ function updateScore() {
   if (foundWords.size === total) {
     win.textContent = puzzle.winMessage;
     win.classList.add("show");
-    message.textContent = "You found them all. ð¥";
+    message.textContent = "You found them all. \u{1F525}";
     message.className = "good";
   }
   else {
@@ -1371,7 +1371,7 @@ function finishSelection() {
     }
   }
   else {
-    message.textContent = "Nope. Keep looking. ð";
+    message.textContent = "Nope. Keep looking. \u{1F60E}";
     message.className = "";
   }
 
@@ -1535,7 +1535,7 @@ function loadNewBoard() {
   renderWordList();
   updatePuzzleInfo();
   updateScore();
-  message.textContent = "Good luck. ð";
+  message.textContent = "Good luck. \u{1F50E}";
   message.className = "";
 }
 
@@ -1544,7 +1544,7 @@ resetButton.addEventListener("click", () => {
   renderGrid();
   renderWordList();
   updateScore();
-  message.textContent = "Same board. Start over. ð";
+  message.textContent = "Same board. Start over. \u{1F50E}";
   message.className = "";
 });
 
